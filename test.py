@@ -48,9 +48,9 @@ def nothing(x):
 cv2.namedWindow('gesture recognition')
 cv2.createTrackbar('speed','gesture recognition',20,500,nothing)
 cv2.createTrackbar('time','gesture recognition',10,100,nothing)
-cv2.createTrackbar('distance','gesture recognition',50,500,nothing)
-cv2.createTrackbar('tolerance','gesture recognition',5,50,nothing)
-cv2.createTrackbar('skip_frame','gesture recognition',3,50,nothing)
+cv2.createTrackbar('distance','gesture recognition',150,500,nothing)
+cv2.createTrackbar('tolerance','gesture recognition',3,50,nothing)
+cv2.createTrackbar('skip_frame','gesture recognition',1,50,nothing)
 
 gestures = [ 'left', 'right', 'select', 'exit', 'none' ]
 gesture_num = 0
@@ -193,7 +193,7 @@ while cap.isOpened():
         else:
             landmark = []
             text_a = ''
-            text_b = ''          
+            text_b = ''
 
     for i in range(len(landmark)):
         x = landmark[i].x * frame.shape[1]
