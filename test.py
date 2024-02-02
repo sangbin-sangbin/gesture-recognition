@@ -36,7 +36,11 @@ mp_drawing = mp.solutions.drawing_utils
 hands = mp_hands.Hands()
 
 # Open a webcam
+w = 1280
+h = 720
 cap = cv2.VideoCapture(0)#1, cv2.CAP_DSHOW)
+cap.set(cv2.CAP_PROP_FRAME_WIDTH, w)
+cap.set(cv2.CAP_PROP_FRAME_HEIGHT, h)
 
 gestures = [ 'left', 'right', 'select', 'exit', 'none' ]
 gesture_num = 0
@@ -87,6 +91,11 @@ def normalize_points(points):
 
 subprocess.run('adb connect 192.168.1.103:5555; adb root; adb connect 192.168.1.103:5555', shell=True)
 
+landmark_time = 0
+landmark_num = 0
+gesture_time = 0
+gesture_num = 0
+
 while cap.isOpened():
     # Read a frame from the webcam
     ret, frame = cap.read()
@@ -95,10 +104,12 @@ while cap.isOpened():
  
     # Convert the BGR image to RGB
     rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
- 
+    s = time.time_ns()//1000000
     # Process the frame with MediaPipe Hands
     results = hands.process(rgb_frame)
-    
+    e = time.time_ns()//1000000
+    landmark_time += e - s
+    landmark_num += 1
     # Extract hand landmarks if available
     if results.multi_hand_landmarks:
         # Get the coordinates of the index fingertip (landmark index 8)
@@ -116,7 +127,11 @@ while cap.isOpened():
                 cv2.circle(frame, (int(x), int(y)), 5, (0, 255, 0), -1)
 
             lst, scale = normalize_points(list(map(lambda x : [x.x, x.y], results.multi_hand_landmarks[hand_idx].landmark)))
+            s = time.time_ns()//1000000
             res = list(model(torch.tensor([element for row in lst for element in row], dtype=torch.float)))
+            e = time.time_ns()//1000000
+            gesture_time += e - s
+            gesture_num += 1
 
             p = max(res)
             gesture_idx = res.index(p) if p >= 0.9 else 4
@@ -160,3 +175,5 @@ while cap.isOpened():
 # Release the webcam and close all windows
 cap.release()
 cv2.destroyAllWindows()
+print('landmark:', landmark_time/landmark_num)
+print('gesture:', gesture_time / gesture_num)
