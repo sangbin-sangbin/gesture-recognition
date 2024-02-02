@@ -102,6 +102,7 @@ while cap.isOpened():
 cap.release()
 cv2.destroyAllWindows()
 
+print(len(dataset), 'data generated')
 save = input("want to save? [ y / n ]\n>>> ")
 if save == 'y':
     with open(dataset_dir, "w") as f:
