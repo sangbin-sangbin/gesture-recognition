@@ -42,9 +42,9 @@ gestures = [ 'left', 'right', 'select', 'exit', 'none' ]
 gesture_num = 0
 
 directions = [ 'right', 'left', 'down', 'up', 'stop' ]
-speed_threshold = 30
-time_threshold = 0.2
-distance_threshold = 100
+speed_threshold = 20
+time_threshold = 0.1
+distance_threshold = 50
 default_tolorance = 5
 state = {'gesture':4, 'start_time':time.time(), 'direction':0, 'prev_pos':[0,0], 'first_pos':[0,0], 'tolorance':default_tolorance}
 
