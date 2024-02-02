@@ -102,22 +102,27 @@ while cap.isOpened():
     # Extract hand landmarks if available
     if results.multi_hand_landmarks:
         # Get the coordinates of the index fingertip (landmark index 8)
-        for i in range(len(results.multi_hand_landmarks[0].landmark)):
-            x = results.multi_hand_landmarks[0].landmark[i].x * frame.shape[1]
-            y = results.multi_hand_landmarks[0].landmark[i].y * frame.shape[0]
+        hand_idx = 0
+        for idx, hand in enumerate(results.multi_handedness):
+            if hand.classification[0].label == 'Right':
+                hand_idx = idx
+                break
+        for i in range(len(results.multi_hand_landmarks[hand_idx].landmark)):
+            x = results.multi_hand_landmarks[hand_idx].landmark[i].x * frame.shape[1]
+            y = results.multi_hand_landmarks[hand_idx].landmark[i].y * frame.shape[0]
 
             # Draw a circle at the fingertip position
             cv2.circle(frame, (int(x), int(y)), 5, (0, 255, 0), -1)
 
-        lst, scale = normalize_points(list(map(lambda x : [x.x, x.y], results.multi_hand_landmarks[0].landmark)))
+        lst, scale = normalize_points(list(map(lambda x : [x.x, x.y], results.multi_hand_landmarks[hand_idx].landmark)))
         res = list(model(torch.tensor([element for row in lst for element in row], dtype=torch.float)))
 
         p = max(res)
         gesture_idx = res.index(p) if p >= 0.9 else 4
         cv2.putText(frame, gestures[gesture_idx]+' '+str(int(p*100)), (frame.shape[1] // 2, frame.shape[0] // 2 - 100), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 3)
 
-        pos_x = results.multi_hand_landmarks[0].landmark[9].x * frame.shape[1]
-        pos_y = results.multi_hand_landmarks[0].landmark[9].y * frame.shape[0]
+        pos_x = results.multi_hand_landmarks[hand_idx].landmark[9].x * frame.shape[1]
+        pos_y = results.multi_hand_landmarks[hand_idx].landmark[9].y * frame.shape[0]
 
         d = direction([pos_x, pos_y], state['prev_pos'])
         spd = distance([pos_x, pos_y], state['prev_pos']) / scale
