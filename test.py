@@ -132,16 +132,16 @@ while cap.isOpened():
             if time.time()-state['start_time'] > time_threshold and distance(state['first_pos'], [pos_x, pos_y]) / scale >= distance_threshold:
                 if gestures[gesture_idx] == 'right' and directions[state['direction']] == 'right':
                     print('right')
-                    subprocess.run('adb shell input tap 80 500')
+                    subprocess.run('adb shell input tap 80 500', shell=True)
                 elif gestures[gesture_idx] == 'left' and directions[state['direction']] == 'left':
                     print('left')
-                    subprocess.run('adb shell input tap 80 600')
+                    subprocess.run('adb shell input tap 80 600', shell=True)
                 elif gestures[gesture_idx] == 'select' and directions[state['direction']] == 'down':
                     print('select')
-                    subprocess.run('adb shell input tap 80 720')
+                    subprocess.run('adb shell input tap 80 720', shell=True)
                 elif gestures[gesture_idx] == 'exit' and directions[state['direction']] == 'right':
                     print('exit')
-                    subprocess.run('adb shell input tap 80 820')
+                    subprocess.run('adb shell input tap 80 820', shell=True)
             state = {'gesture':gesture_idx, 'start_time':time.time(), 'direction':d, 'prev_pos':[pos_x, pos_y], 'first_pos':[pos_x, pos_y], 'tolorance':default_tolorance}
 
     # Display the output
