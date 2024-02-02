@@ -102,11 +102,12 @@ while cap.isOpened():
     # Extract hand landmarks if available
     if results.multi_hand_landmarks:
         # Get the coordinates of the index fingertip (landmark index 8)
-        hand_idx = 0
+        hand_idx = -1
         for idx, hand in enumerate(results.multi_handedness):
-            if hand.classification[0].label == 'Right':
+            if hand.classification[0].label == 'Left':
                 hand_idx = idx
                 break
+        if hand_idx == -1: continue
         for i in range(len(results.multi_hand_landmarks[hand_idx].landmark)):
             x = results.multi_hand_landmarks[hand_idx].landmark[i].x * frame.shape[1]
             y = results.multi_hand_landmarks[hand_idx].landmark[i].y * frame.shape[0]
