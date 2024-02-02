@@ -36,7 +36,7 @@ mp_drawing = mp.solutions.drawing_utils
 hands = mp_hands.Hands()
 
 # Open a webcam
-cap = cv2.VideoCapture(1, cv2.CAP_DSHOW)
+cap = cv2.VideoCapture(0)#1, cv2.CAP_DSHOW)
 
 gestures = [ 'left', 'right', 'select', 'exit', 'none' ]
 gesture_num = 0
