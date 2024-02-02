@@ -34,12 +34,16 @@ mp_drawing = mp.solutions.drawing_utils
 hands = mp_hands.Hands()
 
 # Open a webcam
-cap = cv2.VideoCapture(1, cv2.CAP_DSHOW)
+cap = cv2.VideoCapture(0)#1, cv2.CAP_DSHOW)
 
 start_time = time.time()
 state = 'break'
 
+dataset_dir = "./dataset.json"
 dataset = []
+save = input("want to add previous dataset? [ y / n ]\n>>> ")
+if save == 'y':
+    dataset = json.load(open(dataset_dir))
 data = []
 
 gestures = [ 'left', 'right', 'select', 'exit', 'none' ]
@@ -100,5 +104,5 @@ cv2.destroyAllWindows()
 
 save = input("want to save? [ y / n ]\n>>> ")
 if save == 'y':
-    with open("./dataset.json", "w") as f:
+    with open(dataset_dir, "w") as f:
         json.dump(dataset, f, indent=4)
