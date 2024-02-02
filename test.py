@@ -107,48 +107,48 @@ while cap.isOpened():
             if hand.classification[0].label == 'Left':
                 hand_idx = idx
                 break
-        if hand_idx == -1: continue
-        for i in range(len(results.multi_hand_landmarks[hand_idx].landmark)):
-            x = results.multi_hand_landmarks[hand_idx].landmark[i].x * frame.shape[1]
-            y = results.multi_hand_landmarks[hand_idx].landmark[i].y * frame.shape[0]
+        if hand_idx > -1: 
+            for i in range(len(results.multi_hand_landmarks[hand_idx].landmark)):
+                x = results.multi_hand_landmarks[hand_idx].landmark[i].x * frame.shape[1]
+                y = results.multi_hand_landmarks[hand_idx].landmark[i].y * frame.shape[0]
 
-            # Draw a circle at the fingertip position
-            cv2.circle(frame, (int(x), int(y)), 5, (0, 255, 0), -1)
+                # Draw a circle at the fingertip position
+                cv2.circle(frame, (int(x), int(y)), 5, (0, 255, 0), -1)
 
-        lst, scale = normalize_points(list(map(lambda x : [x.x, x.y], results.multi_hand_landmarks[hand_idx].landmark)))
-        res = list(model(torch.tensor([element for row in lst for element in row], dtype=torch.float)))
+            lst, scale = normalize_points(list(map(lambda x : [x.x, x.y], results.multi_hand_landmarks[hand_idx].landmark)))
+            res = list(model(torch.tensor([element for row in lst for element in row], dtype=torch.float)))
 
-        p = max(res)
-        gesture_idx = res.index(p) if p >= 0.9 else 4
-        cv2.putText(frame, gestures[gesture_idx]+' '+str(int(p*100)), (frame.shape[1] // 2, frame.shape[0] // 2 - 100), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 3)
+            p = max(res)
+            gesture_idx = res.index(p) if p >= 0.9 else 4
+            cv2.putText(frame, gestures[gesture_idx]+' '+str(int(p*100)), (frame.shape[1] // 2, frame.shape[0] // 2 - 100), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 3)
 
-        pos_x = results.multi_hand_landmarks[hand_idx].landmark[9].x * frame.shape[1]
-        pos_y = results.multi_hand_landmarks[hand_idx].landmark[9].y * frame.shape[0]
+            pos_x = results.multi_hand_landmarks[hand_idx].landmark[9].x * frame.shape[1]
+            pos_y = results.multi_hand_landmarks[hand_idx].landmark[9].y * frame.shape[0]
 
-        d = direction([pos_x, pos_y], state['prev_pos'])
-        spd = distance([pos_x, pos_y], state['prev_pos']) / scale
-        cv2.putText(frame, directions[d]+' '+str(int(spd))+' '+str(int(distance(state['first_pos'], [pos_x, pos_y]) / scale)), (frame.shape[1] // 2 - 100, frame.shape[0] // 2 + 100), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 3)
+            d = direction([pos_x, pos_y], state['prev_pos'])
+            spd = distance([pos_x, pos_y], state['prev_pos']) / scale
+            cv2.putText(frame, directions[d]+' '+str(int(spd))+' '+str(int(distance(state['first_pos'], [pos_x, pos_y]) / scale)), (frame.shape[1] // 2 - 100, frame.shape[0] // 2 + 100), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 3)
 
-        if state['gesture'] == gesture_idx and spd > speed_threshold and d == state['direction']:
-            state['prev_pos'] = [pos_x, pos_y]
-        elif state['tolorance'] > 0:
-            state['prev_pos'] = [pos_x, pos_y]
-            state['tolorance'] -= 1
-        else:
-            if time.time()-state['start_time'] > time_threshold and distance(state['first_pos'], [pos_x, pos_y]) / scale >= distance_threshold:
-                if gestures[gesture_idx] == 'right' and directions[state['direction']] == 'right':
-                    print('right')
-                    subprocess.run('adb shell input tap 80 600', shell=True)
-                elif gestures[gesture_idx] == 'left' and directions[state['direction']] == 'left':
-                    print('left')
-                    subprocess.run('adb shell input tap 80 500', shell=True)
-                elif gestures[gesture_idx] == 'select' and directions[state['direction']] == 'down':
-                    print('select')
-                    subprocess.run('adb shell input tap 80 720', shell=True)
-                elif gestures[gesture_idx] == 'exit' and directions[state['direction']] == 'right':
-                    print('exit')
-                    subprocess.run('adb shell input tap 80 820', shell=True)
-            state = {'gesture':gesture_idx, 'start_time':time.time(), 'direction':d, 'prev_pos':[pos_x, pos_y], 'first_pos':[pos_x, pos_y], 'tolorance':default_tolorance}
+            if state['gesture'] == gesture_idx and spd > speed_threshold and d == state['direction']:
+                state['prev_pos'] = [pos_x, pos_y]
+            elif state['tolorance'] > 0:
+                state['prev_pos'] = [pos_x, pos_y]
+                state['tolorance'] -= 1
+            else:
+                if time.time()-state['start_time'] > time_threshold and distance(state['first_pos'], [pos_x, pos_y]) / scale >= distance_threshold:
+                    if gestures[gesture_idx] == 'right' and directions[state['direction']] == 'right':
+                        print('right')
+                        subprocess.run('adb shell input tap 80 600', shell=True)
+                    elif gestures[gesture_idx] == 'left' and directions[state['direction']] == 'left':
+                        print('left')
+                        subprocess.run('adb shell input tap 80 500', shell=True)
+                    elif gestures[gesture_idx] == 'select' and directions[state['direction']] == 'down':
+                        print('select')
+                        subprocess.run('adb shell input tap 80 720', shell=True)
+                    elif gestures[gesture_idx] == 'exit' and directions[state['direction']] == 'right':
+                        print('exit')
+                        subprocess.run('adb shell input tap 80 820', shell=True)
+                state = {'gesture':gesture_idx, 'start_time':time.time(), 'direction':d, 'prev_pos':[pos_x, pos_y], 'first_pos':[pos_x, pos_y], 'tolorance':default_tolorance}
 
     # Display the output
     cv2.imshow('gesture recognition', frame)
