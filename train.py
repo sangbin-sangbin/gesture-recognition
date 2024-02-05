@@ -45,14 +45,14 @@ def print_progress_bar(iteration, total, time_per_step, prefix='', suffix='', le
     print(f'\r{prefix} [{bar}] - {percent}% - {suffix} - {time_str}/step', end='', flush=True)
  
 total_epochs = 20
-total_steps = 100
+total_steps = len(train_dataset)
 time_per_step = 0.01
 
 prev_loss = float('inf')
 tolerance = 3
  
 for epoch in range(total_epochs): 
-    for data in train_dataset:
+    for step, data in enumerate(train_dataset):
         model.zero_grad()
  
         landmarks = torch.tensor([element for row in data['landmarks'] for element in row], dtype=torch.float)
@@ -70,14 +70,9 @@ for epoch in range(total_epochs):
         loss.backward()
  
         optimizer.step()
-  
-    # Loop through steps with a progress bar
-    for step in range(1, total_steps + 1):
-        # Simulate some processing time (replace this with your actual training code)
-        time.sleep(time_per_step)
  
         # Display the progress bar
-        print_progress_bar(step, total_steps, time_per_step, prefix=f'Epoch {epoch}/{total_epochs}', length=30, fill='=')
+        print_progress_bar(step + 1, total_steps, time_per_step, prefix=f'Epoch {epoch + 1}/{total_epochs}', suffix=f"Loss: {loss.item(): .4f}")
 
     val_loss = 0.0
     for data in val_dataset:
