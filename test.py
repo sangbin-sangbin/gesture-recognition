@@ -146,7 +146,7 @@ while cap.isOpened():
                 gesture_num += 1
 
                 p = max(res)
-                gesture_idx = res.index(p) if p >= 0.9 else 4
+                gesture_idx = res.index(p) if p >= 0.9 else 5
                 text_a = f"{gestures[gesture_idx]} {int(p*100)}%"
 
                 cur_gesture = gestures[state['gesture']]

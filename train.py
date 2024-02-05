@@ -44,7 +44,7 @@ def print_progress_bar(iteration, total, time_per_step, prefix='', suffix='', le
     time_str = str(timedelta(seconds=int(time_per_step * total)))
     print(f'\r{prefix} [{bar}] - {percent}% - {suffix} - {time_str}/step', end='', flush=True)
  
-total_epochs = 10
+total_epochs = 20
 total_steps = 100
 time_per_step = 0.01
 
@@ -110,6 +110,5 @@ for data in test_dataset:
     else:
         bad += 1
 print(f"Accuracy: { good / (good + bad) * 100}")
- 
  
 torch.save(model.state_dict(), './model.pt')
