@@ -46,7 +46,7 @@ def nothing(x):
     pass
     
 cv2.namedWindow('gesture recognition')
-cv2.createTrackbar('time','gesture recognition',50,100,nothing)
+cv2.createTrackbar('time','gesture recognition',10,100,nothing)
 cv2.createTrackbar('skip_frame','gesture recognition',1,50,nothing)
 
 gestures = [ 'default', 'left', 'right', 'select', 'exit', 'none' ]
@@ -122,10 +122,10 @@ while cap.isOpened():
     frame_num += 1
     if frame_num % landmark_skip_frame == 0:
         # Process the frame with MediaPipe Hands
-        s = time.time_ns()//1000000
+        start = time.time_ns()//1000000
         results = hands.process(rgb_frame)
-        e = time.time_ns()//1000000
-        landmark_time += e - s
+        end = time.time_ns()//1000000
+        landmark_time += end - start
         landmark_num += 1
         # Extract hand landmarks if available
         if results.multi_hand_landmarks:
@@ -139,10 +139,10 @@ while cap.isOpened():
                 landmark = results.multi_hand_landmarks[hand_idx].landmark
                 lst, scale = normalize_points(list(map(lambda x : [x.x, x.y], landmark)))
 
-                s = time.time_ns()//1000000
+                start = time.time_ns()//1000000
                 res = list(model(torch.tensor([element for row in lst for element in row], dtype=torch.float)))
-                e = time.time_ns()//1000000
-                gesture_time += e - s
+                end = time.time_ns()//1000000
+                gesture_time += end - start
                 gesture_num += 1
 
                 p = max(res)
@@ -176,9 +176,11 @@ while cap.isOpened():
 
         # Draw a circle at the fingertip position
         cv2.circle(frame, (int(x), int(y)), 5, (0, 255, 0), -1)
-        
+
+    # Print Gesture    
     cv2.putText(frame, text_a, (frame.shape[1] // 2 + 230, frame.shape[0] // 2 - 220), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 255), 3)
 
+    # Print Table
     header_data = ["curr_gesture", "elapsed_time", "prev_gesture"]
     table_data = [cur_gesture, elapsed_time, prev_gesture]
     cell_height = 50
