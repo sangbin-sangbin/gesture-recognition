@@ -25,7 +25,7 @@ class Model(nn.Module):
  
 INPUT_SIZE = 42
 HIDDEN_DIM = 32
-TARGET_SIZE = 5
+TARGET_SIZE = 6
  
 model = Model(INPUT_SIZE, HIDDEN_DIM, TARGET_SIZE)
 loss_function = nn.CrossEntropyLoss()

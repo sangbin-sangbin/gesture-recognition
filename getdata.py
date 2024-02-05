@@ -46,7 +46,7 @@ if save == 'y':
     dataset = json.load(open(dataset_dir))
 data = []
 
-gestures = [ 'left', 'right', 'select', 'exit', 'none' ]
+gestures = [ 'default', 'left', 'right', 'select', 'exit', 'none' ]
 gesture_num = 0
 
 while cap.isOpened():

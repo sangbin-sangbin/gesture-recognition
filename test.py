@@ -24,7 +24,7 @@ class Model(nn.Module):
 
 INPUT_SIZE = 42
 HIDDEN_DIM = 32
-TARGET_SIZE = 5
+TARGET_SIZE = 6
 
 model = Model(INPUT_SIZE, HIDDEN_DIM, TARGET_SIZE)
 model.load_state_dict(torch.load('model.pt'))
@@ -46,21 +46,14 @@ def nothing(x):
     pass
     
 cv2.namedWindow('gesture recognition')
-cv2.createTrackbar('speed','gesture recognition',20,500,nothing)
-cv2.createTrackbar('time','gesture recognition',10,100,nothing)
-cv2.createTrackbar('distance','gesture recognition',150,500,nothing)
-cv2.createTrackbar('tolerance','gesture recognition',3,50,nothing)
+cv2.createTrackbar('time','gesture recognition',50,100,nothing)
 cv2.createTrackbar('skip_frame','gesture recognition',1,50,nothing)
 
-gestures = [ 'left', 'right', 'select', 'exit', 'none' ]
+gestures = [ 'default', 'left', 'right', 'select', 'exit', 'none' ]
 gesture_num = 0
 
-directions = [ 'right', 'left', 'down', 'up', 'stop' ]
-speed_threshold = cv2.getTrackbarPos('speed','gesture recognition') #20
 time_threshold = cv2.getTrackbarPos('time','gesture recognition')/100 #0.1
-distance_threshold = cv2.getTrackbarPos('distance','gesture recognition') #50
-default_tolerance = cv2.getTrackbarPos('tolerance','gesture recognition') #5
-state = {'gesture':4, 'start_time':time.time(), 'direction':0, 'prev_pos':[0,0], 'first_pos':[0,0], 'tolerance':default_tolerance}
+state = {'gesture':5, 'start_time':time.time(), 'prev_gesture':4}
 
 landmark_skip_frame = max(cv2.getTrackbarPos('skip_frame','gesture recognition'), 1) #3
 frame_num = 0
@@ -114,11 +107,7 @@ text_a = ''
 text_b = ''
 
 while cap.isOpened():    
-    speed_threshold = cv2.getTrackbarPos('speed','gesture recognition')
     time_threshold = cv2.getTrackbarPos('time','gesture recognition')/100
-    distance_threshold = cv2.getTrackbarPos('distance','gesture recognition')
-    default_tolerance = cv2.getTrackbarPos('tolerance','gesture recognition')
-    landmark_skip_frame = max(cv2.getTrackbarPos('skip_frame','gesture recognition'), 1)
 
     # Read a frame from the webcam
     ret, frame = cap.read()
@@ -157,39 +146,21 @@ while cap.isOpened():
                 p = max(res)
                 gesture_idx = res.index(p) if p >= 0.9 else 4
                 text_a = gestures[gesture_idx]+' '+str(int(p*100))
+                text_b = gestures[state['gesture']]+ '  '+gestures[state['prev_gesture']]
 
-                pos_x = results.multi_hand_landmarks[hand_idx].landmark[9].x * frame.shape[1]
-                pos_y = results.multi_hand_landmarks[hand_idx].landmark[9].y * frame.shape[0]
-
-                d = direction([pos_x, pos_y], state['prev_pos'])
-                spd = distance([pos_x, pos_y], state['prev_pos']) / scale
-                text_b = directions[d]+' '+str(int(spd))+' '+str(int(distance(state['first_pos'], [pos_x, pos_y]) / scale))
-
-                if state['gesture'] == gesture_idx and spd > speed_threshold and d == state['direction']:
-                    state['prev_pos'] = [pos_x, pos_y]
-                elif state['tolerance'] > 0:
-                    state['prev_pos'] = [pos_x, pos_y]
-                    state['tolerance'] -= 1
-                else:
-                    if time.time()-state['start_time'] > time_threshold and distance(state['first_pos'], [pos_x, pos_y]) / scale >= distance_threshold:
-                        if gestures[gesture_idx] == 'right' and directions[state['direction']] == 'right':
+                if state['gesture'] == gesture_idx:
+                    if time.time()-state['start_time'] > time_threshold:
+                        if gestures[state['gesture']] == 'right' and gestures[state['prev_gesture']] == 'default':
                             print('right')
-                            subprocess.run('adb shell input tap 80 600', shell=True)
-                        elif gestures[gesture_idx] == 'left' and directions[state['direction']] == 'left':
+                        elif gestures[state['gesture']] == 'left' and gestures[state['prev_gesture']] == 'default':
                             print('left')
-                            subprocess.run('adb shell input tap 80 500', shell=True)
-                        if gestures[gesture_idx] == 'select' and directions[state['direction']] == 'down':
+                        elif gestures[state['gesture']] == 'select' and gestures[state['prev_gesture']] == 'default':
                             print('select')
-                            subprocess.run('adb shell input tap 80 720', shell=True)
-                        elif gestures[gesture_idx] == 'exit' and directions[state['direction']] == 'right':
+                        elif gestures[state['gesture']] == 'exit' and gestures[state['prev_gesture']] == 'default':
                             print('exit')
-                            subprocess.run('adb shell input tap 80 820', shell=True)
-                    elif time.time()-state['start_time'] > time_threshold and distance(state['first_pos'], [pos_x, pos_y]) / scale >= distance_threshold * 0.5:
-                        if gestures[gesture_idx] == 'select' and directions[state['direction']] == 'down':
-                            print('select')
-                            subprocess.run('adb shell input tap 80 720', shell=True)
- 
-                    state = {'gesture':gesture_idx, 'start_time':time.time(), 'direction':d, 'prev_pos':[pos_x, pos_y], 'first_pos':[pos_x, pos_y], 'tolerance':default_tolerance}
+                        state['prev_gesture'] = gesture_idx
+                else:
+                    state = {'gesture':gesture_idx, 'start_time':time.time(), 'prev_gesture':state['prev_gesture']}
         else:
             landmark = []
             text_a = ''
