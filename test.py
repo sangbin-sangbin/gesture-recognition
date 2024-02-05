@@ -104,7 +104,9 @@ gesture_num = 0
 
 landmark = []
 text_a = ''
-text_b = ''
+cur_gesture = gestures[5]
+elapsed_time = '0'
+prev_gesture = gestures[5]
 
 while cap.isOpened():    
     time_threshold = cv2.getTrackbarPos('time','gesture recognition')/100
@@ -145,8 +147,11 @@ while cap.isOpened():
 
                 p = max(res)
                 gesture_idx = res.index(p) if p >= 0.9 else 4
-                text_a = gestures[gesture_idx]+' '+str(int(p*100))
-                text_b = gestures[state['gesture']]+ '  '+gestures[state['prev_gesture']]
+                text_a = f"{gestures[gesture_idx]} {int(p*100)}%"
+
+                cur_gesture = gestures[state['gesture']]
+                elapsed_time = str(round(time.time() - state['start_time'], 2))
+                prev_gesture = gestures[state['prev_gesture']]
 
                 if state['gesture'] == gesture_idx:
                     if time.time()-state['start_time'] > time_threshold:
@@ -164,7 +169,6 @@ while cap.isOpened():
         else:
             landmark = []
             text_a = ''
-            text_b = ''
 
     for i in range(len(landmark)):
         x = landmark[i].x * frame.shape[1]
@@ -173,8 +177,26 @@ while cap.isOpened():
         # Draw a circle at the fingertip position
         cv2.circle(frame, (int(x), int(y)), 5, (0, 255, 0), -1)
         
-    cv2.putText(frame, text_a, (frame.shape[1] // 2, frame.shape[0] // 2 - 100), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 3)
-    cv2.putText(frame, text_b, (frame.shape[1] // 2 - 100, frame.shape[0] // 2 + 100), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 3)
+    cv2.putText(frame, text_a, (frame.shape[1] // 2 + 250, frame.shape[0] // 2 - 220), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 255), 3)
+
+    header_data = ["curr_gesture", "elapsed_time", "prev_gesture"]
+    table_data = [cur_gesture, elapsed_time, prev_gesture]
+    cell_height = 50
+    cell_width = 300
+    text_position = (50, 50)
+
+    for i, data in enumerate([header_data] + [table_data]):
+        for j, cell in enumerate(data):
+            x = 50 + cell_width * j + 30
+            y = text_position[1] + 20 + i * cell_height + cell_height // 2 + 10
+            cv2.putText(frame, str(cell), (x, y), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
+
+            if i == 0:
+                cv2.rectangle(frame, (50 + cell_width * j, text_position[1] + 20),
+                                (50 + cell_width * (j + 1), text_position[1] + 20 + cell_height), (0, 255, 0), 2)
+            else:
+                cv2.rectangle(frame, (50 + cell_width * j, text_position[1] + 20 + i * cell_height),
+                                (50 + cell_width * (j + 1), text_position[1] + 20 + (i + 1) * cell_height), (0, 255, 0), 2)
 
     # Display the output
     cv2.imshow('gesture recognition', frame)
