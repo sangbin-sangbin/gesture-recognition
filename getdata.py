@@ -84,7 +84,7 @@ while cap.isOpened():
         start_time = time.time()
         state = 'break'
         gesture_num = (gesture_num + 1) % len(gestures)
-    elif (time.time() - start_time) > 5 and state == 'break':
+    elif (time.time() - start_time) > 10 and state == 'break':
         start_time = time.time()
         state = 'recording'
     
