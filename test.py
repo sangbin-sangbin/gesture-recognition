@@ -177,12 +177,12 @@ while cap.isOpened():
         # Draw a circle at the fingertip position
         cv2.circle(frame, (int(x), int(y)), 5, (0, 255, 0), -1)
         
-    cv2.putText(frame, text_a, (frame.shape[1] // 2 + 250, frame.shape[0] // 2 - 220), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 255), 3)
+    cv2.putText(frame, text_a, (frame.shape[1] // 2 + 230, frame.shape[0] // 2 - 220), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 255), 3)
 
     header_data = ["curr_gesture", "elapsed_time", "prev_gesture"]
     table_data = [cur_gesture, elapsed_time, prev_gesture]
     cell_height = 50
-    cell_width = 300
+    cell_width = 250
     text_position = (50, 50)
 
     for i, data in enumerate([header_data] + [table_data]):
