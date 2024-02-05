@@ -42,7 +42,7 @@ def print_progress_bar(iteration, total, time_per_step, prefix='', suffix='', le
     filled_length = int(length * iteration // total)
     bar = fill * filled_length + '-' * (length - filled_length)
     time_str = str(timedelta(seconds=int(time_per_step * total)))
-    print(f'\r{prefix} [{bar}] - {percent}% - {suffix} - {time_str}/step', end='', flush=True)
+    print(f'\r{prefix} [{bar}] - {percent}% - {suffix} - {time_str}/epoch', end='', flush=True)
  
 total_epochs = 20
 total_steps = len(train_dataset)
