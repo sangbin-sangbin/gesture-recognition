@@ -156,12 +156,16 @@ while cap.isOpened():
                 if state['gesture'] == gesture_idx:
                     if time.time()-state['start_time'] > time_threshold:
                         if gestures[state['gesture']] == 'right' and gestures[state['prev_gesture']] == 'default':
+                            subprocess.run('adb shell input tap 80 600', shell=True)
                             print('right')
                         elif gestures[state['gesture']] == 'left' and gestures[state['prev_gesture']] == 'default':
+                            subprocess.run('adb shell input tap 80 500', shell=True)
                             print('left')
                         elif gestures[state['gesture']] == 'select' and gestures[state['prev_gesture']] == 'default':
+                            subprocess.run('adb shell input tap 80 720', shell=True)
                             print('select')
                         elif gestures[state['gesture']] == 'exit' and gestures[state['prev_gesture']] == 'default':
+                            subprocess.run('adb shell input tap 80 820', shell=True)
                             print('exit')
                         state['prev_gesture'] = gesture_idx
                 else:
