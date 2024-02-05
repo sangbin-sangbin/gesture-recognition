@@ -31,7 +31,7 @@ model = Model(INPUT_SIZE, HIDDEN_DIM, TARGET_SIZE)
 loss_function = nn.CrossEntropyLoss()
 optimizer = optim.SGD(model.parameters(), lr=0.1)
  
-dataset = json.load(open('dataset2.json'))
+dataset = json.load(open('dataset.json'))
 random.shuffle(dataset)
 train_dataset = dataset[:int(len(dataset)*0.8)]
 val_dataset = dataset[int(len(dataset)*0.8):int(len(dataset)*0.9)]
