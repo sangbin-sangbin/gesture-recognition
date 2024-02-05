@@ -46,12 +46,12 @@ def print_progress_bar(iteration, total, time_per_step, prefix='', suffix='', le
  
 total_epochs = 20
 total_steps = len(train_dataset)
-time_per_step = 0.01
 
 prev_loss = float('inf')
 tolerance = 3
  
 for epoch in range(total_epochs): 
+    start_time = time.time()
     for step, data in enumerate(train_dataset):
         model.zero_grad()
  
@@ -72,8 +72,10 @@ for epoch in range(total_epochs):
         optimizer.step()
  
         # Display the progress bar
-        print_progress_bar(step + 1, total_steps, time_per_step, prefix=f'Epoch {epoch + 1}/{total_epochs}', suffix=f"Loss: {loss.item(): .4f}")
+        print_progress_bar(step + 1, total_steps, time.time() - start_time, prefix=f'Epoch {epoch + 1}/{total_epochs}', suffix=f"Loss: {loss.item(): .4f}")
 
+
+    # Prevent from overfitting
     val_loss = 0.0
     for data in val_dataset:
         landmarks = torch.tensor([element for row in data['landmarks'] for element in row], dtype=torch.float)
