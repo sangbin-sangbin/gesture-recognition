@@ -39,7 +39,7 @@ cap = cv2.VideoCapture(0)#1, cv2.CAP_DSHOW)
 start_time = time.time()
 state = 'break'
 
-dataset_dir = "./dataset2.json"
+dataset_dir = "./dataset.json"
 dataset = []
 save = input("want to add previous dataset? [ y / n ]\n>>> ")
 if save == 'y':
