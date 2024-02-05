@@ -110,5 +110,5 @@ for data in test_dataset:
     else:
         bad += 1
 print(f"Accuracy: { good / (good + bad) * 100}")
- 
+
 torch.save(model.state_dict(), './model.pt')
