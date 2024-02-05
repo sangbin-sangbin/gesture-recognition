@@ -7,7 +7,18 @@ import torch.nn as nn
 import json
 from math import sqrt
 import subprocess
+import pygame
 
+
+def play_wav_file(file_path):
+    pygame.mixer.init()
+    try:
+        pygame.mixer.music.load(file_path)
+        pygame.mixer.music.play()
+        while pygame.mixer.music.get_busy():
+            pygame.time.Clock().tick(10)
+    except pygame.error as e:
+        print(f"Error playing WAV file: {e}")
 
 class Model(nn.Module):
     def __init__(self, input_size, hidden_dim, tagset_size):
@@ -108,6 +119,11 @@ cur_gesture = gestures[5]
 elapsed_time = '0'
 prev_gesture = gestures[5]
 
+recognizing = False
+start_recognizing_time_threshold = 3
+no_gesture_time = time.time()
+stop_recognizing_time_threshold = 3
+
 while cap.isOpened():    
     time_threshold = cv2.getTrackbarPos('time','gesture recognition')/100
 
@@ -129,6 +145,7 @@ while cap.isOpened():
         landmark_num += 1
         # Extract hand landmarks if available
         if results.multi_hand_landmarks:
+            no_gesture_time = time.time()
             # Get the coordinates of the index fingertip (landmark index 8)
             hand_idx = -1
             for idx, hand in enumerate(results.multi_handedness):
@@ -154,7 +171,12 @@ while cap.isOpened():
                 prev_gesture = gestures[state['prev_gesture']]
 
                 if state['gesture'] == gesture_idx:
-                    if time.time()-state['start_time'] > time_threshold:
+                    if not recognizing:
+                        if time.time()-state['start_time'] > start_recognizing_time_threshold:
+                            print('start recognizing') 
+                            play_wav_file('./start.wav')
+                            recognizing = True
+                    elif time.time()-state['start_time'] > time_threshold:
                         if gestures[state['gesture']] == 'right' and gestures[state['prev_gesture']] == 'default':
                             subprocess.run('adb shell input tap 80 600', shell=True)
                             print('right')
@@ -173,6 +195,10 @@ while cap.isOpened():
         else:
             landmark = []
             text_a = ''
+            if recognizing and time.time() - no_gesture_time > stop_recognizing_time_threshold:
+                print('stop recognizing')
+                play_wav_file('./start.wav')
+                recognizing = False
 
     for i in range(len(landmark)):
         x = landmark[i].x * frame.shape[1]
