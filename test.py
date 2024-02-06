@@ -90,6 +90,8 @@ cv2.namedWindow('gesture recognition')
 cv2.createTrackbar('time','gesture recognition',10,100,nothing)
 cv2.createTrackbar('same_hand','gesture recognition',5,100,nothing)
 cv2.createTrackbar('skip_frame','gesture recognition',1,50,nothing)
+cv2.createTrackbar('start_time','gesture recognition',2,10,nothing)
+cv2.createTrackbar('stop_time','gesture recognition',2,10,nothing)
 
 gestures = [ 'default', 'left', 'right', 'select', 'exit', 'none' ]
 gesture_num = 0
@@ -134,8 +136,6 @@ elapsed_time = '0'
 prev_gesture = gestures[5]
 
 recognizing = False
-start_recognizing_time_threshold = 3
-stop_recognizing_time_threshold = 3
 last_hand_time = time.time()
 
 wake_up_state = []
@@ -143,6 +143,8 @@ wake_up_state = []
 while cap.isOpened():    
     time_threshold = cv2.getTrackbarPos('time','gesture recognition')/100
     same_hand_threshold = cv2.getTrackbarPos('same_hand','gesture recognition')/1000
+    start_recognizing_time_threshold = cv2.getTrackbarPos('start_time','gesture recognition')
+    stop_recognizing_time_threshold = cv2.getTrackbarPos('stop_time','gesture recognition')
 
     # Read a frame from the webcam
     ret, frame = cap.read()
