@@ -168,7 +168,7 @@ while cap.isOpened():
         if results.multi_hand_landmarks:
             right_hands = []
             for idx, hand in enumerate(results.multi_handedness):
-                # label 'Left' means it is right hand because of 좌우반전
+                # label 'Left' means it is right hand because of left/right inversion
                 if hand.classification[0].label == 'Left':
                     right_hands.append(list(map(lambda x : [x.x, x.y], results.multi_hand_landmarks[idx].landmark)))
             recognizing_hands = right_hands
@@ -297,9 +297,10 @@ while cap.isOpened():
         # Draw a circle at the fingertip position
         cv2.circle(frame, (int(x * frame.shape[1]), int(y * frame.shape[0])), 5, (255, 0, 0), -1)
 
-    # Print Gesture    
+    # Print Current Hand's Gesture    
     cv2.putText(frame, text_a, (frame.shape[1] // 2 + 230, frame.shape[0] // 2 - 220), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 255), 3)
 
+    # print recognized gesture
     if time.time() - visual_notification[1] < time_threshold * 2:
         cv2.putText(frame, visual_notification[0], (frame.shape[1] // 2 + 250, frame.shape[0] // 2 + 250), cv2.FONT_HERSHEY_SIMPLEX, 2, (255, 0, 0), 3)
 
