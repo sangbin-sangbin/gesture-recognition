@@ -19,6 +19,7 @@ def get_center(landmark):
     return [sum_x / len(landmark), sum_y / len(landmark)]
 
 def same_hand_tracking(hands, prev_pos, same_hand_threshold):
+    # -1 index means there is no same hand
     if len(hands) == 0:
         return -1, prev_pos
 
@@ -30,10 +31,10 @@ def same_hand_tracking(hands, prev_pos, same_hand_threshold):
     min_idx = -1
     min_val = float('inf')
     for i, [x, y] in enumerate(positions):
-        d = (x-prev_pos[0])**2 + (y-prev_pos[1])**2
-        if min_val > d:
+        distance = (x-prev_pos[0])**2 + (y-prev_pos[1])**2
+        if min_val > distance:
             min_idx = i
-            min_val = d
+            min_val = distance
 
     if min_val > same_hand_threshold:
         return -1, prev_pos
@@ -98,7 +99,6 @@ gesture_num = 0
 
 state = {'gesture':5, 'start_time':time.time(), 'prev_gesture':5}
 
-landmark_skip_frame = max(cv2.getTrackbarPos('skip_frame','gesture recognition'), 1) #3
 frame_num = 0
 
 def normalize_points(points):
@@ -141,8 +141,11 @@ last_hand_time = time.time()
 wake_up_state = []
 
 while cap.isOpened():    
+    # require more time than time_threshold to recognize it as an gesture
     time_threshold = cv2.getTrackbarPos('time','gesture recognition')/100
+    # distance between this frame's hand and last frame's recognized hand should be smaller than same_hand_threshold to regard them as same hand
     same_hand_threshold = cv2.getTrackbarPos('same_hand','gesture recognition')/1000
+    landmark_skip_frame = max(cv2.getTrackbarPos('skip_frame','gesture recognition'), 1)
     start_recognizing_time_threshold = cv2.getTrackbarPos('start_time','gesture recognition')
     stop_recognizing_time_threshold = cv2.getTrackbarPos('stop_time','gesture recognition')
 
@@ -166,12 +169,13 @@ while cap.isOpened():
         if results.multi_hand_landmarks:
             right_hands = []
             for idx, hand in enumerate(results.multi_handedness):
-                if hand.classification[0].label == 'Left' or hand.classification[0].label == 'Right':
+                # label 'Left' means it is right hand because of 좌우반전
+                if hand.classification[0].label == 'Left':
                     right_hands.append(list(map(lambda x : [x.x, x.y], results.multi_hand_landmarks[idx].landmark)))
             recognizing_hands = right_hands
 
             if recognizing:
-                #find closest hand
+                # find closest hand
                 hand_idx, recognized_hand_prev_pos = same_hand_tracking(right_hands, recognized_hand_prev_pos, same_hand_threshold)
 
                 if hand_idx != -1:
@@ -188,8 +192,8 @@ while cap.isOpened():
                     gesture_time += end - start
                     gesture_num += 1
 
-                    p = max(res)
-                    gesture_idx = res.index(p) if p >= 0.9 else 5
+                    probability = max(res)
+                    gesture_idx = res.index(probability) if probability >= 0.9 else 5
                     text_a = f"{gestures[gesture_idx]} {int(p*100)}%"
 
                     cur_gesture = gestures[state['gesture']]
@@ -214,7 +218,7 @@ while cap.isOpened():
                     else:
                         state = {'gesture':gesture_idx, 'start_time':time.time(), 'prev_gesture':state['prev_gesture']}
                 else:
-                    #stop recognizing
+                    # stop recognizing
                     recognizing_hand = []
                     text_a = ''
                     if recognizing and time.time() - last_hand_time > stop_recognizing_time_threshold:
@@ -227,14 +231,15 @@ while cap.isOpened():
                         elapsed_time = '0'
                         prev_gesture = 'none'
             else:
+                # when not recognizing, get hands with 'default' gesture and measure elapsed time
                 delete_list = []
                 wake_up_hands = []
                 for right_hand in right_hands:
                     lst, scale = normalize_points(right_hand)
 
                     res = list(model(torch.tensor([element for row in lst for element in row], dtype=torch.float)))
-                    p = max(res)
-                    gesture_idx = res.index(p) if p >= 0.9 else 5
+                    probability = max(res)
+                    gesture_idx = res.index(probability) if probability >= 0.9 else 5
                     if gestures[gesture_idx] == 'default':
                         wake_up_hands.append(right_hand)
 
@@ -244,6 +249,7 @@ while cap.isOpened():
                     if hand_idx == -1:
                         delete_list = [i] + delete_list
                     elif time.time()-start_time > start_recognizing_time_threshold:
+                        # when there are default gestured hand for enough time, start recognizing and track the hand
                         print('start recognizing') 
                         recognized_hand_prev_pos = get_center(wake_up_hands[hand_idx])
                         play_wav_file('./start.wav')
@@ -253,6 +259,7 @@ while cap.isOpened():
                     else:
                         checked[hand_idx] = 1
 
+                # wake_up_state refreshing
                 if not recognizing:
                     for i in delete_list:
                         wake_up_state.pop(i)
@@ -261,7 +268,7 @@ while cap.isOpened():
                         if checked[i] == 0:
                             wake_up_state.append([get_center(wake_up_hands[i]), time.time()])
         else:
-            #stop recognizing
+            # stop recognizing
             recognizing_hands = []
             recognizing_hand = []
             text_a = ''
