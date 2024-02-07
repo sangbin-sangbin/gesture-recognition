@@ -172,6 +172,7 @@ while cap.isOpened():
                 if hand.classification[0].label == 'Left':
                     right_hands.append(list(map(lambda x : [x.x, x.y], results.multi_hand_landmarks[idx].landmark)))
             recognizing_hands = right_hands
+            
             if recognizing:
                 # find closest hand
                 hand_idx, recognized_hand_prev_pos = same_hand_tracking(right_hands, recognized_hand_prev_pos, same_hand_threshold)
