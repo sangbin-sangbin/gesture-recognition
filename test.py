@@ -41,10 +41,10 @@ def same_hand_tracking(hands, prev_pos, same_hand_threshold):
 
     return min_idx, [positions[min_idx][0], positions[min_idx][1]]
 
-def play_wav_file(file_path):
+def play_wav_file(file_name):
     pygame.mixer.init()
     try:
-        pygame.mixer.music.load(file_path)
+        pygame.mixer.music.load('./sound/'+file_name+'.wav')
         pygame.mixer.music.play()
         while pygame.mixer.music.get_busy():
             pygame.time.Clock().tick(10)
@@ -174,6 +174,8 @@ while cap.isOpened():
                     right_hands.append(list(map(lambda x : [x.x, x.y], results.multi_hand_landmarks[idx].landmark)))
             recognizing_hands = right_hands
 
+            
+
             if recognizing:
                 # find closest hand
                 hand_idx, recognized_hand_prev_pos = same_hand_tracking(right_hands, recognized_hand_prev_pos, same_hand_threshold)
@@ -205,15 +207,19 @@ while cap.isOpened():
                             if gestures[state['gesture']] == 'right' and gestures[state['prev_gesture']] == 'default':
                                 subprocess.run('adb shell input keyevent KEYCODE_DPAD_RIGHT', shell=True)
                                 print('right')
+                                play_wav_file('action')
                             elif gestures[state['gesture']] == 'left' and gestures[state['prev_gesture']] == 'default':
                                 subprocess.run('adb shell input keyevent KEYCODE_DPAD_LEFT', shell=True)
                                 print('left')
+                                play_wav_file('action')
                             elif gestures[state['gesture']] == 'select' and gestures[state['prev_gesture']] == 'default':
                                 subprocess.run('adb shell input keyevent KEYCODE_BUTTON_SELECT', shell=True)
                                 print('select')
+                                play_wav_file('action')
                             elif gestures[state['gesture']] == 'exit' and (gestures[state['prev_gesture']] == 'default' or gestures[state['prev_gesture']] == 'left'):
                                 subprocess.run('adb shell input keyevent KEYCODE_BACK', shell=True)
                                 print('exit')
+                                play_wav_file('action')
                             state['prev_gesture'] = gesture_idx
                     else:
                         state = {'gesture':gesture_idx, 'start_time':time.time(), 'prev_gesture':state['prev_gesture']}
@@ -223,7 +229,7 @@ while cap.isOpened():
                     text_a = ''
                     if recognizing and time.time() - last_hand_time > stop_recognizing_time_threshold:
                         print('stop recognizing')
-                        play_wav_file('./start.wav')
+                        play_wav_file('stop')
                         recognizing = False
                         state = {'gesture':5, 'start_time':time.time(), 'prev_gesture':5}
 
@@ -252,7 +258,7 @@ while cap.isOpened():
                         # when there are default gestured hand for enough time, start recognizing and track the hand
                         print('start recognizing') 
                         recognized_hand_prev_pos = get_center(wake_up_hands[hand_idx])
-                        play_wav_file('./start.wav')
+                        play_wav_file('start')
                         recognizing = True
                         wake_up_state = []
                         break
@@ -274,7 +280,7 @@ while cap.isOpened():
             text_a = ''
             if recognizing and time.time() - last_hand_time > stop_recognizing_time_threshold:
                 print('stop recognizing')
-                play_wav_file('./start.wav')
+                play_wav_file('stop')
                 recognizing = False  
                 state = {'gesture':5, 'start_time':time.time(), 'prev_gesture':5}
                 
