@@ -8,7 +8,21 @@ import json
 from math import sqrt
 import subprocess
 import pygame
+import asyncio
 
+
+class Model(nn.Module):
+    def __init__(self, input_size, hidden_dim, tagset_size):
+        super(Model, self).__init__()
+        self.fc1 = nn.Linear(input_size, hidden_dim)
+        self.fc2 = nn.Linear(hidden_dim, tagset_size)
+        self.softmax = nn.Softmax(dim=0)
+
+    def forward(self, landmarks):
+        x = self.fc1(landmarks)
+        x = self.fc2(x)
+        res = self.softmax(x)
+        return res
 
 def get_center(landmark):
     sum_x = 0
@@ -43,26 +57,31 @@ def same_hand_tracking(hands, prev_pos, same_hand_threshold):
 
 def play_wav_file(file_name):
     pygame.mixer.init()
-    try:
-        pygame.mixer.music.load('./sound/'+file_name+'.wav')
-        pygame.mixer.music.play()
-        while pygame.mixer.music.get_busy():
-            pygame.time.Clock().tick(10)
-    except pygame.error as e:
-        print(f"Error playing WAV file: {e}")
+    pygame.mixer.music.load('./sound/'+file_name+'.wav')
+    pygame.mixer.music.play()
 
-class Model(nn.Module):
-    def __init__(self, input_size, hidden_dim, tagset_size):
-        super(Model, self).__init__()
-        self.fc1 = nn.Linear(input_size, hidden_dim)
-        self.fc2 = nn.Linear(hidden_dim, tagset_size)
-        self.softmax = nn.Softmax(dim=0)
+def nothing(x):
+    pass
+    
+def normalize_points(points):
+    min_x, min_y = points[0]
+    max_x, max_y = points[0]
 
-    def forward(self, landmarks):
-        x = self.fc1(landmarks)
-        x = self.fc2(x)
-        res = self.softmax(x)
-        return res
+    for x, y in points:
+        min_x = min(min_x, x)
+        min_y = min(min_y, y)
+        max_x = max(max_x, x)
+        max_y = max(max_y, y)
+
+    scale = max(max_x - min_x, max_y - min_y)
+
+    normalized_points = []
+    for x, y in points:
+        normalized_x = (x - min_x) / scale
+        normalized_y = (y - min_y) / scale
+        normalized_points.append((normalized_x, normalized_y))
+
+    return normalized_points, scale
 
 INPUT_SIZE = 42
 HIDDEN_DIM = 32
@@ -84,8 +103,6 @@ cap = cv2.VideoCapture(0)#1, cv2.CAP_DSHOW)
 cap.set(cv2.CAP_PROP_FRAME_WIDTH, w)
 cap.set(cv2.CAP_PROP_FRAME_HEIGHT, h)
 
-def nothing(x):
-    pass
     
 cv2.namedWindow('gesture recognition')
 cv2.createTrackbar('time','gesture recognition',10,100,nothing)
@@ -100,26 +117,6 @@ gesture_num = 0
 state = {'gesture':5, 'start_time':time.time(), 'prev_gesture':5}
 
 frame_num = 0
-
-def normalize_points(points):
-    min_x, min_y = points[0]
-    max_x, max_y = points[0]
-
-    for x, y in points:
-        min_x = min(min_x, x)
-        min_y = min(min_y, y)
-        max_x = max(max_x, x)
-        max_y = max(max_y, y)
-
-    scale = max(max_x - min_x, max_y - min_y)
-
-    normalized_points = []
-    for x, y in points:
-        normalized_x = (x - min_x) / scale
-        normalized_y = (y - min_y) / scale
-        normalized_points.append((normalized_x, normalized_y))
-
-    return normalized_points, scale
 
 subprocess.run('adb connect 192.168.1.103:5555; adb root; adb connect 192.168.1.103:5555', shell=True)
 
@@ -140,6 +137,8 @@ last_hand_time = time.time()
 
 wake_up_state = []
 
+visual_notification = ['', 0]
+
 while cap.isOpened():    
     # require more time than time_threshold to recognize it as an gesture
     time_threshold = cv2.getTrackbarPos('time','gesture recognition')/100
@@ -153,7 +152,7 @@ while cap.isOpened():
     ret, frame = cap.read()
     if frame is None:
         continue
- 
+
     # Convert the BGR image to RGB
     rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
@@ -173,8 +172,6 @@ while cap.isOpened():
                 if hand.classification[0].label == 'Left':
                     right_hands.append(list(map(lambda x : [x.x, x.y], results.multi_hand_landmarks[idx].landmark)))
             recognizing_hands = right_hands
-
-            
 
             if recognizing:
                 # find closest hand
@@ -196,7 +193,7 @@ while cap.isOpened():
 
                     probability = max(res)
                     gesture_idx = res.index(probability) if probability >= 0.9 else 5
-                    text_a = f"{gestures[gesture_idx]} {int(p*100)}%"
+                    text_a = f"{gestures[gesture_idx]} {int(probability*100)}%"
 
                     cur_gesture = gestures[state['gesture']]
                     elapsed_time = str(round(time.time() - state['start_time'], 2))
@@ -208,18 +205,22 @@ while cap.isOpened():
                                 subprocess.run('adb shell input keyevent KEYCODE_DPAD_RIGHT', shell=True)
                                 print('right')
                                 play_wav_file('action')
+                                visual_notification = ['right', time.time()]
                             elif gestures[state['gesture']] == 'left' and gestures[state['prev_gesture']] == 'default':
                                 subprocess.run('adb shell input keyevent KEYCODE_DPAD_LEFT', shell=True)
                                 print('left')
                                 play_wav_file('action')
+                                visual_notification = ['left', time.time()]
                             elif gestures[state['gesture']] == 'select' and gestures[state['prev_gesture']] == 'default':
                                 subprocess.run('adb shell input keyevent KEYCODE_BUTTON_SELECT', shell=True)
                                 print('select')
                                 play_wav_file('action')
+                                visual_notification = ['select', time.time()]
                             elif gestures[state['gesture']] == 'exit' and (gestures[state['prev_gesture']] == 'default' or gestures[state['prev_gesture']] == 'left'):
                                 subprocess.run('adb shell input keyevent KEYCODE_BACK', shell=True)
                                 print('exit')
                                 play_wav_file('action')
+                                visual_notification = ['exit', time.time()]
                             state['prev_gesture'] = gesture_idx
                     else:
                         state = {'gesture':gesture_idx, 'start_time':time.time(), 'prev_gesture':state['prev_gesture']}
@@ -287,7 +288,7 @@ while cap.isOpened():
                 cur_gesture = 'none'
                 elapsed_time = '0'
                 prev_gesture = 'none'
-                  
+                
     for rh in recognizing_hands:
         for x, y in rh:
             # Draw a circle at the fingertip position
@@ -298,6 +299,9 @@ while cap.isOpened():
 
     # Print Gesture    
     cv2.putText(frame, text_a, (frame.shape[1] // 2 + 230, frame.shape[0] // 2 - 220), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 255), 3)
+
+    if time.time() - visual_notification[1] < time_threshold * 2:
+        cv2.putText(frame, visual_notification[0], (frame.shape[1] // 2 + 250, frame.shape[0] // 2 + 250), cv2.FONT_HERSHEY_SIMPLEX, 2, (255, 0, 0), 3)
 
     # Print Table
     header_data = ["curr_gesture", "elapsed_time", "prev_gesture"]
@@ -329,5 +333,7 @@ while cap.isOpened():
 # Release the webcam and close all windows
 cap.release()
 cv2.destroyAllWindows()
-print('landmark:', landmark_time/landmark_num)
+
+# average inference time
+print('landmark:', landmark_time / landmark_num)
 print('gesture:', gesture_time / gesture_num)
