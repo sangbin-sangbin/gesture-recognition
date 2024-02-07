@@ -172,7 +172,7 @@ while cap.isOpened():
                 if hand.classification[0].label == 'Left':
                     right_hands.append(list(map(lambda x : [x.x, x.y], results.multi_hand_landmarks[idx].landmark)))
             recognizing_hands = right_hands
-
+            
             if recognizing:
                 # find closest hand
                 hand_idx, recognized_hand_prev_pos = same_hand_tracking(right_hands, recognized_hand_prev_pos, same_hand_threshold)
@@ -180,10 +180,9 @@ while cap.isOpened():
                 if hand_idx != -1:
                     last_hand_time = time.time()
 
-                    landmark = results.multi_hand_landmarks[hand_idx].landmark
-                    landmark_lst = list(map(lambda x : [x.x, x.y], landmark))
-                    recognizing_hand = landmark_lst
-                    lst, scale = normalize_points(landmark_lst)
+                    landmark = right_hands[hand_idx]
+                    recognizing_hand = landmark
+                    lst, scale = normalize_points(landmark)
 
                     start = time.time_ns()//1000000
                     res = list(model(torch.tensor([element for row in lst for element in row], dtype=torch.float)))
