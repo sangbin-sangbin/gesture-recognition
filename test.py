@@ -239,6 +239,7 @@ while cap.isOpened():
                     prev_gesture = gestures[state['prev_gesture']]
 
                     if state['gesture'] == gesture_idx:
+                        # start multi action when user hold one gesture enough time
                         if time.time()-state['start_time'] > multi_action_time_threshold:
                             if state['multi_action_start_time'] == -1:
                                 state['multi_action_start_time'] = time.time()
@@ -359,24 +360,25 @@ while cap.isOpened():
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
 
+# save paramters
+res = input('want to save current parameters? [ y / n ]\n')
+if res == 'y':
+    parameter = {
+        'time': cv2.getTrackbarPos('time','gesture recognition'),
+        'same_hand': cv2.getTrackbarPos('same_hand','gesture recognition'),
+        'skip_frame': cv2.getTrackbarPos('skip_frame','gesture recognition'),
+        'start_time': cv2.getTrackbarPos('start_time','gesture recognition'),
+        'stop_time': cv2.getTrackbarPos('stop_time','gesture recognition'),
+        'multi_time': cv2.getTrackbarPos('multi_time','gesture recognition'),
+        'multi_cooltime': cv2.getTrackbarPos('multi_cooltime','gesture recognition')
+    }
+    with open(parameters_dir, "w") as f:
+        json.dump(parameter, f)
+
 # Release the webcam and close all windows
 cap.release()
 cv2.destroyAllWindows()
 
-# average inference time
+# print average inference time
 print('landmark:', landmark_time / landmark_num)
 print('gesture:', gesture_time / gesture_num)
-
-res = input('want to save current parameters? [ y / n ]\n')
-if res == 'y':
-    parameter = {
-        'time': time_threshold,
-        'same_hand': same_hand_threshold,
-        'skip_frame': landmark_skip_frame,
-        'start_time': start_recognizing_time_threshold,
-        'stop_time': stop_recognizing_time_threshold,
-        'multi_time': multi_action_time_threshold,
-        'multi_cooltime': multi_action_cooltime
-    }
-    with open(parameters_dir, "w") as f:
-        json.dump(parameter, f)
