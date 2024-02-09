@@ -175,8 +175,6 @@ last_hand_time = time.time()
 
 wake_up_state = []
 
-is_multi_action = False
-
 while cap.isOpened():    
     # require more time than time_threshold to recognize it as an gesture
     time_threshold = cv2.getTrackbarPos('time','gesture recognition')/100
