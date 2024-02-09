@@ -34,7 +34,11 @@ mp_drawing = mp.solutions.drawing_utils
 hands = mp_hands.Hands()
 
 # Open a webcam
+w = 1280
+h = 720
 cap = cv2.VideoCapture(0)#1, cv2.CAP_DSHOW)
+cap.set(cv2.CAP_PROP_FRAME_WIDTH, w)
+cap.set(cv2.CAP_PROP_FRAME_HEIGHT, h)
 
 start_time = time.time()
 state = 'break'
@@ -87,9 +91,11 @@ while cap.isOpened():
     elif (time.time() - start_time) > 10 and state == 'break':
         start_time = time.time()
         state = 'recording'
-    
-    cv2.putText(frame, state, (frame.shape[1] // 2, frame.shape[0] // 2 + 100), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 3)
-    cv2.putText(frame, gestures[gesture_num], (frame.shape[1] // 2, frame.shape[0] // 2 - 100), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 3)
+        
+    if state == 'break':
+        cv2.putText(frame, "Break.. Next gesture is \"" + gestures[gesture_num] + "\"", (frame.shape[1] // 2 - 430, frame.shape[0] // 2 - 220), cv2.FONT_HERSHEY_SIMPLEX, 2, (255, 0, 0), 3)
+    else:
+        cv2.putText(frame, "Recorging \"" + gestures[gesture_num] + "\"", (frame.shape[1] // 2 - 430, frame.shape[0] // 2 - 220), cv2.FONT_HERSHEY_SIMPLEX, 2, (255, 0, 0), 3)
 
     # Display the output
     cv2.imshow('1', frame)
