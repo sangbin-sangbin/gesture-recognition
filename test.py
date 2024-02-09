@@ -127,7 +127,7 @@ cap.set(cv2.CAP_PROP_FRAME_WIDTH, w)
 cap.set(cv2.CAP_PROP_FRAME_HEIGHT, h)
 
 parameters_dir = './parameters.json'
-res = input('want to use saved parameters? [ y / n ]\n')
+res = input('want to use saved parameters? [ y / n ]\n>>> ')
 if res == 'y':
     parameter = json.load(open(parameters_dir))
 else:
@@ -359,19 +359,15 @@ while cap.isOpened():
         break
 
 # save paramters
-res = input('want to save current parameters? [ y / n ]\n')
-if res == 'y':
-    parameter = {
-        'time': cv2.getTrackbarPos('time','gesture recognition'),
-        'same_hand': cv2.getTrackbarPos('same_hand','gesture recognition'),
-        'skip_frame': cv2.getTrackbarPos('skip_frame','gesture recognition'),
-        'start_time': cv2.getTrackbarPos('start_time','gesture recognition'),
-        'stop_time': cv2.getTrackbarPos('stop_time','gesture recognition'),
-        'multi_time': cv2.getTrackbarPos('multi_time','gesture recognition'),
-        'multi_cooltime': cv2.getTrackbarPos('multi_cooltime','gesture recognition')
-    }
-    with open(parameters_dir, "w") as f:
-        json.dump(parameter, f)
+parameter = {
+    'time': cv2.getTrackbarPos('time','gesture recognition'),
+    'same_hand': cv2.getTrackbarPos('same_hand','gesture recognition'),
+    'skip_frame': cv2.getTrackbarPos('skip_frame','gesture recognition'),
+    'start_time': cv2.getTrackbarPos('start_time','gesture recognition'),
+    'stop_time': cv2.getTrackbarPos('stop_time','gesture recognition'),
+    'multi_time': cv2.getTrackbarPos('multi_time','gesture recognition'),
+    'multi_cooltime': cv2.getTrackbarPos('multi_cooltime','gesture recognition')
+}
 
 # Release the webcam and close all windows
 cap.release()
@@ -380,3 +376,8 @@ cv2.destroyAllWindows()
 # print average inference time
 print('landmark:', landmark_time / landmark_num)
 print('gesture:', gesture_time / gesture_num)
+
+res = input('want to save current parameters? [ y / n ]\n>>> ')
+if res == 'y':
+    with open(parameters_dir, "w") as f:
+        json.dump(parameter, f)
