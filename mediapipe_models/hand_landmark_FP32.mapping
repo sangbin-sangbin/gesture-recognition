@@ -1,0 +1,2043 @@
+<?xml version="1.0"?>
+<mapping>
+	<map>
+		<framework name="input_1/scale_copy" output_port_id="Conv2D/filter:0" />
+		<IR name="input_1/scale_copy" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Conv2D/filter" output_port_id="Conv2D/filter:0" />
+		<IR name="input_1/scale_copy" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Conv2D" output_port_id="Conv2D:0" />
+		<IR name="Conv2D" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Conv2D" output_port_id="Conv2D:0" />
+		<IR name="Conv2D" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Add/y" output_port_id="Add/y:0" />
+		<IR name="Add/y" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Add/y" output_port_id="Add/y:0" />
+		<IR name="Add/y" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Add" output_port_id="Add:0" />
+		<IR name="Add" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Add" output_port_id="Add:0" />
+		<IR name="Add" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="model_1/model/re_lu/Relu6_model_1/model/batch_normalization/FusedBatchNormV3_model_1/model/batch_normalization_1/FusedBatchNormV3_model_1/model/depthwise_conv2d/depthwise_model_1/model/conv2d_5/Conv2D_model_1/model/conv2d/Conv2D" output_port_id="model_1/model/re_lu/Relu6_model_1/model/batch_normalization/FusedBatchNormV3_model_1/model/batch_normalization_1/FusedBatchNormV3_model_1/model/depthwise_conv2d/depthwise_model_1/model/conv2d_5/Conv2D_model_1/model/conv2d/Conv2D:0" />
+		<IR name="model_1/model/re_lu/Relu6_model_1/model/batch_normalization/FusedBatchNormV3_model_1/model/batch_normalization_1/FusedBatchNormV3_model_1/model/depthwise_conv2d/depthwise_model_1/model/conv2d_5/Conv2D_model_1/model/conv2d/Conv2D" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="model_1/model/re_lu/Relu6_model_1/model/batch_normalization/FusedBatchNormV3_model_1/model/batch_normalization_1/FusedBatchNormV3_model_1/model/depthwise_conv2d/depthwise_model_1/model/conv2d_5/Conv2D_model_1/model/conv2d/Conv2D" output_port_id="model_1/model/re_lu/Relu6_model_1/model/batch_normalization/FusedBatchNormV3_model_1/model/batch_normalization_1/FusedBatchNormV3_model_1/model/depthwise_conv2d/depthwise_model_1/model/conv2d_5/Conv2D_model_1/model/conv2d/Conv2D:0" />
+		<IR name="model_1/model/re_lu/Relu6_model_1/model/batch_normalization/FusedBatchNormV3_model_1/model/batch_normalization_1/FusedBatchNormV3_model_1/model/depthwise_conv2d/depthwise_model_1/model/conv2d_5/Conv2D_model_1/model/conv2d/Conv2D" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="depthwise/filter_in" output_port_id="depthwise/filter_in:0" />
+		<IR name="depthwise/filter_in" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="depthwise/filter_in" output_port_id="depthwise/filter_in:0" />
+		<IR name="depthwise/filter_in" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="depthwise" output_port_id="depthwise:0" />
+		<IR name="depthwise" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="depthwise" output_port_id="depthwise:0" />
+		<IR name="depthwise" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Add_1/y" output_port_id="Add_1/y:0" />
+		<IR name="Add_1/y" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Add_1/y" output_port_id="Add_1/y:0" />
+		<IR name="Add_1/y" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Add_1" output_port_id="Add_1:0" />
+		<IR name="Add_1" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Add_1" output_port_id="Add_1:0" />
+		<IR name="Add_1" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="model_1/model/re_lu_1/Relu6_model_1/model/batch_normalization_1/FusedBatchNormV3_model_1/model/depthwise_conv2d/depthwise_model_1/model/conv2d_5/Conv2D" output_port_id="model_1/model/re_lu_1/Relu6_model_1/model/batch_normalization_1/FusedBatchNormV3_model_1/model/depthwise_conv2d/depthwise_model_1/model/conv2d_5/Conv2D:0" />
+		<IR name="model_1/model/re_lu_1/Relu6_model_1/model/batch_normalization_1/FusedBatchNormV3_model_1/model/depthwise_conv2d/depthwise_model_1/model/conv2d_5/Conv2D" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="model_1/model/re_lu_1/Relu6_model_1/model/batch_normalization_1/FusedBatchNormV3_model_1/model/depthwise_conv2d/depthwise_model_1/model/conv2d_5/Conv2D" output_port_id="model_1/model/re_lu_1/Relu6_model_1/model/batch_normalization_1/FusedBatchNormV3_model_1/model/depthwise_conv2d/depthwise_model_1/model/conv2d_5/Conv2D:0" />
+		<IR name="model_1/model/re_lu_1/Relu6_model_1/model/batch_normalization_1/FusedBatchNormV3_model_1/model/depthwise_conv2d/depthwise_model_1/model/conv2d_5/Conv2D" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="Conv2D_1/filter" output_port_id="Conv2D_1/filter:0" />
+		<IR name="Conv2D_1/filter" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Conv2D_1/filter" output_port_id="Conv2D_1/filter:0" />
+		<IR name="Conv2D_1/filter" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Conv2D_1" output_port_id="Conv2D_1:0" />
+		<IR name="Conv2D_1" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Conv2D_1" output_port_id="Conv2D_1:0" />
+		<IR name="Conv2D_1" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="model_1/model/batch_normalization_2/FusedBatchNormV3_model_1/model/conv2d_1/Conv2D1/y" output_port_id="model_1/model/batch_normalization_2/FusedBatchNormV3_model_1/model/conv2d_1/Conv2D1/y:0" />
+		<IR name="model_1/model/batch_normalization_2/FusedBatchNormV3_model_1/model/conv2d_1/Conv2D1/y" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="model_1/model/batch_normalization_2/FusedBatchNormV3_model_1/model/conv2d_1/Conv2D1/y" output_port_id="model_1/model/batch_normalization_2/FusedBatchNormV3_model_1/model/conv2d_1/Conv2D1/y:0" />
+		<IR name="model_1/model/batch_normalization_2/FusedBatchNormV3_model_1/model/conv2d_1/Conv2D1/y" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="model_1/model/batch_normalization_2/FusedBatchNormV3_model_1/model/conv2d_1/Conv2D1" output_port_id="model_1/model/batch_normalization_2/FusedBatchNormV3_model_1/model/conv2d_1/Conv2D1:0" />
+		<IR name="model_1/model/batch_normalization_2/FusedBatchNormV3_model_1/model/conv2d_1/Conv2D1" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="model_1/model/batch_normalization_2/FusedBatchNormV3_model_1/model/conv2d_1/Conv2D1" output_port_id="model_1/model/batch_normalization_2/FusedBatchNormV3_model_1/model/conv2d_1/Conv2D1:0" />
+		<IR name="model_1/model/batch_normalization_2/FusedBatchNormV3_model_1/model/conv2d_1/Conv2D1" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Conv2D_2/filter" output_port_id="Conv2D_2/filter:0" />
+		<IR name="Conv2D_2/filter" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Conv2D_2/filter" output_port_id="Conv2D_2/filter:0" />
+		<IR name="Conv2D_2/filter" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Conv2D_2" output_port_id="Conv2D_2:0" />
+		<IR name="Conv2D_2" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Conv2D_2" output_port_id="Conv2D_2:0" />
+		<IR name="Conv2D_2" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Add_2/y" output_port_id="Add_2/y:0" />
+		<IR name="Add_2/y" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Add_2/y" output_port_id="Add_2/y:0" />
+		<IR name="Add_2/y" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Add_2" output_port_id="Add_2:0" />
+		<IR name="Add_2" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Add_2" output_port_id="Add_2:0" />
+		<IR name="Add_2" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="model_1/model/re_lu_2/Relu6_model_1/model/batch_normalization_3/FusedBatchNormV3_model_1/model/batch_normalization_4/FusedBatchNormV3_model_1/model/depthwise_conv2d_1/depthwise_model_1/model/conv2d_2/Conv2D" output_port_id="model_1/model/re_lu_2/Relu6_model_1/model/batch_normalization_3/FusedBatchNormV3_model_1/model/batch_normalization_4/FusedBatchNormV3_model_1/model/depthwise_conv2d_1/depthwise_model_1/model/conv2d_2/Conv2D:0" />
+		<IR name="model_1/model/re_lu_2/Relu6_model_1/model/batch_normalization_3/FusedBatchNormV3_model_1/model/batch_normalization_4/FusedBatchNormV3_model_1/model/depthwise_conv2d_1/depthwise_model_1/model/conv2d_2/Conv2D" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="model_1/model/re_lu_2/Relu6_model_1/model/batch_normalization_3/FusedBatchNormV3_model_1/model/batch_normalization_4/FusedBatchNormV3_model_1/model/depthwise_conv2d_1/depthwise_model_1/model/conv2d_2/Conv2D" output_port_id="model_1/model/re_lu_2/Relu6_model_1/model/batch_normalization_3/FusedBatchNormV3_model_1/model/batch_normalization_4/FusedBatchNormV3_model_1/model/depthwise_conv2d_1/depthwise_model_1/model/conv2d_2/Conv2D:0" />
+		<IR name="model_1/model/re_lu_2/Relu6_model_1/model/batch_normalization_3/FusedBatchNormV3_model_1/model/batch_normalization_4/FusedBatchNormV3_model_1/model/depthwise_conv2d_1/depthwise_model_1/model/conv2d_2/Conv2D" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="depthwise_1/filter_in" output_port_id="depthwise_1/filter_in:0" />
+		<IR name="depthwise_1/filter_in" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="depthwise_1/filter_in" output_port_id="depthwise_1/filter_in:0" />
+		<IR name="depthwise_1/filter_in" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="depthwise_1" output_port_id="depthwise_1:0" />
+		<IR name="depthwise_1" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="depthwise_1" output_port_id="depthwise_1:0" />
+		<IR name="depthwise_1" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Add_3/y" output_port_id="Add_3/y:0" />
+		<IR name="Add_3/y" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Add_3/y" output_port_id="Add_3/y:0" />
+		<IR name="Add_3/y" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Add_3" output_port_id="Add_3:0" />
+		<IR name="Add_3" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Add_3" output_port_id="Add_3:0" />
+		<IR name="Add_3" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="model_1/model/re_lu_3/Relu6_model_1/model/batch_normalization_4/FusedBatchNormV3_model_1/model/depthwise_conv2d_1/depthwise" output_port_id="model_1/model/re_lu_3/Relu6_model_1/model/batch_normalization_4/FusedBatchNormV3_model_1/model/depthwise_conv2d_1/depthwise:0" />
+		<IR name="model_1/model/re_lu_3/Relu6_model_1/model/batch_normalization_4/FusedBatchNormV3_model_1/model/depthwise_conv2d_1/depthwise" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="model_1/model/re_lu_3/Relu6_model_1/model/batch_normalization_4/FusedBatchNormV3_model_1/model/depthwise_conv2d_1/depthwise" output_port_id="model_1/model/re_lu_3/Relu6_model_1/model/batch_normalization_4/FusedBatchNormV3_model_1/model/depthwise_conv2d_1/depthwise:0" />
+		<IR name="model_1/model/re_lu_3/Relu6_model_1/model/batch_normalization_4/FusedBatchNormV3_model_1/model/depthwise_conv2d_1/depthwise" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="Conv2D_3/filter" output_port_id="Conv2D_3/filter:0" />
+		<IR name="Conv2D_3/filter" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Conv2D_3/filter" output_port_id="Conv2D_3/filter:0" />
+		<IR name="Conv2D_3/filter" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Conv2D_3" output_port_id="Conv2D_3:0" />
+		<IR name="Conv2D_3" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Conv2D_3" output_port_id="Conv2D_3:0" />
+		<IR name="Conv2D_3" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="model_1/model/batch_normalization_5/FusedBatchNormV3_model_1/model/conv2d_5/Conv2D_model_1/model/conv2d_3/Conv2D1/y" output_port_id="model_1/model/batch_normalization_5/FusedBatchNormV3_model_1/model/conv2d_5/Conv2D_model_1/model/conv2d_3/Conv2D1/y:0" />
+		<IR name="model_1/model/batch_normalization_5/FusedBatchNormV3_model_1/model/conv2d_5/Conv2D_model_1/model/conv2d_3/Conv2D1/y" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="model_1/model/batch_normalization_5/FusedBatchNormV3_model_1/model/conv2d_5/Conv2D_model_1/model/conv2d_3/Conv2D1/y" output_port_id="model_1/model/batch_normalization_5/FusedBatchNormV3_model_1/model/conv2d_5/Conv2D_model_1/model/conv2d_3/Conv2D1/y:0" />
+		<IR name="model_1/model/batch_normalization_5/FusedBatchNormV3_model_1/model/conv2d_5/Conv2D_model_1/model/conv2d_3/Conv2D1/y" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="model_1/model/batch_normalization_5/FusedBatchNormV3_model_1/model/conv2d_5/Conv2D_model_1/model/conv2d_3/Conv2D1" output_port_id="model_1/model/batch_normalization_5/FusedBatchNormV3_model_1/model/conv2d_5/Conv2D_model_1/model/conv2d_3/Conv2D1:0" />
+		<IR name="model_1/model/batch_normalization_5/FusedBatchNormV3_model_1/model/conv2d_5/Conv2D_model_1/model/conv2d_3/Conv2D1" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="model_1/model/batch_normalization_5/FusedBatchNormV3_model_1/model/conv2d_5/Conv2D_model_1/model/conv2d_3/Conv2D1" output_port_id="model_1/model/batch_normalization_5/FusedBatchNormV3_model_1/model/conv2d_5/Conv2D_model_1/model/conv2d_3/Conv2D1:0" />
+		<IR name="model_1/model/batch_normalization_5/FusedBatchNormV3_model_1/model/conv2d_5/Conv2D_model_1/model/conv2d_3/Conv2D1" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Conv2D_4/filter" output_port_id="Conv2D_4/filter:0" />
+		<IR name="Conv2D_4/filter" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Conv2D_4/filter" output_port_id="Conv2D_4/filter:0" />
+		<IR name="Conv2D_4/filter" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Conv2D_4" output_port_id="Conv2D_4:0" />
+		<IR name="Conv2D_4" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Conv2D_4" output_port_id="Conv2D_4:0" />
+		<IR name="Conv2D_4" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Add_4/y" output_port_id="Add_4/y:0" />
+		<IR name="Add_4/y" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Add_4/y" output_port_id="Add_4/y:0" />
+		<IR name="Add_4/y" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Add_4" output_port_id="Add_4:0" />
+		<IR name="Add_4" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Add_4" output_port_id="Add_4:0" />
+		<IR name="Add_4" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="model_1/model/re_lu_4/Relu6_model_1/model/batch_normalization_6/FusedBatchNormV3_model_1/model/batch_normalization_10/FusedBatchNormV3_model_1/model/depthwise_conv2d_3/depthwise_model_1/model/conv2d_4/Conv2D" output_port_id="model_1/model/re_lu_4/Relu6_model_1/model/batch_normalization_6/FusedBatchNormV3_model_1/model/batch_normalization_10/FusedBatchNormV3_model_1/model/depthwise_conv2d_3/depthwise_model_1/model/conv2d_4/Conv2D:0" />
+		<IR name="model_1/model/re_lu_4/Relu6_model_1/model/batch_normalization_6/FusedBatchNormV3_model_1/model/batch_normalization_10/FusedBatchNormV3_model_1/model/depthwise_conv2d_3/depthwise_model_1/model/conv2d_4/Conv2D" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="model_1/model/re_lu_4/Relu6_model_1/model/batch_normalization_6/FusedBatchNormV3_model_1/model/batch_normalization_10/FusedBatchNormV3_model_1/model/depthwise_conv2d_3/depthwise_model_1/model/conv2d_4/Conv2D" output_port_id="model_1/model/re_lu_4/Relu6_model_1/model/batch_normalization_6/FusedBatchNormV3_model_1/model/batch_normalization_10/FusedBatchNormV3_model_1/model/depthwise_conv2d_3/depthwise_model_1/model/conv2d_4/Conv2D:0" />
+		<IR name="model_1/model/re_lu_4/Relu6_model_1/model/batch_normalization_6/FusedBatchNormV3_model_1/model/batch_normalization_10/FusedBatchNormV3_model_1/model/depthwise_conv2d_3/depthwise_model_1/model/conv2d_4/Conv2D" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="depthwise_2/filter_in" output_port_id="depthwise_2/filter_in:0" />
+		<IR name="depthwise_2/filter_in" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="depthwise_2/filter_in" output_port_id="depthwise_2/filter_in:0" />
+		<IR name="depthwise_2/filter_in" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="depthwise_2" output_port_id="depthwise_2:0" />
+		<IR name="depthwise_2" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="depthwise_2" output_port_id="depthwise_2:0" />
+		<IR name="depthwise_2" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Add_5/y" output_port_id="Add_5/y:0" />
+		<IR name="Add_5/y" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Add_5/y" output_port_id="Add_5/y:0" />
+		<IR name="Add_5/y" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Add_5" output_port_id="Add_5:0" />
+		<IR name="Add_5" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Add_5" output_port_id="Add_5:0" />
+		<IR name="Add_5" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="model_1/model/re_lu_5/Relu6_model_1/model/batch_normalization_7/FusedBatchNormV3_model_1/model/batch_normalization_10/FusedBatchNormV3_model_1/model/depthwise_conv2d_3/depthwise_model_1/model/depthwise_conv2d_2/depthwise" output_port_id="model_1/model/re_lu_5/Relu6_model_1/model/batch_normalization_7/FusedBatchNormV3_model_1/model/batch_normalization_10/FusedBatchNormV3_model_1/model/depthwise_conv2d_3/depthwise_model_1/model/depthwise_conv2d_2/depthwise:0" />
+		<IR name="model_1/model/re_lu_5/Relu6_model_1/model/batch_normalization_7/FusedBatchNormV3_model_1/model/batch_normalization_10/FusedBatchNormV3_model_1/model/depthwise_conv2d_3/depthwise_model_1/model/depthwise_conv2d_2/depthwise" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="model_1/model/re_lu_5/Relu6_model_1/model/batch_normalization_7/FusedBatchNormV3_model_1/model/batch_normalization_10/FusedBatchNormV3_model_1/model/depthwise_conv2d_3/depthwise_model_1/model/depthwise_conv2d_2/depthwise" output_port_id="model_1/model/re_lu_5/Relu6_model_1/model/batch_normalization_7/FusedBatchNormV3_model_1/model/batch_normalization_10/FusedBatchNormV3_model_1/model/depthwise_conv2d_3/depthwise_model_1/model/depthwise_conv2d_2/depthwise:0" />
+		<IR name="model_1/model/re_lu_5/Relu6_model_1/model/batch_normalization_7/FusedBatchNormV3_model_1/model/batch_normalization_10/FusedBatchNormV3_model_1/model/depthwise_conv2d_3/depthwise_model_1/model/depthwise_conv2d_2/depthwise" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="Conv2D_5/filter" output_port_id="Conv2D_5/filter:0" />
+		<IR name="Conv2D_5/filter" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Conv2D_5/filter" output_port_id="Conv2D_5/filter:0" />
+		<IR name="Conv2D_5/filter" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Conv2D_5" output_port_id="Conv2D_5:0" />
+		<IR name="Conv2D_5" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Conv2D_5" output_port_id="Conv2D_5:0" />
+		<IR name="Conv2D_5" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="model_1/model/batch_normalization_8/FusedBatchNormV3_model_1/model/conv2d_5/Conv2D1/y" output_port_id="model_1/model/batch_normalization_8/FusedBatchNormV3_model_1/model/conv2d_5/Conv2D1/y:0" />
+		<IR name="model_1/model/batch_normalization_8/FusedBatchNormV3_model_1/model/conv2d_5/Conv2D1/y" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="model_1/model/batch_normalization_8/FusedBatchNormV3_model_1/model/conv2d_5/Conv2D1/y" output_port_id="model_1/model/batch_normalization_8/FusedBatchNormV3_model_1/model/conv2d_5/Conv2D1/y:0" />
+		<IR name="model_1/model/batch_normalization_8/FusedBatchNormV3_model_1/model/conv2d_5/Conv2D1/y" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="model_1/model/batch_normalization_8/FusedBatchNormV3_model_1/model/conv2d_5/Conv2D1" output_port_id="model_1/model/batch_normalization_8/FusedBatchNormV3_model_1/model/conv2d_5/Conv2D1:0" />
+		<IR name="model_1/model/batch_normalization_8/FusedBatchNormV3_model_1/model/conv2d_5/Conv2D1" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="model_1/model/batch_normalization_8/FusedBatchNormV3_model_1/model/conv2d_5/Conv2D1" output_port_id="model_1/model/batch_normalization_8/FusedBatchNormV3_model_1/model/conv2d_5/Conv2D1:0" />
+		<IR name="model_1/model/batch_normalization_8/FusedBatchNormV3_model_1/model/conv2d_5/Conv2D1" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="model_1/model/add/add" output_port_id="model_1/model/add/add:0" />
+		<IR name="model_1/model/add/add" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="model_1/model/add/add" output_port_id="model_1/model/add/add:0" />
+		<IR name="model_1/model/add/add" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Conv2D_6/filter" output_port_id="Conv2D_6/filter:0" />
+		<IR name="Conv2D_6/filter" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Conv2D_6/filter" output_port_id="Conv2D_6/filter:0" />
+		<IR name="Conv2D_6/filter" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Conv2D_6" output_port_id="Conv2D_6:0" />
+		<IR name="Conv2D_6" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Conv2D_6" output_port_id="Conv2D_6:0" />
+		<IR name="Conv2D_6" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Add_6/y" output_port_id="Add_6/y:0" />
+		<IR name="Add_6/y" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Add_6/y" output_port_id="Add_6/y:0" />
+		<IR name="Add_6/y" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Add_6" output_port_id="Add_6:0" />
+		<IR name="Add_6" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Add_6" output_port_id="Add_6:0" />
+		<IR name="Add_6" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="model_1/model/re_lu_6/Relu6_model_1/model/batch_normalization_9/FusedBatchNormV3_model_1/model/batch_normalization_10/FusedBatchNormV3_model_1/model/depthwise_conv2d_3/depthwise_model_1/model/conv2d_6/Conv2D" output_port_id="model_1/model/re_lu_6/Relu6_model_1/model/batch_normalization_9/FusedBatchNormV3_model_1/model/batch_normalization_10/FusedBatchNormV3_model_1/model/depthwise_conv2d_3/depthwise_model_1/model/conv2d_6/Conv2D:0" />
+		<IR name="model_1/model/re_lu_6/Relu6_model_1/model/batch_normalization_9/FusedBatchNormV3_model_1/model/batch_normalization_10/FusedBatchNormV3_model_1/model/depthwise_conv2d_3/depthwise_model_1/model/conv2d_6/Conv2D" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="model_1/model/re_lu_6/Relu6_model_1/model/batch_normalization_9/FusedBatchNormV3_model_1/model/batch_normalization_10/FusedBatchNormV3_model_1/model/depthwise_conv2d_3/depthwise_model_1/model/conv2d_6/Conv2D" output_port_id="model_1/model/re_lu_6/Relu6_model_1/model/batch_normalization_9/FusedBatchNormV3_model_1/model/batch_normalization_10/FusedBatchNormV3_model_1/model/depthwise_conv2d_3/depthwise_model_1/model/conv2d_6/Conv2D:0" />
+		<IR name="model_1/model/re_lu_6/Relu6_model_1/model/batch_normalization_9/FusedBatchNormV3_model_1/model/batch_normalization_10/FusedBatchNormV3_model_1/model/depthwise_conv2d_3/depthwise_model_1/model/conv2d_6/Conv2D" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="depthwise_3/filter_in" output_port_id="depthwise_3/filter_in:0" />
+		<IR name="depthwise_3/filter_in" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="depthwise_3/filter_in" output_port_id="depthwise_3/filter_in:0" />
+		<IR name="depthwise_3/filter_in" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="depthwise_3" output_port_id="depthwise_3:0" />
+		<IR name="depthwise_3" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="depthwise_3" output_port_id="depthwise_3:0" />
+		<IR name="depthwise_3" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Add_7/y" output_port_id="Add_7/y:0" />
+		<IR name="Add_7/y" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Add_7/y" output_port_id="Add_7/y:0" />
+		<IR name="Add_7/y" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Add_7" output_port_id="Add_7:0" />
+		<IR name="Add_7" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Add_7" output_port_id="Add_7:0" />
+		<IR name="Add_7" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="model_1/model/re_lu_7/Relu6_model_1/model/batch_normalization_10/FusedBatchNormV3_model_1/model/depthwise_conv2d_3/depthwise" output_port_id="model_1/model/re_lu_7/Relu6_model_1/model/batch_normalization_10/FusedBatchNormV3_model_1/model/depthwise_conv2d_3/depthwise:0" />
+		<IR name="model_1/model/re_lu_7/Relu6_model_1/model/batch_normalization_10/FusedBatchNormV3_model_1/model/depthwise_conv2d_3/depthwise" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="model_1/model/re_lu_7/Relu6_model_1/model/batch_normalization_10/FusedBatchNormV3_model_1/model/depthwise_conv2d_3/depthwise" output_port_id="model_1/model/re_lu_7/Relu6_model_1/model/batch_normalization_10/FusedBatchNormV3_model_1/model/depthwise_conv2d_3/depthwise:0" />
+		<IR name="model_1/model/re_lu_7/Relu6_model_1/model/batch_normalization_10/FusedBatchNormV3_model_1/model/depthwise_conv2d_3/depthwise" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="Conv2D_7/filter" output_port_id="Conv2D_7/filter:0" />
+		<IR name="Conv2D_7/filter" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Conv2D_7/filter" output_port_id="Conv2D_7/filter:0" />
+		<IR name="Conv2D_7/filter" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Conv2D_7" output_port_id="Conv2D_7:0" />
+		<IR name="Conv2D_7" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Conv2D_7" output_port_id="Conv2D_7:0" />
+		<IR name="Conv2D_7" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="model_1/model/batch_normalization_11/FusedBatchNormV3_model_1/model/conv2d_9/Conv2D_model_1/model/conv2d_7/Conv2D1/y" output_port_id="model_1/model/batch_normalization_11/FusedBatchNormV3_model_1/model/conv2d_9/Conv2D_model_1/model/conv2d_7/Conv2D1/y:0" />
+		<IR name="model_1/model/batch_normalization_11/FusedBatchNormV3_model_1/model/conv2d_9/Conv2D_model_1/model/conv2d_7/Conv2D1/y" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="model_1/model/batch_normalization_11/FusedBatchNormV3_model_1/model/conv2d_9/Conv2D_model_1/model/conv2d_7/Conv2D1/y" output_port_id="model_1/model/batch_normalization_11/FusedBatchNormV3_model_1/model/conv2d_9/Conv2D_model_1/model/conv2d_7/Conv2D1/y:0" />
+		<IR name="model_1/model/batch_normalization_11/FusedBatchNormV3_model_1/model/conv2d_9/Conv2D_model_1/model/conv2d_7/Conv2D1/y" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="model_1/model/batch_normalization_11/FusedBatchNormV3_model_1/model/conv2d_9/Conv2D_model_1/model/conv2d_7/Conv2D1" output_port_id="model_1/model/batch_normalization_11/FusedBatchNormV3_model_1/model/conv2d_9/Conv2D_model_1/model/conv2d_7/Conv2D1:0" />
+		<IR name="model_1/model/batch_normalization_11/FusedBatchNormV3_model_1/model/conv2d_9/Conv2D_model_1/model/conv2d_7/Conv2D1" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="model_1/model/batch_normalization_11/FusedBatchNormV3_model_1/model/conv2d_9/Conv2D_model_1/model/conv2d_7/Conv2D1" output_port_id="model_1/model/batch_normalization_11/FusedBatchNormV3_model_1/model/conv2d_9/Conv2D_model_1/model/conv2d_7/Conv2D1:0" />
+		<IR name="model_1/model/batch_normalization_11/FusedBatchNormV3_model_1/model/conv2d_9/Conv2D_model_1/model/conv2d_7/Conv2D1" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Conv2D_8/filter" output_port_id="Conv2D_8/filter:0" />
+		<IR name="Conv2D_8/filter" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Conv2D_8/filter" output_port_id="Conv2D_8/filter:0" />
+		<IR name="Conv2D_8/filter" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Conv2D_8" output_port_id="Conv2D_8:0" />
+		<IR name="Conv2D_8" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Conv2D_8" output_port_id="Conv2D_8:0" />
+		<IR name="Conv2D_8" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Add_8/y" output_port_id="Add_8/y:0" />
+		<IR name="Add_8/y" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Add_8/y" output_port_id="Add_8/y:0" />
+		<IR name="Add_8/y" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Add_8" output_port_id="Add_8:0" />
+		<IR name="Add_8" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Add_8" output_port_id="Add_8:0" />
+		<IR name="Add_8" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="model_1/model/re_lu_8/Relu6_model_1/model/batch_normalization_12/FusedBatchNormV3_model_1/model/batch_normalization_16/FusedBatchNormV3_model_1/model/depthwise_conv2d_5/depthwise_model_1/model/conv2d_8/Conv2D" output_port_id="model_1/model/re_lu_8/Relu6_model_1/model/batch_normalization_12/FusedBatchNormV3_model_1/model/batch_normalization_16/FusedBatchNormV3_model_1/model/depthwise_conv2d_5/depthwise_model_1/model/conv2d_8/Conv2D:0" />
+		<IR name="model_1/model/re_lu_8/Relu6_model_1/model/batch_normalization_12/FusedBatchNormV3_model_1/model/batch_normalization_16/FusedBatchNormV3_model_1/model/depthwise_conv2d_5/depthwise_model_1/model/conv2d_8/Conv2D" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="model_1/model/re_lu_8/Relu6_model_1/model/batch_normalization_12/FusedBatchNormV3_model_1/model/batch_normalization_16/FusedBatchNormV3_model_1/model/depthwise_conv2d_5/depthwise_model_1/model/conv2d_8/Conv2D" output_port_id="model_1/model/re_lu_8/Relu6_model_1/model/batch_normalization_12/FusedBatchNormV3_model_1/model/batch_normalization_16/FusedBatchNormV3_model_1/model/depthwise_conv2d_5/depthwise_model_1/model/conv2d_8/Conv2D:0" />
+		<IR name="model_1/model/re_lu_8/Relu6_model_1/model/batch_normalization_12/FusedBatchNormV3_model_1/model/batch_normalization_16/FusedBatchNormV3_model_1/model/depthwise_conv2d_5/depthwise_model_1/model/conv2d_8/Conv2D" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="depthwise_4/filter_in" output_port_id="depthwise_4/filter_in:0" />
+		<IR name="depthwise_4/filter_in" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="depthwise_4/filter_in" output_port_id="depthwise_4/filter_in:0" />
+		<IR name="depthwise_4/filter_in" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="depthwise_4" output_port_id="depthwise_4:0" />
+		<IR name="depthwise_4" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="depthwise_4" output_port_id="depthwise_4:0" />
+		<IR name="depthwise_4" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Add_9/y" output_port_id="Add_9/y:0" />
+		<IR name="Add_9/y" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Add_9/y" output_port_id="Add_9/y:0" />
+		<IR name="Add_9/y" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Add_9" output_port_id="Add_9:0" />
+		<IR name="Add_9" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Add_9" output_port_id="Add_9:0" />
+		<IR name="Add_9" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="model_1/model/re_lu_9/Relu6_model_1/model/batch_normalization_13/FusedBatchNormV3_model_1/model/batch_normalization_16/FusedBatchNormV3_model_1/model/depthwise_conv2d_5/depthwise_model_1/model/depthwise_conv2d_4/depthwise" output_port_id="model_1/model/re_lu_9/Relu6_model_1/model/batch_normalization_13/FusedBatchNormV3_model_1/model/batch_normalization_16/FusedBatchNormV3_model_1/model/depthwise_conv2d_5/depthwise_model_1/model/depthwise_conv2d_4/depthwise:0" />
+		<IR name="model_1/model/re_lu_9/Relu6_model_1/model/batch_normalization_13/FusedBatchNormV3_model_1/model/batch_normalization_16/FusedBatchNormV3_model_1/model/depthwise_conv2d_5/depthwise_model_1/model/depthwise_conv2d_4/depthwise" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="model_1/model/re_lu_9/Relu6_model_1/model/batch_normalization_13/FusedBatchNormV3_model_1/model/batch_normalization_16/FusedBatchNormV3_model_1/model/depthwise_conv2d_5/depthwise_model_1/model/depthwise_conv2d_4/depthwise" output_port_id="model_1/model/re_lu_9/Relu6_model_1/model/batch_normalization_13/FusedBatchNormV3_model_1/model/batch_normalization_16/FusedBatchNormV3_model_1/model/depthwise_conv2d_5/depthwise_model_1/model/depthwise_conv2d_4/depthwise:0" />
+		<IR name="model_1/model/re_lu_9/Relu6_model_1/model/batch_normalization_13/FusedBatchNormV3_model_1/model/batch_normalization_16/FusedBatchNormV3_model_1/model/depthwise_conv2d_5/depthwise_model_1/model/depthwise_conv2d_4/depthwise" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="Conv2D_9/filter" output_port_id="Conv2D_9/filter:0" />
+		<IR name="Conv2D_9/filter" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Conv2D_9/filter" output_port_id="Conv2D_9/filter:0" />
+		<IR name="Conv2D_9/filter" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Conv2D_9" output_port_id="Conv2D_9:0" />
+		<IR name="Conv2D_9" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Conv2D_9" output_port_id="Conv2D_9:0" />
+		<IR name="Conv2D_9" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="model_1/model/batch_normalization_14/FusedBatchNormV3_model_1/model/conv2d_9/Conv2D1/y" output_port_id="model_1/model/batch_normalization_14/FusedBatchNormV3_model_1/model/conv2d_9/Conv2D1/y:0" />
+		<IR name="model_1/model/batch_normalization_14/FusedBatchNormV3_model_1/model/conv2d_9/Conv2D1/y" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="model_1/model/batch_normalization_14/FusedBatchNormV3_model_1/model/conv2d_9/Conv2D1/y" output_port_id="model_1/model/batch_normalization_14/FusedBatchNormV3_model_1/model/conv2d_9/Conv2D1/y:0" />
+		<IR name="model_1/model/batch_normalization_14/FusedBatchNormV3_model_1/model/conv2d_9/Conv2D1/y" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="model_1/model/batch_normalization_14/FusedBatchNormV3_model_1/model/conv2d_9/Conv2D1" output_port_id="model_1/model/batch_normalization_14/FusedBatchNormV3_model_1/model/conv2d_9/Conv2D1:0" />
+		<IR name="model_1/model/batch_normalization_14/FusedBatchNormV3_model_1/model/conv2d_9/Conv2D1" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="model_1/model/batch_normalization_14/FusedBatchNormV3_model_1/model/conv2d_9/Conv2D1" output_port_id="model_1/model/batch_normalization_14/FusedBatchNormV3_model_1/model/conv2d_9/Conv2D1:0" />
+		<IR name="model_1/model/batch_normalization_14/FusedBatchNormV3_model_1/model/conv2d_9/Conv2D1" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="model_1/model/add_1/add" output_port_id="model_1/model/add_1/add:0" />
+		<IR name="model_1/model/add_1/add" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="model_1/model/add_1/add" output_port_id="model_1/model/add_1/add:0" />
+		<IR name="model_1/model/add_1/add" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Conv2D_10/filter" output_port_id="Conv2D_10/filter:0" />
+		<IR name="Conv2D_10/filter" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Conv2D_10/filter" output_port_id="Conv2D_10/filter:0" />
+		<IR name="Conv2D_10/filter" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Conv2D_10" output_port_id="Conv2D_10:0" />
+		<IR name="Conv2D_10" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Conv2D_10" output_port_id="Conv2D_10:0" />
+		<IR name="Conv2D_10" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Add_10/y" output_port_id="Add_10/y:0" />
+		<IR name="Add_10/y" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Add_10/y" output_port_id="Add_10/y:0" />
+		<IR name="Add_10/y" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Add_10" output_port_id="Add_10:0" />
+		<IR name="Add_10" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Add_10" output_port_id="Add_10:0" />
+		<IR name="Add_10" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="model_1/model/re_lu_10/Relu6_model_1/model/batch_normalization_15/FusedBatchNormV3_model_1/model/batch_normalization_16/FusedBatchNormV3_model_1/model/depthwise_conv2d_5/depthwise_model_1/model/conv2d_10/Conv2D" output_port_id="model_1/model/re_lu_10/Relu6_model_1/model/batch_normalization_15/FusedBatchNormV3_model_1/model/batch_normalization_16/FusedBatchNormV3_model_1/model/depthwise_conv2d_5/depthwise_model_1/model/conv2d_10/Conv2D:0" />
+		<IR name="model_1/model/re_lu_10/Relu6_model_1/model/batch_normalization_15/FusedBatchNormV3_model_1/model/batch_normalization_16/FusedBatchNormV3_model_1/model/depthwise_conv2d_5/depthwise_model_1/model/conv2d_10/Conv2D" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="model_1/model/re_lu_10/Relu6_model_1/model/batch_normalization_15/FusedBatchNormV3_model_1/model/batch_normalization_16/FusedBatchNormV3_model_1/model/depthwise_conv2d_5/depthwise_model_1/model/conv2d_10/Conv2D" output_port_id="model_1/model/re_lu_10/Relu6_model_1/model/batch_normalization_15/FusedBatchNormV3_model_1/model/batch_normalization_16/FusedBatchNormV3_model_1/model/depthwise_conv2d_5/depthwise_model_1/model/conv2d_10/Conv2D:0" />
+		<IR name="model_1/model/re_lu_10/Relu6_model_1/model/batch_normalization_15/FusedBatchNormV3_model_1/model/batch_normalization_16/FusedBatchNormV3_model_1/model/depthwise_conv2d_5/depthwise_model_1/model/conv2d_10/Conv2D" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="depthwise_5/filter_in" output_port_id="depthwise_5/filter_in:0" />
+		<IR name="depthwise_5/filter_in" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="depthwise_5/filter_in" output_port_id="depthwise_5/filter_in:0" />
+		<IR name="depthwise_5/filter_in" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="depthwise_5" output_port_id="depthwise_5:0" />
+		<IR name="depthwise_5" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="depthwise_5" output_port_id="depthwise_5:0" />
+		<IR name="depthwise_5" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Add_11/y" output_port_id="Add_11/y:0" />
+		<IR name="Add_11/y" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Add_11/y" output_port_id="Add_11/y:0" />
+		<IR name="Add_11/y" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Add_11" output_port_id="Add_11:0" />
+		<IR name="Add_11" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Add_11" output_port_id="Add_11:0" />
+		<IR name="Add_11" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="model_1/model/re_lu_11/Relu6_model_1/model/batch_normalization_16/FusedBatchNormV3_model_1/model/depthwise_conv2d_5/depthwise" output_port_id="model_1/model/re_lu_11/Relu6_model_1/model/batch_normalization_16/FusedBatchNormV3_model_1/model/depthwise_conv2d_5/depthwise:0" />
+		<IR name="model_1/model/re_lu_11/Relu6_model_1/model/batch_normalization_16/FusedBatchNormV3_model_1/model/depthwise_conv2d_5/depthwise" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="model_1/model/re_lu_11/Relu6_model_1/model/batch_normalization_16/FusedBatchNormV3_model_1/model/depthwise_conv2d_5/depthwise" output_port_id="model_1/model/re_lu_11/Relu6_model_1/model/batch_normalization_16/FusedBatchNormV3_model_1/model/depthwise_conv2d_5/depthwise:0" />
+		<IR name="model_1/model/re_lu_11/Relu6_model_1/model/batch_normalization_16/FusedBatchNormV3_model_1/model/depthwise_conv2d_5/depthwise" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="Conv2D_11/filter" output_port_id="Conv2D_11/filter:0" />
+		<IR name="Conv2D_11/filter" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Conv2D_11/filter" output_port_id="Conv2D_11/filter:0" />
+		<IR name="Conv2D_11/filter" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Conv2D_11" output_port_id="Conv2D_11:0" />
+		<IR name="Conv2D_11" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Conv2D_11" output_port_id="Conv2D_11:0" />
+		<IR name="Conv2D_11" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="model_1/model/batch_normalization_17/FusedBatchNormV3_model_1/model/conv2d_15/Conv2D_model_1/model/conv2d_11/Conv2D1/y" output_port_id="model_1/model/batch_normalization_17/FusedBatchNormV3_model_1/model/conv2d_15/Conv2D_model_1/model/conv2d_11/Conv2D1/y:0" />
+		<IR name="model_1/model/batch_normalization_17/FusedBatchNormV3_model_1/model/conv2d_15/Conv2D_model_1/model/conv2d_11/Conv2D1/y" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="model_1/model/batch_normalization_17/FusedBatchNormV3_model_1/model/conv2d_15/Conv2D_model_1/model/conv2d_11/Conv2D1/y" output_port_id="model_1/model/batch_normalization_17/FusedBatchNormV3_model_1/model/conv2d_15/Conv2D_model_1/model/conv2d_11/Conv2D1/y:0" />
+		<IR name="model_1/model/batch_normalization_17/FusedBatchNormV3_model_1/model/conv2d_15/Conv2D_model_1/model/conv2d_11/Conv2D1/y" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="model_1/model/batch_normalization_17/FusedBatchNormV3_model_1/model/conv2d_15/Conv2D_model_1/model/conv2d_11/Conv2D1" output_port_id="model_1/model/batch_normalization_17/FusedBatchNormV3_model_1/model/conv2d_15/Conv2D_model_1/model/conv2d_11/Conv2D1:0" />
+		<IR name="model_1/model/batch_normalization_17/FusedBatchNormV3_model_1/model/conv2d_15/Conv2D_model_1/model/conv2d_11/Conv2D1" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="model_1/model/batch_normalization_17/FusedBatchNormV3_model_1/model/conv2d_15/Conv2D_model_1/model/conv2d_11/Conv2D1" output_port_id="model_1/model/batch_normalization_17/FusedBatchNormV3_model_1/model/conv2d_15/Conv2D_model_1/model/conv2d_11/Conv2D1:0" />
+		<IR name="model_1/model/batch_normalization_17/FusedBatchNormV3_model_1/model/conv2d_15/Conv2D_model_1/model/conv2d_11/Conv2D1" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Conv2D_12/filter" output_port_id="Conv2D_12/filter:0" />
+		<IR name="Conv2D_12/filter" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Conv2D_12/filter" output_port_id="Conv2D_12/filter:0" />
+		<IR name="Conv2D_12/filter" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Conv2D_12" output_port_id="Conv2D_12:0" />
+		<IR name="Conv2D_12" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Conv2D_12" output_port_id="Conv2D_12:0" />
+		<IR name="Conv2D_12" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Add_12/y" output_port_id="Add_12/y:0" />
+		<IR name="Add_12/y" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Add_12/y" output_port_id="Add_12/y:0" />
+		<IR name="Add_12/y" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Add_12" output_port_id="Add_12:0" />
+		<IR name="Add_12" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Add_12" output_port_id="Add_12:0" />
+		<IR name="Add_12" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="model_1/model/re_lu_12/Relu6_model_1/model/batch_normalization_18/FusedBatchNormV3_model_1/model/batch_normalization_25/FusedBatchNormV3_model_1/model/depthwise_conv2d_8/depthwise_model_1/model/conv2d_12/Conv2D" output_port_id="model_1/model/re_lu_12/Relu6_model_1/model/batch_normalization_18/FusedBatchNormV3_model_1/model/batch_normalization_25/FusedBatchNormV3_model_1/model/depthwise_conv2d_8/depthwise_model_1/model/conv2d_12/Conv2D:0" />
+		<IR name="model_1/model/re_lu_12/Relu6_model_1/model/batch_normalization_18/FusedBatchNormV3_model_1/model/batch_normalization_25/FusedBatchNormV3_model_1/model/depthwise_conv2d_8/depthwise_model_1/model/conv2d_12/Conv2D" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="model_1/model/re_lu_12/Relu6_model_1/model/batch_normalization_18/FusedBatchNormV3_model_1/model/batch_normalization_25/FusedBatchNormV3_model_1/model/depthwise_conv2d_8/depthwise_model_1/model/conv2d_12/Conv2D" output_port_id="model_1/model/re_lu_12/Relu6_model_1/model/batch_normalization_18/FusedBatchNormV3_model_1/model/batch_normalization_25/FusedBatchNormV3_model_1/model/depthwise_conv2d_8/depthwise_model_1/model/conv2d_12/Conv2D:0" />
+		<IR name="model_1/model/re_lu_12/Relu6_model_1/model/batch_normalization_18/FusedBatchNormV3_model_1/model/batch_normalization_25/FusedBatchNormV3_model_1/model/depthwise_conv2d_8/depthwise_model_1/model/conv2d_12/Conv2D" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="depthwise_6/filter_in" output_port_id="depthwise_6/filter_in:0" />
+		<IR name="depthwise_6/filter_in" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="depthwise_6/filter_in" output_port_id="depthwise_6/filter_in:0" />
+		<IR name="depthwise_6/filter_in" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="depthwise_6" output_port_id="depthwise_6:0" />
+		<IR name="depthwise_6" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="depthwise_6" output_port_id="depthwise_6:0" />
+		<IR name="depthwise_6" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Add_13/y" output_port_id="Add_13/y:0" />
+		<IR name="Add_13/y" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Add_13/y" output_port_id="Add_13/y:0" />
+		<IR name="Add_13/y" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Add_13" output_port_id="Add_13:0" />
+		<IR name="Add_13" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Add_13" output_port_id="Add_13:0" />
+		<IR name="Add_13" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="model_1/model/re_lu_13/Relu6_model_1/model/batch_normalization_19/FusedBatchNormV3_model_1/model/batch_normalization_25/FusedBatchNormV3_model_1/model/depthwise_conv2d_8/depthwise_model_1/model/depthwise_conv2d_6/depthwise" output_port_id="model_1/model/re_lu_13/Relu6_model_1/model/batch_normalization_19/FusedBatchNormV3_model_1/model/batch_normalization_25/FusedBatchNormV3_model_1/model/depthwise_conv2d_8/depthwise_model_1/model/depthwise_conv2d_6/depthwise:0" />
+		<IR name="model_1/model/re_lu_13/Relu6_model_1/model/batch_normalization_19/FusedBatchNormV3_model_1/model/batch_normalization_25/FusedBatchNormV3_model_1/model/depthwise_conv2d_8/depthwise_model_1/model/depthwise_conv2d_6/depthwise" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="model_1/model/re_lu_13/Relu6_model_1/model/batch_normalization_19/FusedBatchNormV3_model_1/model/batch_normalization_25/FusedBatchNormV3_model_1/model/depthwise_conv2d_8/depthwise_model_1/model/depthwise_conv2d_6/depthwise" output_port_id="model_1/model/re_lu_13/Relu6_model_1/model/batch_normalization_19/FusedBatchNormV3_model_1/model/batch_normalization_25/FusedBatchNormV3_model_1/model/depthwise_conv2d_8/depthwise_model_1/model/depthwise_conv2d_6/depthwise:0" />
+		<IR name="model_1/model/re_lu_13/Relu6_model_1/model/batch_normalization_19/FusedBatchNormV3_model_1/model/batch_normalization_25/FusedBatchNormV3_model_1/model/depthwise_conv2d_8/depthwise_model_1/model/depthwise_conv2d_6/depthwise" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="Conv2D_13/filter" output_port_id="Conv2D_13/filter:0" />
+		<IR name="Conv2D_13/filter" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Conv2D_13/filter" output_port_id="Conv2D_13/filter:0" />
+		<IR name="Conv2D_13/filter" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Conv2D_13" output_port_id="Conv2D_13:0" />
+		<IR name="Conv2D_13" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Conv2D_13" output_port_id="Conv2D_13:0" />
+		<IR name="Conv2D_13" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="model_1/model/batch_normalization_20/FusedBatchNormV3_model_1/model/conv2d_15/Conv2D_model_1/model/conv2d_13/Conv2D1/y" output_port_id="model_1/model/batch_normalization_20/FusedBatchNormV3_model_1/model/conv2d_15/Conv2D_model_1/model/conv2d_13/Conv2D1/y:0" />
+		<IR name="model_1/model/batch_normalization_20/FusedBatchNormV3_model_1/model/conv2d_15/Conv2D_model_1/model/conv2d_13/Conv2D1/y" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="model_1/model/batch_normalization_20/FusedBatchNormV3_model_1/model/conv2d_15/Conv2D_model_1/model/conv2d_13/Conv2D1/y" output_port_id="model_1/model/batch_normalization_20/FusedBatchNormV3_model_1/model/conv2d_15/Conv2D_model_1/model/conv2d_13/Conv2D1/y:0" />
+		<IR name="model_1/model/batch_normalization_20/FusedBatchNormV3_model_1/model/conv2d_15/Conv2D_model_1/model/conv2d_13/Conv2D1/y" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="model_1/model/batch_normalization_20/FusedBatchNormV3_model_1/model/conv2d_15/Conv2D_model_1/model/conv2d_13/Conv2D1" output_port_id="model_1/model/batch_normalization_20/FusedBatchNormV3_model_1/model/conv2d_15/Conv2D_model_1/model/conv2d_13/Conv2D1:0" />
+		<IR name="model_1/model/batch_normalization_20/FusedBatchNormV3_model_1/model/conv2d_15/Conv2D_model_1/model/conv2d_13/Conv2D1" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="model_1/model/batch_normalization_20/FusedBatchNormV3_model_1/model/conv2d_15/Conv2D_model_1/model/conv2d_13/Conv2D1" output_port_id="model_1/model/batch_normalization_20/FusedBatchNormV3_model_1/model/conv2d_15/Conv2D_model_1/model/conv2d_13/Conv2D1:0" />
+		<IR name="model_1/model/batch_normalization_20/FusedBatchNormV3_model_1/model/conv2d_15/Conv2D_model_1/model/conv2d_13/Conv2D1" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="model_1/model/add_2/add" output_port_id="model_1/model/add_2/add:0" />
+		<IR name="model_1/model/add_2/add" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="model_1/model/add_2/add" output_port_id="model_1/model/add_2/add:0" />
+		<IR name="model_1/model/add_2/add" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Conv2D_14/filter" output_port_id="Conv2D_14/filter:0" />
+		<IR name="Conv2D_14/filter" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Conv2D_14/filter" output_port_id="Conv2D_14/filter:0" />
+		<IR name="Conv2D_14/filter" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Conv2D_14" output_port_id="Conv2D_14:0" />
+		<IR name="Conv2D_14" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Conv2D_14" output_port_id="Conv2D_14:0" />
+		<IR name="Conv2D_14" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Add_14/y" output_port_id="Add_14/y:0" />
+		<IR name="Add_14/y" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Add_14/y" output_port_id="Add_14/y:0" />
+		<IR name="Add_14/y" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Add_14" output_port_id="Add_14:0" />
+		<IR name="Add_14" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Add_14" output_port_id="Add_14:0" />
+		<IR name="Add_14" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="model_1/model/re_lu_14/Relu6_model_1/model/batch_normalization_21/FusedBatchNormV3_model_1/model/batch_normalization_25/FusedBatchNormV3_model_1/model/depthwise_conv2d_8/depthwise_model_1/model/conv2d_14/Conv2D" output_port_id="model_1/model/re_lu_14/Relu6_model_1/model/batch_normalization_21/FusedBatchNormV3_model_1/model/batch_normalization_25/FusedBatchNormV3_model_1/model/depthwise_conv2d_8/depthwise_model_1/model/conv2d_14/Conv2D:0" />
+		<IR name="model_1/model/re_lu_14/Relu6_model_1/model/batch_normalization_21/FusedBatchNormV3_model_1/model/batch_normalization_25/FusedBatchNormV3_model_1/model/depthwise_conv2d_8/depthwise_model_1/model/conv2d_14/Conv2D" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="model_1/model/re_lu_14/Relu6_model_1/model/batch_normalization_21/FusedBatchNormV3_model_1/model/batch_normalization_25/FusedBatchNormV3_model_1/model/depthwise_conv2d_8/depthwise_model_1/model/conv2d_14/Conv2D" output_port_id="model_1/model/re_lu_14/Relu6_model_1/model/batch_normalization_21/FusedBatchNormV3_model_1/model/batch_normalization_25/FusedBatchNormV3_model_1/model/depthwise_conv2d_8/depthwise_model_1/model/conv2d_14/Conv2D:0" />
+		<IR name="model_1/model/re_lu_14/Relu6_model_1/model/batch_normalization_21/FusedBatchNormV3_model_1/model/batch_normalization_25/FusedBatchNormV3_model_1/model/depthwise_conv2d_8/depthwise_model_1/model/conv2d_14/Conv2D" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="depthwise_7/filter_in" output_port_id="depthwise_7/filter_in:0" />
+		<IR name="depthwise_7/filter_in" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="depthwise_7/filter_in" output_port_id="depthwise_7/filter_in:0" />
+		<IR name="depthwise_7/filter_in" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="depthwise_7" output_port_id="depthwise_7:0" />
+		<IR name="depthwise_7" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="depthwise_7" output_port_id="depthwise_7:0" />
+		<IR name="depthwise_7" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Add_15/y" output_port_id="Add_15/y:0" />
+		<IR name="Add_15/y" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Add_15/y" output_port_id="Add_15/y:0" />
+		<IR name="Add_15/y" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Add_15" output_port_id="Add_15:0" />
+		<IR name="Add_15" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Add_15" output_port_id="Add_15:0" />
+		<IR name="Add_15" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="model_1/model/re_lu_15/Relu6_model_1/model/batch_normalization_22/FusedBatchNormV3_model_1/model/batch_normalization_25/FusedBatchNormV3_model_1/model/depthwise_conv2d_8/depthwise_model_1/model/depthwise_conv2d_7/depthwise" output_port_id="model_1/model/re_lu_15/Relu6_model_1/model/batch_normalization_22/FusedBatchNormV3_model_1/model/batch_normalization_25/FusedBatchNormV3_model_1/model/depthwise_conv2d_8/depthwise_model_1/model/depthwise_conv2d_7/depthwise:0" />
+		<IR name="model_1/model/re_lu_15/Relu6_model_1/model/batch_normalization_22/FusedBatchNormV3_model_1/model/batch_normalization_25/FusedBatchNormV3_model_1/model/depthwise_conv2d_8/depthwise_model_1/model/depthwise_conv2d_7/depthwise" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="model_1/model/re_lu_15/Relu6_model_1/model/batch_normalization_22/FusedBatchNormV3_model_1/model/batch_normalization_25/FusedBatchNormV3_model_1/model/depthwise_conv2d_8/depthwise_model_1/model/depthwise_conv2d_7/depthwise" output_port_id="model_1/model/re_lu_15/Relu6_model_1/model/batch_normalization_22/FusedBatchNormV3_model_1/model/batch_normalization_25/FusedBatchNormV3_model_1/model/depthwise_conv2d_8/depthwise_model_1/model/depthwise_conv2d_7/depthwise:0" />
+		<IR name="model_1/model/re_lu_15/Relu6_model_1/model/batch_normalization_22/FusedBatchNormV3_model_1/model/batch_normalization_25/FusedBatchNormV3_model_1/model/depthwise_conv2d_8/depthwise_model_1/model/depthwise_conv2d_7/depthwise" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="Conv2D_15/filter" output_port_id="Conv2D_15/filter:0" />
+		<IR name="Conv2D_15/filter" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Conv2D_15/filter" output_port_id="Conv2D_15/filter:0" />
+		<IR name="Conv2D_15/filter" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Conv2D_15" output_port_id="Conv2D_15:0" />
+		<IR name="Conv2D_15" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Conv2D_15" output_port_id="Conv2D_15:0" />
+		<IR name="Conv2D_15" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="model_1/model/batch_normalization_23/FusedBatchNormV3_model_1/model/conv2d_15/Conv2D1/y" output_port_id="model_1/model/batch_normalization_23/FusedBatchNormV3_model_1/model/conv2d_15/Conv2D1/y:0" />
+		<IR name="model_1/model/batch_normalization_23/FusedBatchNormV3_model_1/model/conv2d_15/Conv2D1/y" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="model_1/model/batch_normalization_23/FusedBatchNormV3_model_1/model/conv2d_15/Conv2D1/y" output_port_id="model_1/model/batch_normalization_23/FusedBatchNormV3_model_1/model/conv2d_15/Conv2D1/y:0" />
+		<IR name="model_1/model/batch_normalization_23/FusedBatchNormV3_model_1/model/conv2d_15/Conv2D1/y" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="model_1/model/batch_normalization_23/FusedBatchNormV3_model_1/model/conv2d_15/Conv2D1" output_port_id="model_1/model/batch_normalization_23/FusedBatchNormV3_model_1/model/conv2d_15/Conv2D1:0" />
+		<IR name="model_1/model/batch_normalization_23/FusedBatchNormV3_model_1/model/conv2d_15/Conv2D1" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="model_1/model/batch_normalization_23/FusedBatchNormV3_model_1/model/conv2d_15/Conv2D1" output_port_id="model_1/model/batch_normalization_23/FusedBatchNormV3_model_1/model/conv2d_15/Conv2D1:0" />
+		<IR name="model_1/model/batch_normalization_23/FusedBatchNormV3_model_1/model/conv2d_15/Conv2D1" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="model_1/model/add_3/add" output_port_id="model_1/model/add_3/add:0" />
+		<IR name="model_1/model/add_3/add" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="model_1/model/add_3/add" output_port_id="model_1/model/add_3/add:0" />
+		<IR name="model_1/model/add_3/add" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Conv2D_16/filter" output_port_id="Conv2D_16/filter:0" />
+		<IR name="Conv2D_16/filter" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Conv2D_16/filter" output_port_id="Conv2D_16/filter:0" />
+		<IR name="Conv2D_16/filter" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Conv2D_16" output_port_id="Conv2D_16:0" />
+		<IR name="Conv2D_16" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Conv2D_16" output_port_id="Conv2D_16:0" />
+		<IR name="Conv2D_16" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Add_16/y" output_port_id="Add_16/y:0" />
+		<IR name="Add_16/y" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Add_16/y" output_port_id="Add_16/y:0" />
+		<IR name="Add_16/y" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Add_16" output_port_id="Add_16:0" />
+		<IR name="Add_16" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Add_16" output_port_id="Add_16:0" />
+		<IR name="Add_16" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="model_1/model/re_lu_16/Relu6_model_1/model/batch_normalization_24/FusedBatchNormV3_model_1/model/batch_normalization_25/FusedBatchNormV3_model_1/model/depthwise_conv2d_8/depthwise_model_1/model/conv2d_16/Conv2D" output_port_id="model_1/model/re_lu_16/Relu6_model_1/model/batch_normalization_24/FusedBatchNormV3_model_1/model/batch_normalization_25/FusedBatchNormV3_model_1/model/depthwise_conv2d_8/depthwise_model_1/model/conv2d_16/Conv2D:0" />
+		<IR name="model_1/model/re_lu_16/Relu6_model_1/model/batch_normalization_24/FusedBatchNormV3_model_1/model/batch_normalization_25/FusedBatchNormV3_model_1/model/depthwise_conv2d_8/depthwise_model_1/model/conv2d_16/Conv2D" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="model_1/model/re_lu_16/Relu6_model_1/model/batch_normalization_24/FusedBatchNormV3_model_1/model/batch_normalization_25/FusedBatchNormV3_model_1/model/depthwise_conv2d_8/depthwise_model_1/model/conv2d_16/Conv2D" output_port_id="model_1/model/re_lu_16/Relu6_model_1/model/batch_normalization_24/FusedBatchNormV3_model_1/model/batch_normalization_25/FusedBatchNormV3_model_1/model/depthwise_conv2d_8/depthwise_model_1/model/conv2d_16/Conv2D:0" />
+		<IR name="model_1/model/re_lu_16/Relu6_model_1/model/batch_normalization_24/FusedBatchNormV3_model_1/model/batch_normalization_25/FusedBatchNormV3_model_1/model/depthwise_conv2d_8/depthwise_model_1/model/conv2d_16/Conv2D" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="depthwise_8/filter_in" output_port_id="depthwise_8/filter_in:0" />
+		<IR name="depthwise_8/filter_in" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="depthwise_8/filter_in" output_port_id="depthwise_8/filter_in:0" />
+		<IR name="depthwise_8/filter_in" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="depthwise_8" output_port_id="depthwise_8:0" />
+		<IR name="depthwise_8" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="depthwise_8" output_port_id="depthwise_8:0" />
+		<IR name="depthwise_8" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Add_17/y" output_port_id="Add_17/y:0" />
+		<IR name="Add_17/y" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Add_17/y" output_port_id="Add_17/y:0" />
+		<IR name="Add_17/y" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Add_17" output_port_id="Add_17:0" />
+		<IR name="Add_17" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Add_17" output_port_id="Add_17:0" />
+		<IR name="Add_17" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="model_1/model/re_lu_17/Relu6_model_1/model/batch_normalization_25/FusedBatchNormV3_model_1/model/depthwise_conv2d_8/depthwise" output_port_id="model_1/model/re_lu_17/Relu6_model_1/model/batch_normalization_25/FusedBatchNormV3_model_1/model/depthwise_conv2d_8/depthwise:0" />
+		<IR name="model_1/model/re_lu_17/Relu6_model_1/model/batch_normalization_25/FusedBatchNormV3_model_1/model/depthwise_conv2d_8/depthwise" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="model_1/model/re_lu_17/Relu6_model_1/model/batch_normalization_25/FusedBatchNormV3_model_1/model/depthwise_conv2d_8/depthwise" output_port_id="model_1/model/re_lu_17/Relu6_model_1/model/batch_normalization_25/FusedBatchNormV3_model_1/model/depthwise_conv2d_8/depthwise:0" />
+		<IR name="model_1/model/re_lu_17/Relu6_model_1/model/batch_normalization_25/FusedBatchNormV3_model_1/model/depthwise_conv2d_8/depthwise" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="Conv2D_17/filter" output_port_id="Conv2D_17/filter:0" />
+		<IR name="Conv2D_17/filter" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Conv2D_17/filter" output_port_id="Conv2D_17/filter:0" />
+		<IR name="Conv2D_17/filter" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Conv2D_17" output_port_id="Conv2D_17:0" />
+		<IR name="Conv2D_17" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Conv2D_17" output_port_id="Conv2D_17:0" />
+		<IR name="Conv2D_17" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="model_1/model/batch_normalization_26/FusedBatchNormV3_model_1/model/conv2d_21/Conv2D_model_1/model/conv2d_17/Conv2D1/y" output_port_id="model_1/model/batch_normalization_26/FusedBatchNormV3_model_1/model/conv2d_21/Conv2D_model_1/model/conv2d_17/Conv2D1/y:0" />
+		<IR name="model_1/model/batch_normalization_26/FusedBatchNormV3_model_1/model/conv2d_21/Conv2D_model_1/model/conv2d_17/Conv2D1/y" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="model_1/model/batch_normalization_26/FusedBatchNormV3_model_1/model/conv2d_21/Conv2D_model_1/model/conv2d_17/Conv2D1/y" output_port_id="model_1/model/batch_normalization_26/FusedBatchNormV3_model_1/model/conv2d_21/Conv2D_model_1/model/conv2d_17/Conv2D1/y:0" />
+		<IR name="model_1/model/batch_normalization_26/FusedBatchNormV3_model_1/model/conv2d_21/Conv2D_model_1/model/conv2d_17/Conv2D1/y" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="model_1/model/batch_normalization_26/FusedBatchNormV3_model_1/model/conv2d_21/Conv2D_model_1/model/conv2d_17/Conv2D1" output_port_id="model_1/model/batch_normalization_26/FusedBatchNormV3_model_1/model/conv2d_21/Conv2D_model_1/model/conv2d_17/Conv2D1:0" />
+		<IR name="model_1/model/batch_normalization_26/FusedBatchNormV3_model_1/model/conv2d_21/Conv2D_model_1/model/conv2d_17/Conv2D1" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="model_1/model/batch_normalization_26/FusedBatchNormV3_model_1/model/conv2d_21/Conv2D_model_1/model/conv2d_17/Conv2D1" output_port_id="model_1/model/batch_normalization_26/FusedBatchNormV3_model_1/model/conv2d_21/Conv2D_model_1/model/conv2d_17/Conv2D1:0" />
+		<IR name="model_1/model/batch_normalization_26/FusedBatchNormV3_model_1/model/conv2d_21/Conv2D_model_1/model/conv2d_17/Conv2D1" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Conv2D_18/filter" output_port_id="Conv2D_18/filter:0" />
+		<IR name="Conv2D_18/filter" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Conv2D_18/filter" output_port_id="Conv2D_18/filter:0" />
+		<IR name="Conv2D_18/filter" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Conv2D_18" output_port_id="Conv2D_18:0" />
+		<IR name="Conv2D_18" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Conv2D_18" output_port_id="Conv2D_18:0" />
+		<IR name="Conv2D_18" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Add_18/y" output_port_id="Add_18/y:0" />
+		<IR name="Add_18/y" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Add_18/y" output_port_id="Add_18/y:0" />
+		<IR name="Add_18/y" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Add_18" output_port_id="Add_18:0" />
+		<IR name="Add_18" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Add_18" output_port_id="Add_18:0" />
+		<IR name="Add_18" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="model_1/model/re_lu_18/Relu6_model_1/model/batch_normalization_27/FusedBatchNormV3_model_1/model/batch_normalization_34/FusedBatchNormV3_model_1/model/depthwise_conv2d_11/depthwise_model_1/model/conv2d_18/Conv2D" output_port_id="model_1/model/re_lu_18/Relu6_model_1/model/batch_normalization_27/FusedBatchNormV3_model_1/model/batch_normalization_34/FusedBatchNormV3_model_1/model/depthwise_conv2d_11/depthwise_model_1/model/conv2d_18/Conv2D:0" />
+		<IR name="model_1/model/re_lu_18/Relu6_model_1/model/batch_normalization_27/FusedBatchNormV3_model_1/model/batch_normalization_34/FusedBatchNormV3_model_1/model/depthwise_conv2d_11/depthwise_model_1/model/conv2d_18/Conv2D" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="model_1/model/re_lu_18/Relu6_model_1/model/batch_normalization_27/FusedBatchNormV3_model_1/model/batch_normalization_34/FusedBatchNormV3_model_1/model/depthwise_conv2d_11/depthwise_model_1/model/conv2d_18/Conv2D" output_port_id="model_1/model/re_lu_18/Relu6_model_1/model/batch_normalization_27/FusedBatchNormV3_model_1/model/batch_normalization_34/FusedBatchNormV3_model_1/model/depthwise_conv2d_11/depthwise_model_1/model/conv2d_18/Conv2D:0" />
+		<IR name="model_1/model/re_lu_18/Relu6_model_1/model/batch_normalization_27/FusedBatchNormV3_model_1/model/batch_normalization_34/FusedBatchNormV3_model_1/model/depthwise_conv2d_11/depthwise_model_1/model/conv2d_18/Conv2D" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="depthwise_9/filter_in" output_port_id="depthwise_9/filter_in:0" />
+		<IR name="depthwise_9/filter_in" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="depthwise_9/filter_in" output_port_id="depthwise_9/filter_in:0" />
+		<IR name="depthwise_9/filter_in" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="depthwise_9" output_port_id="depthwise_9:0" />
+		<IR name="depthwise_9" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="depthwise_9" output_port_id="depthwise_9:0" />
+		<IR name="depthwise_9" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Add_19/y" output_port_id="Add_19/y:0" />
+		<IR name="Add_19/y" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Add_19/y" output_port_id="Add_19/y:0" />
+		<IR name="Add_19/y" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Add_19" output_port_id="Add_19:0" />
+		<IR name="Add_19" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Add_19" output_port_id="Add_19:0" />
+		<IR name="Add_19" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="model_1/model/re_lu_19/Relu6_model_1/model/batch_normalization_28/FusedBatchNormV3_model_1/model/batch_normalization_34/FusedBatchNormV3_model_1/model/depthwise_conv2d_11/depthwise_model_1/model/depthwise_conv2d_9/depthwise" output_port_id="model_1/model/re_lu_19/Relu6_model_1/model/batch_normalization_28/FusedBatchNormV3_model_1/model/batch_normalization_34/FusedBatchNormV3_model_1/model/depthwise_conv2d_11/depthwise_model_1/model/depthwise_conv2d_9/depthwise:0" />
+		<IR name="model_1/model/re_lu_19/Relu6_model_1/model/batch_normalization_28/FusedBatchNormV3_model_1/model/batch_normalization_34/FusedBatchNormV3_model_1/model/depthwise_conv2d_11/depthwise_model_1/model/depthwise_conv2d_9/depthwise" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="model_1/model/re_lu_19/Relu6_model_1/model/batch_normalization_28/FusedBatchNormV3_model_1/model/batch_normalization_34/FusedBatchNormV3_model_1/model/depthwise_conv2d_11/depthwise_model_1/model/depthwise_conv2d_9/depthwise" output_port_id="model_1/model/re_lu_19/Relu6_model_1/model/batch_normalization_28/FusedBatchNormV3_model_1/model/batch_normalization_34/FusedBatchNormV3_model_1/model/depthwise_conv2d_11/depthwise_model_1/model/depthwise_conv2d_9/depthwise:0" />
+		<IR name="model_1/model/re_lu_19/Relu6_model_1/model/batch_normalization_28/FusedBatchNormV3_model_1/model/batch_normalization_34/FusedBatchNormV3_model_1/model/depthwise_conv2d_11/depthwise_model_1/model/depthwise_conv2d_9/depthwise" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="Conv2D_19/filter" output_port_id="Conv2D_19/filter:0" />
+		<IR name="Conv2D_19/filter" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Conv2D_19/filter" output_port_id="Conv2D_19/filter:0" />
+		<IR name="Conv2D_19/filter" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Conv2D_19" output_port_id="Conv2D_19:0" />
+		<IR name="Conv2D_19" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Conv2D_19" output_port_id="Conv2D_19:0" />
+		<IR name="Conv2D_19" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="model_1/model/batch_normalization_29/FusedBatchNormV3_model_1/model/conv2d_21/Conv2D_model_1/model/conv2d_19/Conv2D1/y" output_port_id="model_1/model/batch_normalization_29/FusedBatchNormV3_model_1/model/conv2d_21/Conv2D_model_1/model/conv2d_19/Conv2D1/y:0" />
+		<IR name="model_1/model/batch_normalization_29/FusedBatchNormV3_model_1/model/conv2d_21/Conv2D_model_1/model/conv2d_19/Conv2D1/y" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="model_1/model/batch_normalization_29/FusedBatchNormV3_model_1/model/conv2d_21/Conv2D_model_1/model/conv2d_19/Conv2D1/y" output_port_id="model_1/model/batch_normalization_29/FusedBatchNormV3_model_1/model/conv2d_21/Conv2D_model_1/model/conv2d_19/Conv2D1/y:0" />
+		<IR name="model_1/model/batch_normalization_29/FusedBatchNormV3_model_1/model/conv2d_21/Conv2D_model_1/model/conv2d_19/Conv2D1/y" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="model_1/model/batch_normalization_29/FusedBatchNormV3_model_1/model/conv2d_21/Conv2D_model_1/model/conv2d_19/Conv2D1" output_port_id="model_1/model/batch_normalization_29/FusedBatchNormV3_model_1/model/conv2d_21/Conv2D_model_1/model/conv2d_19/Conv2D1:0" />
+		<IR name="model_1/model/batch_normalization_29/FusedBatchNormV3_model_1/model/conv2d_21/Conv2D_model_1/model/conv2d_19/Conv2D1" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="model_1/model/batch_normalization_29/FusedBatchNormV3_model_1/model/conv2d_21/Conv2D_model_1/model/conv2d_19/Conv2D1" output_port_id="model_1/model/batch_normalization_29/FusedBatchNormV3_model_1/model/conv2d_21/Conv2D_model_1/model/conv2d_19/Conv2D1:0" />
+		<IR name="model_1/model/batch_normalization_29/FusedBatchNormV3_model_1/model/conv2d_21/Conv2D_model_1/model/conv2d_19/Conv2D1" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="model_1/model/add_4/add" output_port_id="model_1/model/add_4/add:0" />
+		<IR name="model_1/model/add_4/add" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="model_1/model/add_4/add" output_port_id="model_1/model/add_4/add:0" />
+		<IR name="model_1/model/add_4/add" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Conv2D_20/filter" output_port_id="Conv2D_20/filter:0" />
+		<IR name="Conv2D_20/filter" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Conv2D_20/filter" output_port_id="Conv2D_20/filter:0" />
+		<IR name="Conv2D_20/filter" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Conv2D_20" output_port_id="Conv2D_20:0" />
+		<IR name="Conv2D_20" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Conv2D_20" output_port_id="Conv2D_20:0" />
+		<IR name="Conv2D_20" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Add_20/y" output_port_id="Add_20/y:0" />
+		<IR name="Add_20/y" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Add_20/y" output_port_id="Add_20/y:0" />
+		<IR name="Add_20/y" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Add_20" output_port_id="Add_20:0" />
+		<IR name="Add_20" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Add_20" output_port_id="Add_20:0" />
+		<IR name="Add_20" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="model_1/model/re_lu_20/Relu6_model_1/model/batch_normalization_30/FusedBatchNormV3_model_1/model/batch_normalization_34/FusedBatchNormV3_model_1/model/depthwise_conv2d_11/depthwise_model_1/model/conv2d_20/Conv2D" output_port_id="model_1/model/re_lu_20/Relu6_model_1/model/batch_normalization_30/FusedBatchNormV3_model_1/model/batch_normalization_34/FusedBatchNormV3_model_1/model/depthwise_conv2d_11/depthwise_model_1/model/conv2d_20/Conv2D:0" />
+		<IR name="model_1/model/re_lu_20/Relu6_model_1/model/batch_normalization_30/FusedBatchNormV3_model_1/model/batch_normalization_34/FusedBatchNormV3_model_1/model/depthwise_conv2d_11/depthwise_model_1/model/conv2d_20/Conv2D" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="model_1/model/re_lu_20/Relu6_model_1/model/batch_normalization_30/FusedBatchNormV3_model_1/model/batch_normalization_34/FusedBatchNormV3_model_1/model/depthwise_conv2d_11/depthwise_model_1/model/conv2d_20/Conv2D" output_port_id="model_1/model/re_lu_20/Relu6_model_1/model/batch_normalization_30/FusedBatchNormV3_model_1/model/batch_normalization_34/FusedBatchNormV3_model_1/model/depthwise_conv2d_11/depthwise_model_1/model/conv2d_20/Conv2D:0" />
+		<IR name="model_1/model/re_lu_20/Relu6_model_1/model/batch_normalization_30/FusedBatchNormV3_model_1/model/batch_normalization_34/FusedBatchNormV3_model_1/model/depthwise_conv2d_11/depthwise_model_1/model/conv2d_20/Conv2D" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="depthwise_10/filter_in" output_port_id="depthwise_10/filter_in:0" />
+		<IR name="depthwise_10/filter_in" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="depthwise_10/filter_in" output_port_id="depthwise_10/filter_in:0" />
+		<IR name="depthwise_10/filter_in" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="depthwise_10" output_port_id="depthwise_10:0" />
+		<IR name="depthwise_10" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="depthwise_10" output_port_id="depthwise_10:0" />
+		<IR name="depthwise_10" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Add_21/y" output_port_id="Add_21/y:0" />
+		<IR name="Add_21/y" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Add_21/y" output_port_id="Add_21/y:0" />
+		<IR name="Add_21/y" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Add_21" output_port_id="Add_21:0" />
+		<IR name="Add_21" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Add_21" output_port_id="Add_21:0" />
+		<IR name="Add_21" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="model_1/model/re_lu_21/Relu6_model_1/model/batch_normalization_31/FusedBatchNormV3_model_1/model/depthwise_conv2d_10/depthwise_model_1/model/depthwise_conv2d_11/depthwise" output_port_id="model_1/model/re_lu_21/Relu6_model_1/model/batch_normalization_31/FusedBatchNormV3_model_1/model/depthwise_conv2d_10/depthwise_model_1/model/depthwise_conv2d_11/depthwise:0" />
+		<IR name="model_1/model/re_lu_21/Relu6_model_1/model/batch_normalization_31/FusedBatchNormV3_model_1/model/depthwise_conv2d_10/depthwise_model_1/model/depthwise_conv2d_11/depthwise" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="model_1/model/re_lu_21/Relu6_model_1/model/batch_normalization_31/FusedBatchNormV3_model_1/model/depthwise_conv2d_10/depthwise_model_1/model/depthwise_conv2d_11/depthwise" output_port_id="model_1/model/re_lu_21/Relu6_model_1/model/batch_normalization_31/FusedBatchNormV3_model_1/model/depthwise_conv2d_10/depthwise_model_1/model/depthwise_conv2d_11/depthwise:0" />
+		<IR name="model_1/model/re_lu_21/Relu6_model_1/model/batch_normalization_31/FusedBatchNormV3_model_1/model/depthwise_conv2d_10/depthwise_model_1/model/depthwise_conv2d_11/depthwise" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="Conv2D_21/filter" output_port_id="Conv2D_21/filter:0" />
+		<IR name="Conv2D_21/filter" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Conv2D_21/filter" output_port_id="Conv2D_21/filter:0" />
+		<IR name="Conv2D_21/filter" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Conv2D_21" output_port_id="Conv2D_21:0" />
+		<IR name="Conv2D_21" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Conv2D_21" output_port_id="Conv2D_21:0" />
+		<IR name="Conv2D_21" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="model_1/model/batch_normalization_32/FusedBatchNormV3_model_1/model/conv2d_21/Conv2D1/y" output_port_id="model_1/model/batch_normalization_32/FusedBatchNormV3_model_1/model/conv2d_21/Conv2D1/y:0" />
+		<IR name="model_1/model/batch_normalization_32/FusedBatchNormV3_model_1/model/conv2d_21/Conv2D1/y" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="model_1/model/batch_normalization_32/FusedBatchNormV3_model_1/model/conv2d_21/Conv2D1/y" output_port_id="model_1/model/batch_normalization_32/FusedBatchNormV3_model_1/model/conv2d_21/Conv2D1/y:0" />
+		<IR name="model_1/model/batch_normalization_32/FusedBatchNormV3_model_1/model/conv2d_21/Conv2D1/y" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="model_1/model/batch_normalization_32/FusedBatchNormV3_model_1/model/conv2d_21/Conv2D1" output_port_id="model_1/model/batch_normalization_32/FusedBatchNormV3_model_1/model/conv2d_21/Conv2D1:0" />
+		<IR name="model_1/model/batch_normalization_32/FusedBatchNormV3_model_1/model/conv2d_21/Conv2D1" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="model_1/model/batch_normalization_32/FusedBatchNormV3_model_1/model/conv2d_21/Conv2D1" output_port_id="model_1/model/batch_normalization_32/FusedBatchNormV3_model_1/model/conv2d_21/Conv2D1:0" />
+		<IR name="model_1/model/batch_normalization_32/FusedBatchNormV3_model_1/model/conv2d_21/Conv2D1" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="model_1/model/add_5/add" output_port_id="model_1/model/add_5/add:0" />
+		<IR name="model_1/model/add_5/add" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="model_1/model/add_5/add" output_port_id="model_1/model/add_5/add:0" />
+		<IR name="model_1/model/add_5/add" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Conv2D_22/filter" output_port_id="Conv2D_22/filter:0" />
+		<IR name="Conv2D_22/filter" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Conv2D_22/filter" output_port_id="Conv2D_22/filter:0" />
+		<IR name="Conv2D_22/filter" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Conv2D_22" output_port_id="Conv2D_22:0" />
+		<IR name="Conv2D_22" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Conv2D_22" output_port_id="Conv2D_22:0" />
+		<IR name="Conv2D_22" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Add_22/y" output_port_id="Add_22/y:0" />
+		<IR name="Add_22/y" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Add_22/y" output_port_id="Add_22/y:0" />
+		<IR name="Add_22/y" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Add_22" output_port_id="Add_22:0" />
+		<IR name="Add_22" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Add_22" output_port_id="Add_22:0" />
+		<IR name="Add_22" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="model_1/model/re_lu_22/Relu6_model_1/model/batch_normalization_33/FusedBatchNormV3_model_1/model/batch_normalization_34/FusedBatchNormV3_model_1/model/depthwise_conv2d_11/depthwise_model_1/model/conv2d_22/Conv2D" output_port_id="model_1/model/re_lu_22/Relu6_model_1/model/batch_normalization_33/FusedBatchNormV3_model_1/model/batch_normalization_34/FusedBatchNormV3_model_1/model/depthwise_conv2d_11/depthwise_model_1/model/conv2d_22/Conv2D:0" />
+		<IR name="model_1/model/re_lu_22/Relu6_model_1/model/batch_normalization_33/FusedBatchNormV3_model_1/model/batch_normalization_34/FusedBatchNormV3_model_1/model/depthwise_conv2d_11/depthwise_model_1/model/conv2d_22/Conv2D" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="model_1/model/re_lu_22/Relu6_model_1/model/batch_normalization_33/FusedBatchNormV3_model_1/model/batch_normalization_34/FusedBatchNormV3_model_1/model/depthwise_conv2d_11/depthwise_model_1/model/conv2d_22/Conv2D" output_port_id="model_1/model/re_lu_22/Relu6_model_1/model/batch_normalization_33/FusedBatchNormV3_model_1/model/batch_normalization_34/FusedBatchNormV3_model_1/model/depthwise_conv2d_11/depthwise_model_1/model/conv2d_22/Conv2D:0" />
+		<IR name="model_1/model/re_lu_22/Relu6_model_1/model/batch_normalization_33/FusedBatchNormV3_model_1/model/batch_normalization_34/FusedBatchNormV3_model_1/model/depthwise_conv2d_11/depthwise_model_1/model/conv2d_22/Conv2D" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="depthwise_11/filter_in" output_port_id="depthwise_11/filter_in:0" />
+		<IR name="depthwise_11/filter_in" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="depthwise_11/filter_in" output_port_id="depthwise_11/filter_in:0" />
+		<IR name="depthwise_11/filter_in" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="depthwise_11" output_port_id="depthwise_11:0" />
+		<IR name="depthwise_11" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="depthwise_11" output_port_id="depthwise_11:0" />
+		<IR name="depthwise_11" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Add_23/y" output_port_id="Add_23/y:0" />
+		<IR name="Add_23/y" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Add_23/y" output_port_id="Add_23/y:0" />
+		<IR name="Add_23/y" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Add_23" output_port_id="Add_23:0" />
+		<IR name="Add_23" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Add_23" output_port_id="Add_23:0" />
+		<IR name="Add_23" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="model_1/model/re_lu_23/Relu6_model_1/model/batch_normalization_34/FusedBatchNormV3_model_1/model/depthwise_conv2d_11/depthwise" output_port_id="model_1/model/re_lu_23/Relu6_model_1/model/batch_normalization_34/FusedBatchNormV3_model_1/model/depthwise_conv2d_11/depthwise:0" />
+		<IR name="model_1/model/re_lu_23/Relu6_model_1/model/batch_normalization_34/FusedBatchNormV3_model_1/model/depthwise_conv2d_11/depthwise" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="model_1/model/re_lu_23/Relu6_model_1/model/batch_normalization_34/FusedBatchNormV3_model_1/model/depthwise_conv2d_11/depthwise" output_port_id="model_1/model/re_lu_23/Relu6_model_1/model/batch_normalization_34/FusedBatchNormV3_model_1/model/depthwise_conv2d_11/depthwise:0" />
+		<IR name="model_1/model/re_lu_23/Relu6_model_1/model/batch_normalization_34/FusedBatchNormV3_model_1/model/depthwise_conv2d_11/depthwise" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="Conv2D_23/filter" output_port_id="Conv2D_23/filter:0" />
+		<IR name="Conv2D_23/filter" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Conv2D_23/filter" output_port_id="Conv2D_23/filter:0" />
+		<IR name="Conv2D_23/filter" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Conv2D_23" output_port_id="Conv2D_23:0" />
+		<IR name="Conv2D_23" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Conv2D_23" output_port_id="Conv2D_23:0" />
+		<IR name="Conv2D_23" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="model_1/model/batch_normalization_35/FusedBatchNormV3_model_1/model/conv2d_29/Conv2D_model_1/model/conv2d_23/Conv2D1/y" output_port_id="model_1/model/batch_normalization_35/FusedBatchNormV3_model_1/model/conv2d_29/Conv2D_model_1/model/conv2d_23/Conv2D1/y:0" />
+		<IR name="model_1/model/batch_normalization_35/FusedBatchNormV3_model_1/model/conv2d_29/Conv2D_model_1/model/conv2d_23/Conv2D1/y" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="model_1/model/batch_normalization_35/FusedBatchNormV3_model_1/model/conv2d_29/Conv2D_model_1/model/conv2d_23/Conv2D1/y" output_port_id="model_1/model/batch_normalization_35/FusedBatchNormV3_model_1/model/conv2d_29/Conv2D_model_1/model/conv2d_23/Conv2D1/y:0" />
+		<IR name="model_1/model/batch_normalization_35/FusedBatchNormV3_model_1/model/conv2d_29/Conv2D_model_1/model/conv2d_23/Conv2D1/y" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="model_1/model/batch_normalization_35/FusedBatchNormV3_model_1/model/conv2d_29/Conv2D_model_1/model/conv2d_23/Conv2D1" output_port_id="model_1/model/batch_normalization_35/FusedBatchNormV3_model_1/model/conv2d_29/Conv2D_model_1/model/conv2d_23/Conv2D1:0" />
+		<IR name="model_1/model/batch_normalization_35/FusedBatchNormV3_model_1/model/conv2d_29/Conv2D_model_1/model/conv2d_23/Conv2D1" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="model_1/model/batch_normalization_35/FusedBatchNormV3_model_1/model/conv2d_29/Conv2D_model_1/model/conv2d_23/Conv2D1" output_port_id="model_1/model/batch_normalization_35/FusedBatchNormV3_model_1/model/conv2d_29/Conv2D_model_1/model/conv2d_23/Conv2D1:0" />
+		<IR name="model_1/model/batch_normalization_35/FusedBatchNormV3_model_1/model/conv2d_29/Conv2D_model_1/model/conv2d_23/Conv2D1" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Conv2D_24/filter" output_port_id="Conv2D_24/filter:0" />
+		<IR name="Conv2D_24/filter" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Conv2D_24/filter" output_port_id="Conv2D_24/filter:0" />
+		<IR name="Conv2D_24/filter" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Conv2D_24" output_port_id="Conv2D_24:0" />
+		<IR name="Conv2D_24" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Conv2D_24" output_port_id="Conv2D_24:0" />
+		<IR name="Conv2D_24" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Add_24/y" output_port_id="Add_24/y:0" />
+		<IR name="Add_24/y" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Add_24/y" output_port_id="Add_24/y:0" />
+		<IR name="Add_24/y" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Add_24" output_port_id="Add_24:0" />
+		<IR name="Add_24" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Add_24" output_port_id="Add_24:0" />
+		<IR name="Add_24" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="model_1/model/re_lu_24/Relu6_model_1/model/batch_normalization_36/FusedBatchNormV3_model_1/model/batch_normalization_46/FusedBatchNormV3_model_1/model/depthwise_conv2d_15/depthwise_model_1/model/conv2d_24/Conv2D" output_port_id="model_1/model/re_lu_24/Relu6_model_1/model/batch_normalization_36/FusedBatchNormV3_model_1/model/batch_normalization_46/FusedBatchNormV3_model_1/model/depthwise_conv2d_15/depthwise_model_1/model/conv2d_24/Conv2D:0" />
+		<IR name="model_1/model/re_lu_24/Relu6_model_1/model/batch_normalization_36/FusedBatchNormV3_model_1/model/batch_normalization_46/FusedBatchNormV3_model_1/model/depthwise_conv2d_15/depthwise_model_1/model/conv2d_24/Conv2D" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="model_1/model/re_lu_24/Relu6_model_1/model/batch_normalization_36/FusedBatchNormV3_model_1/model/batch_normalization_46/FusedBatchNormV3_model_1/model/depthwise_conv2d_15/depthwise_model_1/model/conv2d_24/Conv2D" output_port_id="model_1/model/re_lu_24/Relu6_model_1/model/batch_normalization_36/FusedBatchNormV3_model_1/model/batch_normalization_46/FusedBatchNormV3_model_1/model/depthwise_conv2d_15/depthwise_model_1/model/conv2d_24/Conv2D:0" />
+		<IR name="model_1/model/re_lu_24/Relu6_model_1/model/batch_normalization_36/FusedBatchNormV3_model_1/model/batch_normalization_46/FusedBatchNormV3_model_1/model/depthwise_conv2d_15/depthwise_model_1/model/conv2d_24/Conv2D" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="depthwise_12/filter_in" output_port_id="depthwise_12/filter_in:0" />
+		<IR name="depthwise_12/filter_in" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="depthwise_12/filter_in" output_port_id="depthwise_12/filter_in:0" />
+		<IR name="depthwise_12/filter_in" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="depthwise_12" output_port_id="depthwise_12:0" />
+		<IR name="depthwise_12" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="depthwise_12" output_port_id="depthwise_12:0" />
+		<IR name="depthwise_12" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Add_25/y" output_port_id="Add_25/y:0" />
+		<IR name="Add_25/y" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Add_25/y" output_port_id="Add_25/y:0" />
+		<IR name="Add_25/y" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Add_25" output_port_id="Add_25:0" />
+		<IR name="Add_25" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Add_25" output_port_id="Add_25:0" />
+		<IR name="Add_25" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="model_1/model/re_lu_25/Relu6_model_1/model/batch_normalization_37/FusedBatchNormV3_model_1/model/depthwise_conv2d_12/depthwise_model_1/model/depthwise_conv2d_15/depthwise" output_port_id="model_1/model/re_lu_25/Relu6_model_1/model/batch_normalization_37/FusedBatchNormV3_model_1/model/depthwise_conv2d_12/depthwise_model_1/model/depthwise_conv2d_15/depthwise:0" />
+		<IR name="model_1/model/re_lu_25/Relu6_model_1/model/batch_normalization_37/FusedBatchNormV3_model_1/model/depthwise_conv2d_12/depthwise_model_1/model/depthwise_conv2d_15/depthwise" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="model_1/model/re_lu_25/Relu6_model_1/model/batch_normalization_37/FusedBatchNormV3_model_1/model/depthwise_conv2d_12/depthwise_model_1/model/depthwise_conv2d_15/depthwise" output_port_id="model_1/model/re_lu_25/Relu6_model_1/model/batch_normalization_37/FusedBatchNormV3_model_1/model/depthwise_conv2d_12/depthwise_model_1/model/depthwise_conv2d_15/depthwise:0" />
+		<IR name="model_1/model/re_lu_25/Relu6_model_1/model/batch_normalization_37/FusedBatchNormV3_model_1/model/depthwise_conv2d_12/depthwise_model_1/model/depthwise_conv2d_15/depthwise" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="Conv2D_25/filter" output_port_id="Conv2D_25/filter:0" />
+		<IR name="Conv2D_25/filter" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Conv2D_25/filter" output_port_id="Conv2D_25/filter:0" />
+		<IR name="Conv2D_25/filter" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Conv2D_25" output_port_id="Conv2D_25:0" />
+		<IR name="Conv2D_25" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Conv2D_25" output_port_id="Conv2D_25:0" />
+		<IR name="Conv2D_25" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="model_1/model/batch_normalization_38/FusedBatchNormV3_model_1/model/conv2d_29/Conv2D_model_1/model/conv2d_25/Conv2D1/y" output_port_id="model_1/model/batch_normalization_38/FusedBatchNormV3_model_1/model/conv2d_29/Conv2D_model_1/model/conv2d_25/Conv2D1/y:0" />
+		<IR name="model_1/model/batch_normalization_38/FusedBatchNormV3_model_1/model/conv2d_29/Conv2D_model_1/model/conv2d_25/Conv2D1/y" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="model_1/model/batch_normalization_38/FusedBatchNormV3_model_1/model/conv2d_29/Conv2D_model_1/model/conv2d_25/Conv2D1/y" output_port_id="model_1/model/batch_normalization_38/FusedBatchNormV3_model_1/model/conv2d_29/Conv2D_model_1/model/conv2d_25/Conv2D1/y:0" />
+		<IR name="model_1/model/batch_normalization_38/FusedBatchNormV3_model_1/model/conv2d_29/Conv2D_model_1/model/conv2d_25/Conv2D1/y" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="model_1/model/batch_normalization_38/FusedBatchNormV3_model_1/model/conv2d_29/Conv2D_model_1/model/conv2d_25/Conv2D1" output_port_id="model_1/model/batch_normalization_38/FusedBatchNormV3_model_1/model/conv2d_29/Conv2D_model_1/model/conv2d_25/Conv2D1:0" />
+		<IR name="model_1/model/batch_normalization_38/FusedBatchNormV3_model_1/model/conv2d_29/Conv2D_model_1/model/conv2d_25/Conv2D1" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="model_1/model/batch_normalization_38/FusedBatchNormV3_model_1/model/conv2d_29/Conv2D_model_1/model/conv2d_25/Conv2D1" output_port_id="model_1/model/batch_normalization_38/FusedBatchNormV3_model_1/model/conv2d_29/Conv2D_model_1/model/conv2d_25/Conv2D1:0" />
+		<IR name="model_1/model/batch_normalization_38/FusedBatchNormV3_model_1/model/conv2d_29/Conv2D_model_1/model/conv2d_25/Conv2D1" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="model_1/model/add_6/add" output_port_id="model_1/model/add_6/add:0" />
+		<IR name="model_1/model/add_6/add" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="model_1/model/add_6/add" output_port_id="model_1/model/add_6/add:0" />
+		<IR name="model_1/model/add_6/add" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Conv2D_26/filter" output_port_id="Conv2D_26/filter:0" />
+		<IR name="Conv2D_26/filter" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Conv2D_26/filter" output_port_id="Conv2D_26/filter:0" />
+		<IR name="Conv2D_26/filter" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Conv2D_26" output_port_id="Conv2D_26:0" />
+		<IR name="Conv2D_26" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Conv2D_26" output_port_id="Conv2D_26:0" />
+		<IR name="Conv2D_26" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Add_26/y" output_port_id="Add_26/y:0" />
+		<IR name="Add_26/y" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Add_26/y" output_port_id="Add_26/y:0" />
+		<IR name="Add_26/y" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Add_26" output_port_id="Add_26:0" />
+		<IR name="Add_26" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Add_26" output_port_id="Add_26:0" />
+		<IR name="Add_26" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="model_1/model/re_lu_26/Relu6_model_1/model/batch_normalization_39/FusedBatchNormV3_model_1/model/batch_normalization_46/FusedBatchNormV3_model_1/model/depthwise_conv2d_15/depthwise_model_1/model/conv2d_26/Conv2D" output_port_id="model_1/model/re_lu_26/Relu6_model_1/model/batch_normalization_39/FusedBatchNormV3_model_1/model/batch_normalization_46/FusedBatchNormV3_model_1/model/depthwise_conv2d_15/depthwise_model_1/model/conv2d_26/Conv2D:0" />
+		<IR name="model_1/model/re_lu_26/Relu6_model_1/model/batch_normalization_39/FusedBatchNormV3_model_1/model/batch_normalization_46/FusedBatchNormV3_model_1/model/depthwise_conv2d_15/depthwise_model_1/model/conv2d_26/Conv2D" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="model_1/model/re_lu_26/Relu6_model_1/model/batch_normalization_39/FusedBatchNormV3_model_1/model/batch_normalization_46/FusedBatchNormV3_model_1/model/depthwise_conv2d_15/depthwise_model_1/model/conv2d_26/Conv2D" output_port_id="model_1/model/re_lu_26/Relu6_model_1/model/batch_normalization_39/FusedBatchNormV3_model_1/model/batch_normalization_46/FusedBatchNormV3_model_1/model/depthwise_conv2d_15/depthwise_model_1/model/conv2d_26/Conv2D:0" />
+		<IR name="model_1/model/re_lu_26/Relu6_model_1/model/batch_normalization_39/FusedBatchNormV3_model_1/model/batch_normalization_46/FusedBatchNormV3_model_1/model/depthwise_conv2d_15/depthwise_model_1/model/conv2d_26/Conv2D" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="depthwise_13/filter_in" output_port_id="depthwise_13/filter_in:0" />
+		<IR name="depthwise_13/filter_in" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="depthwise_13/filter_in" output_port_id="depthwise_13/filter_in:0" />
+		<IR name="depthwise_13/filter_in" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="depthwise_13" output_port_id="depthwise_13:0" />
+		<IR name="depthwise_13" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="depthwise_13" output_port_id="depthwise_13:0" />
+		<IR name="depthwise_13" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Add_27/y" output_port_id="Add_27/y:0" />
+		<IR name="Add_27/y" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Add_27/y" output_port_id="Add_27/y:0" />
+		<IR name="Add_27/y" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Add_27" output_port_id="Add_27:0" />
+		<IR name="Add_27" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Add_27" output_port_id="Add_27:0" />
+		<IR name="Add_27" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="model_1/model/re_lu_27/Relu6_model_1/model/batch_normalization_40/FusedBatchNormV3_model_1/model/depthwise_conv2d_13/depthwise_model_1/model/depthwise_conv2d_15/depthwise" output_port_id="model_1/model/re_lu_27/Relu6_model_1/model/batch_normalization_40/FusedBatchNormV3_model_1/model/depthwise_conv2d_13/depthwise_model_1/model/depthwise_conv2d_15/depthwise:0" />
+		<IR name="model_1/model/re_lu_27/Relu6_model_1/model/batch_normalization_40/FusedBatchNormV3_model_1/model/depthwise_conv2d_13/depthwise_model_1/model/depthwise_conv2d_15/depthwise" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="model_1/model/re_lu_27/Relu6_model_1/model/batch_normalization_40/FusedBatchNormV3_model_1/model/depthwise_conv2d_13/depthwise_model_1/model/depthwise_conv2d_15/depthwise" output_port_id="model_1/model/re_lu_27/Relu6_model_1/model/batch_normalization_40/FusedBatchNormV3_model_1/model/depthwise_conv2d_13/depthwise_model_1/model/depthwise_conv2d_15/depthwise:0" />
+		<IR name="model_1/model/re_lu_27/Relu6_model_1/model/batch_normalization_40/FusedBatchNormV3_model_1/model/depthwise_conv2d_13/depthwise_model_1/model/depthwise_conv2d_15/depthwise" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="Conv2D_27/filter" output_port_id="Conv2D_27/filter:0" />
+		<IR name="Conv2D_27/filter" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Conv2D_27/filter" output_port_id="Conv2D_27/filter:0" />
+		<IR name="Conv2D_27/filter" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Conv2D_27" output_port_id="Conv2D_27:0" />
+		<IR name="Conv2D_27" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Conv2D_27" output_port_id="Conv2D_27:0" />
+		<IR name="Conv2D_27" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="model_1/model/batch_normalization_41/FusedBatchNormV3_model_1/model/conv2d_29/Conv2D_model_1/model/conv2d_27/Conv2D1/y" output_port_id="model_1/model/batch_normalization_41/FusedBatchNormV3_model_1/model/conv2d_29/Conv2D_model_1/model/conv2d_27/Conv2D1/y:0" />
+		<IR name="model_1/model/batch_normalization_41/FusedBatchNormV3_model_1/model/conv2d_29/Conv2D_model_1/model/conv2d_27/Conv2D1/y" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="model_1/model/batch_normalization_41/FusedBatchNormV3_model_1/model/conv2d_29/Conv2D_model_1/model/conv2d_27/Conv2D1/y" output_port_id="model_1/model/batch_normalization_41/FusedBatchNormV3_model_1/model/conv2d_29/Conv2D_model_1/model/conv2d_27/Conv2D1/y:0" />
+		<IR name="model_1/model/batch_normalization_41/FusedBatchNormV3_model_1/model/conv2d_29/Conv2D_model_1/model/conv2d_27/Conv2D1/y" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="model_1/model/batch_normalization_41/FusedBatchNormV3_model_1/model/conv2d_29/Conv2D_model_1/model/conv2d_27/Conv2D1" output_port_id="model_1/model/batch_normalization_41/FusedBatchNormV3_model_1/model/conv2d_29/Conv2D_model_1/model/conv2d_27/Conv2D1:0" />
+		<IR name="model_1/model/batch_normalization_41/FusedBatchNormV3_model_1/model/conv2d_29/Conv2D_model_1/model/conv2d_27/Conv2D1" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="model_1/model/batch_normalization_41/FusedBatchNormV3_model_1/model/conv2d_29/Conv2D_model_1/model/conv2d_27/Conv2D1" output_port_id="model_1/model/batch_normalization_41/FusedBatchNormV3_model_1/model/conv2d_29/Conv2D_model_1/model/conv2d_27/Conv2D1:0" />
+		<IR name="model_1/model/batch_normalization_41/FusedBatchNormV3_model_1/model/conv2d_29/Conv2D_model_1/model/conv2d_27/Conv2D1" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="model_1/model/add_7/add" output_port_id="model_1/model/add_7/add:0" />
+		<IR name="model_1/model/add_7/add" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="model_1/model/add_7/add" output_port_id="model_1/model/add_7/add:0" />
+		<IR name="model_1/model/add_7/add" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Conv2D_28/filter" output_port_id="Conv2D_28/filter:0" />
+		<IR name="Conv2D_28/filter" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Conv2D_28/filter" output_port_id="Conv2D_28/filter:0" />
+		<IR name="Conv2D_28/filter" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Conv2D_28" output_port_id="Conv2D_28:0" />
+		<IR name="Conv2D_28" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Conv2D_28" output_port_id="Conv2D_28:0" />
+		<IR name="Conv2D_28" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Add_28/y" output_port_id="Add_28/y:0" />
+		<IR name="Add_28/y" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Add_28/y" output_port_id="Add_28/y:0" />
+		<IR name="Add_28/y" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Add_28" output_port_id="Add_28:0" />
+		<IR name="Add_28" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Add_28" output_port_id="Add_28:0" />
+		<IR name="Add_28" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="model_1/model/re_lu_28/Relu6_model_1/model/batch_normalization_42/FusedBatchNormV3_model_1/model/batch_normalization_46/FusedBatchNormV3_model_1/model/depthwise_conv2d_15/depthwise_model_1/model/conv2d_28/Conv2D" output_port_id="model_1/model/re_lu_28/Relu6_model_1/model/batch_normalization_42/FusedBatchNormV3_model_1/model/batch_normalization_46/FusedBatchNormV3_model_1/model/depthwise_conv2d_15/depthwise_model_1/model/conv2d_28/Conv2D:0" />
+		<IR name="model_1/model/re_lu_28/Relu6_model_1/model/batch_normalization_42/FusedBatchNormV3_model_1/model/batch_normalization_46/FusedBatchNormV3_model_1/model/depthwise_conv2d_15/depthwise_model_1/model/conv2d_28/Conv2D" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="model_1/model/re_lu_28/Relu6_model_1/model/batch_normalization_42/FusedBatchNormV3_model_1/model/batch_normalization_46/FusedBatchNormV3_model_1/model/depthwise_conv2d_15/depthwise_model_1/model/conv2d_28/Conv2D" output_port_id="model_1/model/re_lu_28/Relu6_model_1/model/batch_normalization_42/FusedBatchNormV3_model_1/model/batch_normalization_46/FusedBatchNormV3_model_1/model/depthwise_conv2d_15/depthwise_model_1/model/conv2d_28/Conv2D:0" />
+		<IR name="model_1/model/re_lu_28/Relu6_model_1/model/batch_normalization_42/FusedBatchNormV3_model_1/model/batch_normalization_46/FusedBatchNormV3_model_1/model/depthwise_conv2d_15/depthwise_model_1/model/conv2d_28/Conv2D" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="depthwise_14/filter_in" output_port_id="depthwise_14/filter_in:0" />
+		<IR name="depthwise_14/filter_in" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="depthwise_14/filter_in" output_port_id="depthwise_14/filter_in:0" />
+		<IR name="depthwise_14/filter_in" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="depthwise_14" output_port_id="depthwise_14:0" />
+		<IR name="depthwise_14" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="depthwise_14" output_port_id="depthwise_14:0" />
+		<IR name="depthwise_14" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Add_29/y" output_port_id="Add_29/y:0" />
+		<IR name="Add_29/y" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Add_29/y" output_port_id="Add_29/y:0" />
+		<IR name="Add_29/y" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Add_29" output_port_id="Add_29:0" />
+		<IR name="Add_29" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Add_29" output_port_id="Add_29:0" />
+		<IR name="Add_29" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="model_1/model/re_lu_29/Relu6_model_1/model/batch_normalization_43/FusedBatchNormV3_model_1/model/depthwise_conv2d_14/depthwise_model_1/model/depthwise_conv2d_15/depthwise" output_port_id="model_1/model/re_lu_29/Relu6_model_1/model/batch_normalization_43/FusedBatchNormV3_model_1/model/depthwise_conv2d_14/depthwise_model_1/model/depthwise_conv2d_15/depthwise:0" />
+		<IR name="model_1/model/re_lu_29/Relu6_model_1/model/batch_normalization_43/FusedBatchNormV3_model_1/model/depthwise_conv2d_14/depthwise_model_1/model/depthwise_conv2d_15/depthwise" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="model_1/model/re_lu_29/Relu6_model_1/model/batch_normalization_43/FusedBatchNormV3_model_1/model/depthwise_conv2d_14/depthwise_model_1/model/depthwise_conv2d_15/depthwise" output_port_id="model_1/model/re_lu_29/Relu6_model_1/model/batch_normalization_43/FusedBatchNormV3_model_1/model/depthwise_conv2d_14/depthwise_model_1/model/depthwise_conv2d_15/depthwise:0" />
+		<IR name="model_1/model/re_lu_29/Relu6_model_1/model/batch_normalization_43/FusedBatchNormV3_model_1/model/depthwise_conv2d_14/depthwise_model_1/model/depthwise_conv2d_15/depthwise" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="Conv2D_29/filter" output_port_id="Conv2D_29/filter:0" />
+		<IR name="Conv2D_29/filter" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Conv2D_29/filter" output_port_id="Conv2D_29/filter:0" />
+		<IR name="Conv2D_29/filter" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Conv2D_29" output_port_id="Conv2D_29:0" />
+		<IR name="Conv2D_29" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Conv2D_29" output_port_id="Conv2D_29:0" />
+		<IR name="Conv2D_29" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="model_1/model/batch_normalization_44/FusedBatchNormV3_model_1/model/conv2d_29/Conv2D1/y" output_port_id="model_1/model/batch_normalization_44/FusedBatchNormV3_model_1/model/conv2d_29/Conv2D1/y:0" />
+		<IR name="model_1/model/batch_normalization_44/FusedBatchNormV3_model_1/model/conv2d_29/Conv2D1/y" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="model_1/model/batch_normalization_44/FusedBatchNormV3_model_1/model/conv2d_29/Conv2D1/y" output_port_id="model_1/model/batch_normalization_44/FusedBatchNormV3_model_1/model/conv2d_29/Conv2D1/y:0" />
+		<IR name="model_1/model/batch_normalization_44/FusedBatchNormV3_model_1/model/conv2d_29/Conv2D1/y" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="model_1/model/batch_normalization_44/FusedBatchNormV3_model_1/model/conv2d_29/Conv2D1" output_port_id="model_1/model/batch_normalization_44/FusedBatchNormV3_model_1/model/conv2d_29/Conv2D1:0" />
+		<IR name="model_1/model/batch_normalization_44/FusedBatchNormV3_model_1/model/conv2d_29/Conv2D1" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="model_1/model/batch_normalization_44/FusedBatchNormV3_model_1/model/conv2d_29/Conv2D1" output_port_id="model_1/model/batch_normalization_44/FusedBatchNormV3_model_1/model/conv2d_29/Conv2D1:0" />
+		<IR name="model_1/model/batch_normalization_44/FusedBatchNormV3_model_1/model/conv2d_29/Conv2D1" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="model_1/model/add_8/add" output_port_id="model_1/model/add_8/add:0" />
+		<IR name="model_1/model/add_8/add" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="model_1/model/add_8/add" output_port_id="model_1/model/add_8/add:0" />
+		<IR name="model_1/model/add_8/add" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Conv2D_30/filter" output_port_id="Conv2D_30/filter:0" />
+		<IR name="Conv2D_30/filter" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Conv2D_30/filter" output_port_id="Conv2D_30/filter:0" />
+		<IR name="Conv2D_30/filter" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Conv2D_30" output_port_id="Conv2D_30:0" />
+		<IR name="Conv2D_30" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Conv2D_30" output_port_id="Conv2D_30:0" />
+		<IR name="Conv2D_30" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Add_30/y" output_port_id="Add_30/y:0" />
+		<IR name="Add_30/y" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Add_30/y" output_port_id="Add_30/y:0" />
+		<IR name="Add_30/y" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Add_30" output_port_id="Add_30:0" />
+		<IR name="Add_30" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Add_30" output_port_id="Add_30:0" />
+		<IR name="Add_30" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="model_1/model/re_lu_30/Relu6_model_1/model/batch_normalization_45/FusedBatchNormV3_model_1/model/batch_normalization_46/FusedBatchNormV3_model_1/model/depthwise_conv2d_15/depthwise_model_1/model/conv2d_30/Conv2D" output_port_id="model_1/model/re_lu_30/Relu6_model_1/model/batch_normalization_45/FusedBatchNormV3_model_1/model/batch_normalization_46/FusedBatchNormV3_model_1/model/depthwise_conv2d_15/depthwise_model_1/model/conv2d_30/Conv2D:0" />
+		<IR name="model_1/model/re_lu_30/Relu6_model_1/model/batch_normalization_45/FusedBatchNormV3_model_1/model/batch_normalization_46/FusedBatchNormV3_model_1/model/depthwise_conv2d_15/depthwise_model_1/model/conv2d_30/Conv2D" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="model_1/model/re_lu_30/Relu6_model_1/model/batch_normalization_45/FusedBatchNormV3_model_1/model/batch_normalization_46/FusedBatchNormV3_model_1/model/depthwise_conv2d_15/depthwise_model_1/model/conv2d_30/Conv2D" output_port_id="model_1/model/re_lu_30/Relu6_model_1/model/batch_normalization_45/FusedBatchNormV3_model_1/model/batch_normalization_46/FusedBatchNormV3_model_1/model/depthwise_conv2d_15/depthwise_model_1/model/conv2d_30/Conv2D:0" />
+		<IR name="model_1/model/re_lu_30/Relu6_model_1/model/batch_normalization_45/FusedBatchNormV3_model_1/model/batch_normalization_46/FusedBatchNormV3_model_1/model/depthwise_conv2d_15/depthwise_model_1/model/conv2d_30/Conv2D" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="depthwise_15/filter_in" output_port_id="depthwise_15/filter_in:0" />
+		<IR name="depthwise_15/filter_in" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="depthwise_15/filter_in" output_port_id="depthwise_15/filter_in:0" />
+		<IR name="depthwise_15/filter_in" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="depthwise_15" output_port_id="depthwise_15:0" />
+		<IR name="depthwise_15" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="depthwise_15" output_port_id="depthwise_15:0" />
+		<IR name="depthwise_15" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Add_31/y" output_port_id="Add_31/y:0" />
+		<IR name="Add_31/y" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Add_31/y" output_port_id="Add_31/y:0" />
+		<IR name="Add_31/y" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Add_31" output_port_id="Add_31:0" />
+		<IR name="Add_31" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Add_31" output_port_id="Add_31:0" />
+		<IR name="Add_31" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="model_1/model/global_average_pooling2d/Mean" output_port_id="model_1/model/global_average_pooling2d/Mean:0" />
+		<IR name="model_1/model/global_average_pooling2d/Mean" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="model_1/model/global_average_pooling2d/Mean" output_port_id="model_1/model/global_average_pooling2d/Mean:0" />
+		<IR name="model_1/model/global_average_pooling2d/Mean" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Identity_dense/MatMul/ReadVariableOp" output_port_id="Identity_dense/MatMul/ReadVariableOp:0" />
+		<IR name="Identity_dense/MatMul/ReadVariableOp" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Identity_dense/MatMul/ReadVariableOp" output_port_id="Identity_dense/MatMul/ReadVariableOp:0" />
+		<IR name="Identity_dense/MatMul/ReadVariableOp" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Identity_dense/MatMul" output_port_id="Identity_dense/MatMul:0" />
+		<IR name="Identity_dense/MatMul" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Identity_dense/MatMul" output_port_id="Identity_dense/MatMul:0" />
+		<IR name="Identity_dense/MatMul" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Identity_dense/BiasAdd/ReadVariableOp" output_port_id="Identity_dense/BiasAdd/ReadVariableOp:0" />
+		<IR name="Identity_dense/BiasAdd/ReadVariableOp" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Identity_dense/BiasAdd/ReadVariableOp" output_port_id="Identity_dense/BiasAdd/ReadVariableOp:0" />
+		<IR name="Identity_dense/BiasAdd/ReadVariableOp" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Identity_dense/BiasAdd/Add" output_port_id="Identity_dense/BiasAdd:0" />
+		<IR name="Identity_dense/BiasAdd/Add" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Identity_dense/BiasAdd" output_port_id="Identity_dense/BiasAdd:0" />
+		<IR name="Identity_dense/BiasAdd/Add" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Identity" output_port_id="Identity_dense/BiasAdd:0" />
+		<IR name="Identity_dense/BiasAdd/Add" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Identity_dense/BiasAdd/Add" output_port_id="Identity:0" />
+		<IR name="Identity_dense/BiasAdd/Add" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Identity_dense/BiasAdd" output_port_id="Identity:0" />
+		<IR name="Identity_dense/BiasAdd/Add" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Identity" output_port_id="Identity:0" />
+		<IR name="Identity_dense/BiasAdd/Add" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Identity_3_dense/MatMul/ReadVariableOp" output_port_id="Identity_3_dense/MatMul/ReadVariableOp:0" />
+		<IR name="Identity_3_dense/MatMul/ReadVariableOp" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Identity_3_dense/MatMul/ReadVariableOp" output_port_id="Identity_3_dense/MatMul/ReadVariableOp:0" />
+		<IR name="Identity_3_dense/MatMul/ReadVariableOp" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Identity_3_dense/MatMul" output_port_id="Identity_3_dense/MatMul:0" />
+		<IR name="Identity_3_dense/MatMul" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Identity_3_dense/MatMul" output_port_id="Identity_3_dense/MatMul:0" />
+		<IR name="Identity_3_dense/MatMul" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Identity_3_dense/BiasAdd/ReadVariableOp" output_port_id="Identity_3_dense/BiasAdd/ReadVariableOp:0" />
+		<IR name="Identity_3_dense/BiasAdd/ReadVariableOp" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Identity_3_dense/BiasAdd/ReadVariableOp" output_port_id="Identity_3_dense/BiasAdd/ReadVariableOp:0" />
+		<IR name="Identity_3_dense/BiasAdd/ReadVariableOp" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Identity_3_dense/BiasAdd/Add" output_port_id="Identity_3_dense/BiasAdd:0" />
+		<IR name="Identity_3_dense/BiasAdd/Add" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Identity_3_dense/BiasAdd" output_port_id="Identity_3_dense/BiasAdd:0" />
+		<IR name="Identity_3_dense/BiasAdd/Add" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Identity_3" output_port_id="Identity_3_dense/BiasAdd:0" />
+		<IR name="Identity_3_dense/BiasAdd/Add" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Identity_3_dense/BiasAdd/Add" output_port_id="Identity_3:0" />
+		<IR name="Identity_3_dense/BiasAdd/Add" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Identity_3_dense/BiasAdd" output_port_id="Identity_3:0" />
+		<IR name="Identity_3_dense/BiasAdd/Add" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Identity_3" output_port_id="Identity_3:0" />
+		<IR name="Identity_3_dense/BiasAdd/Add" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="model_1/model/conv_handedness/MatMul_model_1/model/conv_handedness/BiasAdd_dense/MatMul/ReadVariableOp" output_port_id="model_1/model/conv_handedness/MatMul_model_1/model/conv_handedness/BiasAdd_dense/MatMul/ReadVariableOp:0" />
+		<IR name="model_1/model/conv_handedness/MatMul_model_1/model/conv_handedness/BiasAdd_dense/MatMul/ReadVariableOp" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="model_1/model/conv_handedness/MatMul_model_1/model/conv_handedness/BiasAdd_dense/MatMul/ReadVariableOp" output_port_id="model_1/model/conv_handedness/MatMul_model_1/model/conv_handedness/BiasAdd_dense/MatMul/ReadVariableOp:0" />
+		<IR name="model_1/model/conv_handedness/MatMul_model_1/model/conv_handedness/BiasAdd_dense/MatMul/ReadVariableOp" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="model_1/model/conv_handedness/MatMul_model_1/model/conv_handedness/BiasAdd_dense/MatMul" output_port_id="model_1/model/conv_handedness/MatMul_model_1/model/conv_handedness/BiasAdd_dense/MatMul:0" />
+		<IR name="model_1/model/conv_handedness/MatMul_model_1/model/conv_handedness/BiasAdd_dense/MatMul" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="model_1/model/conv_handedness/MatMul_model_1/model/conv_handedness/BiasAdd_dense/MatMul" output_port_id="model_1/model/conv_handedness/MatMul_model_1/model/conv_handedness/BiasAdd_dense/MatMul:0" />
+		<IR name="model_1/model/conv_handedness/MatMul_model_1/model/conv_handedness/BiasAdd_dense/MatMul" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="model_1/model/conv_handedness/MatMul_model_1/model/conv_handedness/BiasAdd_dense/BiasAdd/ReadVariableOp" output_port_id="model_1/model/conv_handedness/MatMul_model_1/model/conv_handedness/BiasAdd_dense/BiasAdd/ReadVariableOp:0" />
+		<IR name="model_1/model/conv_handedness/MatMul_model_1/model/conv_handedness/BiasAdd_dense/BiasAdd/ReadVariableOp" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="model_1/model/conv_handedness/MatMul_model_1/model/conv_handedness/BiasAdd_dense/BiasAdd/ReadVariableOp" output_port_id="model_1/model/conv_handedness/MatMul_model_1/model/conv_handedness/BiasAdd_dense/BiasAdd/ReadVariableOp:0" />
+		<IR name="model_1/model/conv_handedness/MatMul_model_1/model/conv_handedness/BiasAdd_dense/BiasAdd/ReadVariableOp" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="model_1/model/conv_handedness/MatMul_model_1/model/conv_handedness/BiasAdd_dense/BiasAdd/Add" output_port_id="model_1/model/conv_handedness/MatMul_model_1/model/conv_handedness/BiasAdd_dense/BiasAdd:0" />
+		<IR name="model_1/model/conv_handedness/MatMul_model_1/model/conv_handedness/BiasAdd_dense/BiasAdd/Add" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="model_1/model/conv_handedness/MatMul_model_1/model/conv_handedness/BiasAdd_dense/BiasAdd" output_port_id="model_1/model/conv_handedness/MatMul_model_1/model/conv_handedness/BiasAdd_dense/BiasAdd:0" />
+		<IR name="model_1/model/conv_handedness/MatMul_model_1/model/conv_handedness/BiasAdd_dense/BiasAdd/Add" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="model_1/model/conv_handedness/MatMul_model_1/model/conv_handedness/BiasAdd" output_port_id="model_1/model/conv_handedness/MatMul_model_1/model/conv_handedness/BiasAdd_dense/BiasAdd:0" />
+		<IR name="model_1/model/conv_handedness/MatMul_model_1/model/conv_handedness/BiasAdd_dense/BiasAdd/Add" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="model_1/model/conv_handedness/MatMul_model_1/model/conv_handedness/BiasAdd_dense/BiasAdd/Add" output_port_id="model_1/model/conv_handedness/MatMul_model_1/model/conv_handedness/BiasAdd:0" />
+		<IR name="model_1/model/conv_handedness/MatMul_model_1/model/conv_handedness/BiasAdd_dense/BiasAdd/Add" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="model_1/model/conv_handedness/MatMul_model_1/model/conv_handedness/BiasAdd_dense/BiasAdd" output_port_id="model_1/model/conv_handedness/MatMul_model_1/model/conv_handedness/BiasAdd:0" />
+		<IR name="model_1/model/conv_handedness/MatMul_model_1/model/conv_handedness/BiasAdd_dense/BiasAdd/Add" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="model_1/model/conv_handedness/MatMul_model_1/model/conv_handedness/BiasAdd" output_port_id="model_1/model/conv_handedness/MatMul_model_1/model/conv_handedness/BiasAdd:0" />
+		<IR name="model_1/model/conv_handedness/MatMul_model_1/model/conv_handedness/BiasAdd_dense/BiasAdd/Add" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Identity_2" output_port_id="Identity_2:0" />
+		<IR name="Identity_2" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="Identity_2" output_port_id="Identity_2:0" />
+		<IR name="Identity_2" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="model_1/model/conv_handflag/MatMul_model_1/model/conv_handflag/BiasAdd_dense/MatMul/ReadVariableOp" output_port_id="model_1/model/conv_handflag/MatMul_model_1/model/conv_handflag/BiasAdd_dense/MatMul/ReadVariableOp:0" />
+		<IR name="model_1/model/conv_handflag/MatMul_model_1/model/conv_handflag/BiasAdd_dense/MatMul/ReadVariableOp" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="model_1/model/conv_handflag/MatMul_model_1/model/conv_handflag/BiasAdd_dense/MatMul/ReadVariableOp" output_port_id="model_1/model/conv_handflag/MatMul_model_1/model/conv_handflag/BiasAdd_dense/MatMul/ReadVariableOp:0" />
+		<IR name="model_1/model/conv_handflag/MatMul_model_1/model/conv_handflag/BiasAdd_dense/MatMul/ReadVariableOp" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="model_1/model/conv_handflag/MatMul_model_1/model/conv_handflag/BiasAdd_dense/MatMul" output_port_id="model_1/model/conv_handflag/MatMul_model_1/model/conv_handflag/BiasAdd_dense/MatMul:0" />
+		<IR name="model_1/model/conv_handflag/MatMul_model_1/model/conv_handflag/BiasAdd_dense/MatMul" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="model_1/model/conv_handflag/MatMul_model_1/model/conv_handflag/BiasAdd_dense/MatMul" output_port_id="model_1/model/conv_handflag/MatMul_model_1/model/conv_handflag/BiasAdd_dense/MatMul:0" />
+		<IR name="model_1/model/conv_handflag/MatMul_model_1/model/conv_handflag/BiasAdd_dense/MatMul" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="model_1/model/conv_handflag/MatMul_model_1/model/conv_handflag/BiasAdd_dense/BiasAdd/ReadVariableOp" output_port_id="model_1/model/conv_handflag/MatMul_model_1/model/conv_handflag/BiasAdd_dense/BiasAdd/ReadVariableOp:0" />
+		<IR name="model_1/model/conv_handflag/MatMul_model_1/model/conv_handflag/BiasAdd_dense/BiasAdd/ReadVariableOp" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="model_1/model/conv_handflag/MatMul_model_1/model/conv_handflag/BiasAdd_dense/BiasAdd/ReadVariableOp" output_port_id="model_1/model/conv_handflag/MatMul_model_1/model/conv_handflag/BiasAdd_dense/BiasAdd/ReadVariableOp:0" />
+		<IR name="model_1/model/conv_handflag/MatMul_model_1/model/conv_handflag/BiasAdd_dense/BiasAdd/ReadVariableOp" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="model_1/model/conv_handflag/MatMul_model_1/model/conv_handflag/BiasAdd_dense/BiasAdd/Add" output_port_id="model_1/model/conv_handflag/MatMul_model_1/model/conv_handflag/BiasAdd_dense/BiasAdd:0" />
+		<IR name="model_1/model/conv_handflag/MatMul_model_1/model/conv_handflag/BiasAdd_dense/BiasAdd/Add" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="model_1/model/conv_handflag/MatMul_model_1/model/conv_handflag/BiasAdd_dense/BiasAdd" output_port_id="model_1/model/conv_handflag/MatMul_model_1/model/conv_handflag/BiasAdd_dense/BiasAdd:0" />
+		<IR name="model_1/model/conv_handflag/MatMul_model_1/model/conv_handflag/BiasAdd_dense/BiasAdd/Add" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="model_1/model/conv_handflag/MatMul_model_1/model/conv_handflag/BiasAdd" output_port_id="model_1/model/conv_handflag/MatMul_model_1/model/conv_handflag/BiasAdd_dense/BiasAdd:0" />
+		<IR name="model_1/model/conv_handflag/MatMul_model_1/model/conv_handflag/BiasAdd_dense/BiasAdd/Add" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="model_1/model/conv_handflag/MatMul_model_1/model/conv_handflag/BiasAdd_dense/BiasAdd/Add" output_port_id="model_1/model/conv_handflag/MatMul_model_1/model/conv_handflag/BiasAdd:0" />
+		<IR name="model_1/model/conv_handflag/MatMul_model_1/model/conv_handflag/BiasAdd_dense/BiasAdd/Add" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="model_1/model/conv_handflag/MatMul_model_1/model/conv_handflag/BiasAdd_dense/BiasAdd" output_port_id="model_1/model/conv_handflag/MatMul_model_1/model/conv_handflag/BiasAdd:0" />
+		<IR name="model_1/model/conv_handflag/MatMul_model_1/model/conv_handflag/BiasAdd_dense/BiasAdd/Add" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="model_1/model/conv_handflag/MatMul_model_1/model/conv_handflag/BiasAdd" output_port_id="model_1/model/conv_handflag/MatMul_model_1/model/conv_handflag/BiasAdd:0" />
+		<IR name="model_1/model/conv_handflag/MatMul_model_1/model/conv_handflag/BiasAdd_dense/BiasAdd/Add" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Identity_1" output_port_id="Identity_1:0" />
+		<IR name="Identity_1" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="Identity_1" output_port_id="Identity_1:0" />
+		<IR name="Identity_1" output_port_id="1" />
+	</map>
+</mapping>
