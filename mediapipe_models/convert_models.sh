@@ -20,7 +20,6 @@ tflite2tensorflow \
 #  --schema_path ../../schema.fbs \
 #  --output_openvino_and_myriad
 # Generate Openvino "normalized input" models
-# /opt/intel/openvino_2021/deployment_tools/model_optimizer/mo_tf.py --input_model palm_detection/model_float32.pb --model_name palm_detection_${FP} --data_type ${FP} --mean_values "[127.5, 127.5, 127.5]" --scale_values "[127.5, 127.5, 127.5]" --reverse_input_channels
 /opt/intel/openvino_2021/deployment_tools/model_optimizer/mo_tf.py --input_model palm_detection/model_float32.pb --model_name palm_detection_${FP} --data_type ${FP} --mean_values "[0.0, 0.0, 0.0]" --scale_values "[255.0, 255.0, 255.0]" --reverse_input_channels
 
 # Hand landmark model
