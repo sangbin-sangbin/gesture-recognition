@@ -1,14 +1,11 @@
 import cv2
 import mediapipe as mp
-import math
 import time
 import torch
 import torch.nn as nn
 import json
-from math import sqrt
 import subprocess
 import pygame
-import asyncio
 
 
 class Model(nn.Module):
@@ -149,24 +146,12 @@ else:
     }
 cv2.namedWindow("gesture recognition")
 cv2.createTrackbar("time", "gesture recognition", parameter["time"], 100, nothing)
-cv2.createTrackbar(
-    "same_hand", "gesture recognition", parameter["same_hand"], 100, nothing
-)
-cv2.createTrackbar(
-    "skip_frame", "gesture recognition", parameter["skip_frame"], 50, nothing
-)
-cv2.createTrackbar(
-    "start_time", "gesture recognition", parameter["start_time"], 10, nothing
-)
-cv2.createTrackbar(
-    "stop_time", "gesture recognition", parameter["stop_time"], 10, nothing
-)
-cv2.createTrackbar(
-    "multi_time", "gesture recognition", parameter["multi_time"], 10, nothing
-)
-cv2.createTrackbar(
-    "multi_cooltime", "gesture recognition", parameter["multi_cooltime"], 10, nothing
-)
+cv2.createTrackbar("same_hand", "gesture recognition", parameter["same_hand"], 100, nothing)
+cv2.createTrackbar("skip_frame", "gesture recognition", parameter["skip_frame"], 50, nothing)
+cv2.createTrackbar("start_time", "gesture recognition", parameter["start_time"], 10, nothing)
+cv2.createTrackbar("stop_time", "gesture recognition", parameter["stop_time"], 10, nothing)
+cv2.createTrackbar("multi_time", "gesture recognition", parameter["multi_time"], 10, nothing)
+cv2.createTrackbar("multi_cooltime", "gesture recognition", parameter["multi_cooltime"], 10, nothing)
 
 gestures = ["default", "left", "right", "select", "exit", "none"]
 gesture_num = 0
@@ -209,21 +194,11 @@ while cap.isOpened():
     time_threshold = cv2.getTrackbarPos("time", "gesture recognition") / 100
     # distance between this frame's hand and last frame's recognized hand should be smaller than same_hand_threshold to regard them as same hand
     same_hand_threshold = cv2.getTrackbarPos("same_hand", "gesture recognition") / 1000
-    landmark_skip_frame = max(
-        cv2.getTrackbarPos("skip_frame", "gesture recognition"), 1
-    )
-    start_recognizing_time_threshold = cv2.getTrackbarPos(
-        "start_time", "gesture recognition"
-    )
-    stop_recognizing_time_threshold = cv2.getTrackbarPos(
-        "stop_time", "gesture recognition"
-    )
-    multi_action_time_threshold = cv2.getTrackbarPos(
-        "multi_time", "gesture recognition"
-    )
-    multi_action_cooltime = (
-        cv2.getTrackbarPos("multi_cooltime", "gesture recognition") / 10
-    )
+    landmark_skip_frame = max(cv2.getTrackbarPos("skip_frame", "gesture recognition"), 1)
+    start_recognizing_time_threshold = cv2.getTrackbarPos("start_time", "gesture recognition")
+    stop_recognizing_time_threshold = cv2.getTrackbarPos("stop_time", "gesture recognition")
+    multi_action_time_threshold = cv2.getTrackbarPos("multi_time", "gesture recognition")
+    multi_action_cooltime = cv2.getTrackbarPos("multi_cooltime", "gesture recognition") / 10
 
     # Read a frame from the webcam
     ret, frame = cap.read()
@@ -293,10 +268,7 @@ while cap.isOpened():
 
                     if state["gesture"] == gesture_idx:
                         # start multi action when user hold one gesture enough time
-                        if (
-                            time.time() - state["start_time"]
-                            > multi_action_time_threshold
-                        ):
+                        if time.time() - state["start_time"] > multi_action_time_threshold:
                             if state["multi_action_start_time"] == -1:
                                 state["multi_action_start_time"] = time.time()
                             if (
@@ -304,15 +276,11 @@ while cap.isOpened():
                                 > multi_action_cooltime * state["multi_action_cnt"]
                             ):
                                 state["multi_action_cnt"] += 1
-                                state["prev_action"] = perform_action(
-                                    state["prev_action"][0]
-                                )
+                                state["prev_action"] = perform_action(state["prev_action"][0])
 
                         elif time.time() - state["start_time"] > time_threshold:
                             if gestures[state["prev_gesture"]] == "default":
-                                state["prev_action"] = perform_action(
-                                    gestures[state["gesture"]]
-                                )
+                                state["prev_action"] = perform_action(gestures[state["gesture"]])
                             state["prev_gesture"] = gesture_idx
                     else:
                         state = {
@@ -327,11 +295,7 @@ while cap.isOpened():
                     # stop recognizing
                     recognizing_hand = []
                     text_a = ""
-                    if (
-                        recognizing
-                        and time.time() - last_hand_time
-                        > stop_recognizing_time_threshold
-                    ):
+                    if recognizing and time.time() - last_hand_time > stop_recognizing_time_threshold:
                         print("stop recognizing")
                         play_wav_file("stop")
                         recognizing = False
@@ -369,9 +333,7 @@ while cap.isOpened():
 
                 checked = [0 for _ in range(len(wake_up_hands))]
                 for i, [prev_pos, start_time] in enumerate(wake_up_state):
-                    hand_idx, prev_pos = same_hand_tracking(
-                        wake_up_hands, prev_pos, same_hand_threshold
-                    )
+                    hand_idx, prev_pos = same_hand_tracking(wake_up_hands, prev_pos, same_hand_threshold)
                     if hand_idx == -1:
                         delete_list = [i] + delete_list
                     elif time.time() - start_time > start_recognizing_time_threshold:
@@ -392,18 +354,13 @@ while cap.isOpened():
 
                     for i in range(len(checked)):
                         if checked[i] == 0:
-                            wake_up_state.append(
-                                [get_center(wake_up_hands[i]), time.time()]
-                            )
+                            wake_up_state.append([get_center(wake_up_hands[i]), time.time()])
         else:
             # stop recognizing
             recognizing_hands = []
             recognizing_hand = []
             text_a = ""
-            if (
-                recognizing
-                and time.time() - last_hand_time > stop_recognizing_time_threshold
-            ):
+            if recognizing and time.time() - last_hand_time > stop_recognizing_time_threshold:
                 print("stop recognizing")
                 play_wav_file("stop")
                 recognizing = False
@@ -474,9 +431,7 @@ while cap.isOpened():
         for j, cell in enumerate(data):
             x = 50 + cell_width * j + 30
             y = text_position[1] + 20 + i * cell_height + cell_height // 2 + 10
-            cv2.putText(
-                frame, str(cell), (x, y), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2
-            )
+            cv2.putText(frame, str(cell), (x, y), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2)
 
             if i == 0:
                 cv2.rectangle(

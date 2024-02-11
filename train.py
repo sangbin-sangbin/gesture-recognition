@@ -36,9 +36,7 @@ val_dataset = dataset[int(len(dataset) * 0.8) : int(len(dataset) * 0.9)]
 test_dataset = dataset[int(len(dataset) * 0.9) :]
 
 
-def print_progress_bar(
-    iteration, total, time_per_step, prefix="", suffix="", length=30, fill="="
-):
+def print_progress_bar(iteration, total, time_per_step, prefix="", suffix="", length=30, fill="="):
     percent = ("{0:.1f}").format(100 * (iteration / float(total)))
     filled_length = int(length * iteration // total)
     bar = fill * filled_length + "-" * (length - filled_length)
@@ -61,9 +59,7 @@ for epoch in range(total_epochs):
     for step, data in enumerate(train_dataset):
         model.zero_grad()
 
-        landmarks = torch.tensor(
-            [element for row in data["landmarks"] for element in row], dtype=torch.float
-        )
+        landmarks = torch.tensor([element for row in data["landmarks"] for element in row], dtype=torch.float)
 
         ans = [0 for _ in range(TARGET_SIZE)]
         ans[data["gesture"]] = 1
@@ -91,9 +87,7 @@ for epoch in range(total_epochs):
     # Prevent from overfitting
     val_loss = 0.0
     for data in val_dataset:
-        landmarks = torch.tensor(
-            [element for row in data["landmarks"] for element in row], dtype=torch.float
-        )
+        landmarks = torch.tensor([element for row in data["landmarks"] for element in row], dtype=torch.float)
         ans = [0 for _ in range(TARGET_SIZE)]
         ans[data["gesture"]] = 1
         ans = torch.tensor(ans, dtype=torch.float)
