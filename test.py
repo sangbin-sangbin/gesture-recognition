@@ -126,7 +126,7 @@ hands = mp_hands.Hands(max_num_hands=5)
 # Open a webcam
 w = 1280
 h = 720
-cap = cv2.VideoCapture(0)  # 1, cv2.CAP_DSHOW)
+cap = cv2.VideoCapture(1)  # 1, cv2.CAP_DSHOW)
 cap.set(cv2.CAP_PROP_FRAME_WIDTH, w)
 cap.set(cv2.CAP_PROP_FRAME_HEIGHT, h)
 

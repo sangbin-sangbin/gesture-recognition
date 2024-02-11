@@ -2,11 +2,9 @@ import numpy as np
 import mediapipe_utils as mpu
 import cv2
 from FPS import FPS, now
-import argparse
 import os
-from openvino.inference_engine import IECore
-import json
 import time
+from openvino.inference_engine import IECore
 
 
 class HandTracker:
@@ -21,16 +19,21 @@ class HandTracker:
         lm_xml="mediapipe_models/hand_landmark_FP32.xml",
         lm_device="CPU",
         lm_score_threshold=0.5,
+        use_gesture=False,
         crop=False,
+        is_getdata=False,
     ):
 
         self.pd_score_thresh = pd_score_thresh
         self.pd_nms_thresh = pd_nms_thresh
         self.use_lm = use_lm
         self.lm_score_threshold = lm_score_threshold
+        self.use_gesture = use_gesture
         self.crop = crop
 
+        self.is_getdata = is_getdata
         self.dataset = []
+        self.coords = []
         self.state = "break"
         self.start_time = time.time()
         self.gesture_num = 0
@@ -46,7 +49,7 @@ class HandTracker:
             # Open a webcam
             w = 1280
             h = 720
-            self.cap = cv2.VideoCapture(0)
+            self.cap = cv2.VideoCapture(input_src)
             self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, w)
             self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, h)
 
@@ -121,8 +124,8 @@ class HandTracker:
         print("Palm Detection model - Reading network files:\n\t{}\n\t{}".format(pd_xml, pd_bin))
         self.pd_net = self.ie.read_network(model=pd_xml, weights=pd_bin)
         # Input blob: input_1 - shape: [1, 3, 192, 192]
-        # Output blob: Identity - shape: [1, 2016, 18] : bboxes
-        # Output blob: Identity_1 - shape: [1, 2016, 1] : scores
+        # Output blob: Identity - shape: [1, 2016, 18]
+        # Output blob: Identity_1 - shape: [1, 2016, 1]
         self.pd_input_blob = next(iter(self.pd_net.input_info))
         print(
             f"Input blob: {self.pd_input_blob} - shape: {self.pd_net.input_info[self.pd_input_blob].input_data.shape}"
@@ -181,8 +184,8 @@ class HandTracker:
             self.lm_hand_nb = 0
 
     def pd_postprocess(self, inference):
-        scores = np.squeeze(inference[self.pd_scores])  # 896
-        bboxes = inference[self.pd_bboxes][0]  # 896x18
+        scores = np.squeeze(inference[self.pd_scores])  # 2016
+        bboxes = inference[self.pd_bboxes][0]  # 2016x18
         # Decode bboxes
         self.regions = mpu.decode_bboxes(self.pd_score_thresh, scores, bboxes, self.anchors)
         # Non maximum suppression
@@ -226,42 +229,48 @@ class HandTracker:
 
     def lm_render(self, frame, region):
         if region.lm_score > self.lm_score_threshold:
-            # Store the lnadmarks in dataset
             lst = [[float(coords[0]), float(coords[1])] for coords in region.landmarks]
-            if self.state == "recording":
-                self.dataset.append({"landmarks": mpu.normalize_points(lst), "gesture": self.gesture_num})
 
-            if (time.time() - self.start_time) > 30 and self.state == "recording":
-                self.start_time = time.time()
-                self.state = "break"
-                self.gesture_num = (self.gesture_num + 1) % len(self.gestures)
-            elif (time.time() - self.start_time) > 10 and self.state == "break":
-                self.start_time = time.time()
-                self.state = "recording"
+            if self.is_getdata:
+                # Store the lnadmarks in dataset when recording
+                if self.state == "recording":
+                    self.dataset.append({"landmarks": mpu.normalize_points(lst), "gesture": self.gesture_num})
 
-            if self.state == "break":
-                cv2.putText(
-                    frame,
-                    'Break.. Next gesture is "' + self.gestures[self.gesture_num] + '"',
-                    (frame.shape[1] // 2 - 430, frame.shape[0] // 2 - 220),
-                    cv2.FONT_HERSHEY_SIMPLEX,
-                    2,
-                    (255, 0, 0),
-                    3,
-                )
+                if (time.time() - self.start_time) > 30 and self.state == "recording":
+                    self.start_time = time.time()
+                    self.state = "break"
+                    self.gesture_num = (self.gesture_num + 1) % len(self.gestures)
+                elif (time.time() - self.start_time) > 10 and self.state == "break":
+                    self.start_time = time.time()
+                    self.state = "recording"
+
+                if self.state == "break":
+                    cv2.putText(
+                        frame,
+                        'Break.. Next gesture is "' + self.gestures[self.gesture_num] + '"',
+                        (frame.shape[1] // 2 - 430, frame.shape[0] // 2 - 220),
+                        cv2.FONT_HERSHEY_SIMPLEX,
+                        2,
+                        (255, 0, 0),
+                        3,
+                    )
+                else:
+                    cv2.putText(
+                        frame,
+                        'Recorging "' + self.gestures[self.gesture_num] + '"',
+                        (frame.shape[1] // 2 - 430, frame.shape[0] // 2 - 220),
+                        cv2.FONT_HERSHEY_SIMPLEX,
+                        2,
+                        (255, 0, 0),
+                        3,
+                    )
             else:
-                cv2.putText(
-                    frame,
-                    'Recorging "' + self.gestures[self.gesture_num] + '"',
-                    (frame.shape[1] // 2 - 430, frame.shape[0] // 2 - 220),
-                    cv2.FONT_HERSHEY_SIMPLEX,
-                    2,
-                    (255, 0, 0),
-                    3,
-                )
+                self.dataset.append({"landmarks": mpu.normalize_points(lst), "gesture": self.gesture_num})
+                self.coords.append(lst)
 
             if self.show_rot_rect:
                 cv2.polylines(frame, [np.array(region.rect_points)], True, (0, 255, 255), 2, cv2.LINE_AA)
+
             if self.show_landmarks:
                 src = np.array([(0, 0), (1, 0), (1, 1)], dtype=np.float32)
                 dst = np.array(
@@ -282,6 +291,7 @@ class HandTracker:
                 cv2.polylines(frame, lines, False, (255, 0, 0), 2, cv2.LINE_AA)
                 for x, y in lm_xy:
                     cv2.circle(frame, (x, y), 6, (0, 128, 255), -1)
+
             if self.show_handedness:
                 cv2.putText(
                     frame,
@@ -404,57 +414,57 @@ class HandTracker:
         print(f"Hand landmark round trip    : {glob_lm_rtrip_time/nb_lm_inferences*1000:.1f} ms")
 
 
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "-i", "--input", type=str, default="0", help="Path to video or image file to use as input (default=%(default)s)"
-    )
-    parser.add_argument(
-        "--pd_m",
-        default="models/palm_detection_FP32.xml",
-        type=str,
-        help="Path to an .xml file for palm detection model (default=%(default)s)",
-    )
-    parser.add_argument(
-        "--pd_device", default="CPU", type=str, help="Target device for the palm detection model (default=%(default)s)"
-    )
-    parser.add_argument(
-        "--no_lm", action="store_true", help="only the palm detection model is run, not the hand landmark model"
-    )
-    parser.add_argument(
-        "--lm_m",
-        default="models/hand_landmark_FP32.xml",
-        type=str,
-        help="Path to an .xml file for landmark model (default=%(default)s)",
-    )
-    parser.add_argument(
-        "--lm_device",
-        default="CPU",
-        type=str,
-        help="Target device for the landmark regression model (default=%(default)s)",
-    )
-    parser.add_argument(
-        "-c",
-        "--crop",
-        action="store_true",
-        help="center crop frames to a square shape before feeding palm detection model",
-    )
+# if __name__ == "__main__":
+#     parser = argparse.ArgumentParser()
+#     parser.add_argument(
+#         "-i", "--input", type=str, default="0", help="Path to video or image file to use as input (default=%(default)s)"
+#     )
+#     parser.add_argument("-g", "--gesture", action="store_true", help="enable gesture recognition")
+#     parser.add_argument(
+#         "--pd_m",
+#         default="models/palm_detection_FP32.xml",
+#         type=str,
+#         help="Path to an .xml file for palm detection model (default=%(default)s)",
+#     )
+#     parser.add_argument(
+#         "--pd_device", default="CPU", type=str, help="Target device for the palm detection model (default=%(default)s)"
+#     )
+#     parser.add_argument(
+#         "--no_lm", action="store_true", help="only the palm detection model is run, not the hand landmark model"
+#     )
+#     parser.add_argument(
+#         "--lm_m",
+#         default="models/hand_landmark_FP32.xml",
+#         type=str,
+#         help="Path to an .xml file for landmark model (default=%(default)s)",
+#     )
+#     parser.add_argument(
+#         "--lm_device",
+#         default="CPU",
+#         type=str,
+#         help="Target device for the landmark regression model (default=%(default)s)",
+#     )
+#     parser.add_argument(
+#         "-c",
+#         "--crop",
+#         action="store_true",
+#         help="center crop frames to a square shape before feeding palm detection model",
+#     )
+#     parser.add_argument(
+#         "-g",
+#         "--get",
+#         action="store_false",
+#         help="get data for training gesture recognition",
+#     )
 
-    args = parser.parse_args()
+#     args = parser.parse_args()
 
-    ht = HandTracker(
-        input_src=args.input, pd_device=args.pd_device, use_lm=not args.no_lm, lm_device=args.lm_device, crop=args.crop
-    )
-
-    dataset_dir = "./dataset.json"
-    save = input("want to add previous dataset? [ y / n ]\n>>> ")
-    if save == "y":
-        ht.dataset = json.load(open(dataset_dir))
-
-    ht.run()
-
-    print(len(ht.dataset), "data generated")
-    save = input("want to save? [ y / n ]\n>>> ")
-    if save == "y":
-        with open(dataset_dir, "w") as f:
-            json.dump(ht.dataset, f, indent=4)
+# ht = HandTracker(
+#     input_src=args.input,
+#     pd_device=args.pd_device,
+#     use_lm=not args.no_lm,
+#     lm_device=args.lm_device,
+#     use_gesture=args.gesture,
+#     crop=args.crop,
+# )
+# ht.run()
