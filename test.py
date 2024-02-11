@@ -24,6 +24,7 @@ class Model(nn.Module):
         res = self.softmax(x)
         return res
 
+
 def get_center(landmark):
     sum_x = 0
     sum_y = 0
@@ -31,6 +32,7 @@ def get_center(landmark):
         sum_x += x
         sum_y += y
     return [sum_x / len(landmark), sum_y / len(landmark)]
+
 
 def same_hand_tracking(hands, prev_pos, same_hand_threshold):
     # -1 index means there is no same hand
@@ -40,12 +42,12 @@ def same_hand_tracking(hands, prev_pos, same_hand_threshold):
     positions = []
     for landmark in hands:
         center = get_center(landmark)
-        positions.append([ center[0], center[1] ])
+        positions.append([center[0], center[1]])
 
     min_idx = -1
-    min_val = float('inf')
+    min_val = float("inf")
     for i, [x, y] in enumerate(positions):
-        distance = (x-prev_pos[0])**2 + (y-prev_pos[1])**2
+        distance = (x - prev_pos[0]) ** 2 + (y - prev_pos[1]) ** 2
         if min_val > distance:
             min_idx = i
             min_val = distance
@@ -55,14 +57,17 @@ def same_hand_tracking(hands, prev_pos, same_hand_threshold):
 
     return min_idx, [positions[min_idx][0], positions[min_idx][1]]
 
+
 def play_wav_file(file_name):
     pygame.mixer.init()
-    pygame.mixer.music.load('./sound/'+file_name+'.wav')
+    pygame.mixer.music.load("./sound/" + file_name + ".wav")
     pygame.mixer.music.play()
+
 
 def nothing(x):
     pass
-    
+
+
 def normalize_points(points):
     min_x, min_y = points[0]
     max_x, max_y = points[0]
@@ -83,35 +88,37 @@ def normalize_points(points):
 
     return normalized_points, scale
 
+
 def perform_action(action):
-    if action == 'right':
-        subprocess.run('adb shell input keyevent KEYCODE_DPAD_RIGHT', shell=True)
-        print('right')
-        play_wav_file('action')
-        return ['right', time.time()]
-    elif action == 'left':
-        subprocess.run('adb shell input keyevent KEYCODE_DPAD_LEFT', shell=True)
-        print('left')
-        play_wav_file('action')
-        return ['left', time.time()]
-    elif action == 'select':
-        subprocess.run('adb shell input keyevent KEYCODE_BUTTON_SELECT', shell=True)
-        print('select')
-        play_wav_file('action')
-        return ['select', time.time()]
-    elif action == 'exit':
-        subprocess.run('adb shell input keyevent KEYCODE_BACK', shell=True)
-        print('exit')
-        play_wav_file('action')
-        return ['exit', time.time()]
-    return ['', 0]
+    if action == "right":
+        subprocess.run("adb shell input keyevent KEYCODE_DPAD_RIGHT", shell=True)
+        print("right")
+        play_wav_file("action")
+        return ["right", time.time()]
+    elif action == "left":
+        subprocess.run("adb shell input keyevent KEYCODE_DPAD_LEFT", shell=True)
+        print("left")
+        play_wav_file("action")
+        return ["left", time.time()]
+    elif action == "select":
+        subprocess.run("adb shell input keyevent KEYCODE_BUTTON_SELECT", shell=True)
+        print("select")
+        play_wav_file("action")
+        return ["select", time.time()]
+    elif action == "exit":
+        subprocess.run("adb shell input keyevent KEYCODE_BACK", shell=True)
+        print("exit")
+        play_wav_file("action")
+        return ["exit", time.time()]
+    return ["", 0]
+
 
 INPUT_SIZE = 42
 HIDDEN_DIM = 32
 TARGET_SIZE = 6
 
 model = Model(INPUT_SIZE, HIDDEN_DIM, TARGET_SIZE)
-model.load_state_dict(torch.load('model.pt'))
+model.load_state_dict(torch.load("model.pt"))
 
 mp_hands = mp.solutions.hands
 mp_drawing = mp.solutions.drawing_utils
@@ -122,41 +129,63 @@ hands = mp_hands.Hands(max_num_hands=5)
 # Open a webcam
 w = 1280
 h = 720
-cap = cv2.VideoCapture(0)#1, cv2.CAP_DSHOW)
+cap = cv2.VideoCapture(0)  # 1, cv2.CAP_DSHOW)
 cap.set(cv2.CAP_PROP_FRAME_WIDTH, w)
 cap.set(cv2.CAP_PROP_FRAME_HEIGHT, h)
 
-parameters_dir = './parameters.json'
-res = input('want to use saved parameters? [ y / n ]\n>>> ')
-if res == 'y':
+parameters_dir = "./parameters.json"
+res = input("want to use saved parameters? [ y / n ]\n>>> ")
+if res == "y":
     parameter = json.load(open(parameters_dir))
 else:
     parameter = {
-        'time': 10,
-        'same_hand': 10,
-        'skip_frame': 1,
-        'start_time': 1,
-        'stop_time': 1,
-        'multi_time': 1,
-        'multi_cooltime': 2
+        "time": 10,
+        "same_hand": 10,
+        "skip_frame": 1,
+        "start_time": 1,
+        "stop_time": 1,
+        "multi_time": 1,
+        "multi_cooltime": 2,
     }
-cv2.namedWindow('gesture recognition')
-cv2.createTrackbar('time','gesture recognition',parameter['time'],100,nothing)
-cv2.createTrackbar('same_hand','gesture recognition',parameter['same_hand'],100,nothing)
-cv2.createTrackbar('skip_frame','gesture recognition',parameter['skip_frame'],50,nothing)
-cv2.createTrackbar('start_time','gesture recognition',parameter['start_time'],10,nothing)
-cv2.createTrackbar('stop_time','gesture recognition',parameter['stop_time'],10,nothing)
-cv2.createTrackbar('multi_time','gesture recognition',parameter['multi_time'],10,nothing)
-cv2.createTrackbar('multi_cooltime','gesture recognition',parameter['multi_cooltime'],10,nothing)
+cv2.namedWindow("gesture recognition")
+cv2.createTrackbar("time", "gesture recognition", parameter["time"], 100, nothing)
+cv2.createTrackbar(
+    "same_hand", "gesture recognition", parameter["same_hand"], 100, nothing
+)
+cv2.createTrackbar(
+    "skip_frame", "gesture recognition", parameter["skip_frame"], 50, nothing
+)
+cv2.createTrackbar(
+    "start_time", "gesture recognition", parameter["start_time"], 10, nothing
+)
+cv2.createTrackbar(
+    "stop_time", "gesture recognition", parameter["stop_time"], 10, nothing
+)
+cv2.createTrackbar(
+    "multi_time", "gesture recognition", parameter["multi_time"], 10, nothing
+)
+cv2.createTrackbar(
+    "multi_cooltime", "gesture recognition", parameter["multi_cooltime"], 10, nothing
+)
 
-gestures = [ 'default', 'left', 'right', 'select', 'exit', 'none' ]
+gestures = ["default", "left", "right", "select", "exit", "none"]
 gesture_num = 0
 
-state = {'gesture':5, 'start_time':time.time(), 'prev_gesture':5, 'multi_action_start_time':-1, 'multi_action_cnt':0, 'prev_action':['', 0]}
+state = {
+    "gesture": 5,
+    "start_time": time.time(),
+    "prev_gesture": 5,
+    "multi_action_start_time": -1,
+    "multi_action_cnt": 0,
+    "prev_action": ["", 0],
+}
 
 frame_num = 0
 
-subprocess.run('adb connect 192.168.1.103:5555; adb root; adb connect 192.168.1.103:5555', shell=True)
+subprocess.run(
+    "adb connect 192.168.1.103:5555; adb root; adb connect 192.168.1.103:5555",
+    shell=True,
+)
 
 landmark_time = 0
 landmark_num = 0
@@ -165,9 +194,9 @@ gesture_num = 0
 
 recognizing_hands = []
 recognizing_hand = []
-text_a = ''
+text_a = ""
 cur_gesture = gestures[5]
-elapsed_time = '0'
+elapsed_time = "0"
 prev_gesture = gestures[5]
 
 recognizing = False
@@ -175,16 +204,26 @@ last_hand_time = time.time()
 
 wake_up_state = []
 
-while cap.isOpened():    
+while cap.isOpened():
     # require more time than time_threshold to recognize it as an gesture
-    time_threshold = cv2.getTrackbarPos('time','gesture recognition')/100
+    time_threshold = cv2.getTrackbarPos("time", "gesture recognition") / 100
     # distance between this frame's hand and last frame's recognized hand should be smaller than same_hand_threshold to regard them as same hand
-    same_hand_threshold = cv2.getTrackbarPos('same_hand','gesture recognition')/1000
-    landmark_skip_frame = max(cv2.getTrackbarPos('skip_frame','gesture recognition'), 1)
-    start_recognizing_time_threshold = cv2.getTrackbarPos('start_time','gesture recognition')
-    stop_recognizing_time_threshold = cv2.getTrackbarPos('stop_time','gesture recognition')
-    multi_action_time_threshold = cv2.getTrackbarPos('multi_time','gesture recognition')
-    multi_action_cooltime = cv2.getTrackbarPos('multi_cooltime','gesture recognition')/10
+    same_hand_threshold = cv2.getTrackbarPos("same_hand", "gesture recognition") / 1000
+    landmark_skip_frame = max(
+        cv2.getTrackbarPos("skip_frame", "gesture recognition"), 1
+    )
+    start_recognizing_time_threshold = cv2.getTrackbarPos(
+        "start_time", "gesture recognition"
+    )
+    stop_recognizing_time_threshold = cv2.getTrackbarPos(
+        "stop_time", "gesture recognition"
+    )
+    multi_action_time_threshold = cv2.getTrackbarPos(
+        "multi_time", "gesture recognition"
+    )
+    multi_action_cooltime = (
+        cv2.getTrackbarPos("multi_cooltime", "gesture recognition") / 10
+    )
 
     # Read a frame from the webcam
     ret, frame = cap.read()
@@ -197,23 +236,32 @@ while cap.isOpened():
     frame_num += 1
     if frame_num % landmark_skip_frame == 0:
         # Process the frame with MediaPipe Hands
-        start = time.time_ns()//1000000
+        start = time.time_ns() // 1000000
         results = hands.process(rgb_frame)
-        end = time.time_ns()//1000000
+        end = time.time_ns() // 1000000
         landmark_time += end - start
         landmark_num += 1
-    
+
         if results.multi_hand_landmarks:
             right_hands = []
             for idx, hand in enumerate(results.multi_handedness):
                 # label 'Left' means it is right hand because of left/right inversion
-                if hand.classification[0].label == 'Left':
-                    right_hands.append(list(map(lambda x : [x.x, x.y], results.multi_hand_landmarks[idx].landmark)))
+                if hand.classification[0].label == "Left":
+                    right_hands.append(
+                        list(
+                            map(
+                                lambda x: [x.x, x.y],
+                                results.multi_hand_landmarks[idx].landmark,
+                            )
+                        )
+                    )
             recognizing_hands = right_hands
-            
+
             if recognizing:
                 # find closest hand
-                hand_idx, recognized_hand_prev_pos = same_hand_tracking(right_hands, recognized_hand_prev_pos, same_hand_threshold)
+                hand_idx, recognized_hand_prev_pos = same_hand_tracking(
+                    right_hands, recognized_hand_prev_pos, same_hand_threshold
+                )
 
                 if hand_idx != -1:
                     last_hand_time = time.time()
@@ -222,9 +270,16 @@ while cap.isOpened():
                     recognizing_hand = landmark
                     lst, scale = normalize_points(landmark)
 
-                    start = time.time_ns()//1000000
-                    res = list(model(torch.tensor([element for row in lst for element in row], dtype=torch.float)))
-                    end = time.time_ns()//1000000
+                    start = time.time_ns() // 1000000
+                    res = list(
+                        model(
+                            torch.tensor(
+                                [element for row in lst for element in row],
+                                dtype=torch.float,
+                            )
+                        )
+                    )
+                    end = time.time_ns() // 1000000
                     gesture_time += end - start
                     gesture_num += 1
 
@@ -232,38 +287,66 @@ while cap.isOpened():
                     gesture_idx = res.index(probability) if probability >= 0.9 else 5
                     text_a = f"{gestures[gesture_idx]} {int(probability*100)}%"
 
-                    cur_gesture = gestures[state['gesture']]
-                    elapsed_time = str(round(time.time() - state['start_time'], 2))
-                    prev_gesture = gestures[state['prev_gesture']]
+                    cur_gesture = gestures[state["gesture"]]
+                    elapsed_time = str(round(time.time() - state["start_time"], 2))
+                    prev_gesture = gestures[state["prev_gesture"]]
 
-                    if state['gesture'] == gesture_idx:
+                    if state["gesture"] == gesture_idx:
                         # start multi action when user hold one gesture enough time
-                        if time.time()-state['start_time'] > multi_action_time_threshold:
-                            if state['multi_action_start_time'] == -1:
-                                state['multi_action_start_time'] = time.time()
-                            if time.time() - state['multi_action_start_time'] > multi_action_cooltime * state['multi_action_cnt']:
-                                state['multi_action_cnt'] += 1
-                                state['prev_action'] = perform_action(state['prev_action'][0])
+                        if (
+                            time.time() - state["start_time"]
+                            > multi_action_time_threshold
+                        ):
+                            if state["multi_action_start_time"] == -1:
+                                state["multi_action_start_time"] = time.time()
+                            if (
+                                time.time() - state["multi_action_start_time"]
+                                > multi_action_cooltime * state["multi_action_cnt"]
+                            ):
+                                state["multi_action_cnt"] += 1
+                                state["prev_action"] = perform_action(
+                                    state["prev_action"][0]
+                                )
 
-                        elif time.time()-state['start_time'] > time_threshold:
-                            if gestures[state['prev_gesture']] == 'default':
-                                state['prev_action'] = perform_action(gestures[state['gesture']])
-                            state['prev_gesture'] = gesture_idx
+                        elif time.time() - state["start_time"] > time_threshold:
+                            if gestures[state["prev_gesture"]] == "default":
+                                state["prev_action"] = perform_action(
+                                    gestures[state["gesture"]]
+                                )
+                            state["prev_gesture"] = gesture_idx
                     else:
-                        state = {'gesture':gesture_idx, 'start_time':time.time(), 'prev_gesture':state['prev_gesture'], 'multi_action_start_time':-1, 'multi_action_cnt':0, 'prev_action':['', 0]}
+                        state = {
+                            "gesture": gesture_idx,
+                            "start_time": time.time(),
+                            "prev_gesture": state["prev_gesture"],
+                            "multi_action_start_time": -1,
+                            "multi_action_cnt": 0,
+                            "prev_action": ["", 0],
+                        }
                 else:
                     # stop recognizing
                     recognizing_hand = []
-                    text_a = ''
-                    if recognizing and time.time() - last_hand_time > stop_recognizing_time_threshold:
-                        print('stop recognizing')
-                        play_wav_file('stop')
+                    text_a = ""
+                    if (
+                        recognizing
+                        and time.time() - last_hand_time
+                        > stop_recognizing_time_threshold
+                    ):
+                        print("stop recognizing")
+                        play_wav_file("stop")
                         recognizing = False
-                        state = {'gesture':5, 'start_time':time.time(), 'prev_gesture':5, 'multi_action_start_time':-1, 'multi_action_cnt':0, 'prev_action':['', 0]}
+                        state = {
+                            "gesture": 5,
+                            "start_time": time.time(),
+                            "prev_gesture": 5,
+                            "multi_action_start_time": -1,
+                            "multi_action_cnt": 0,
+                            "prev_action": ["", 0],
+                        }
 
-                        cur_gesture = 'none'
-                        elapsed_time = '0'
-                        prev_gesture = 'none'
+                        cur_gesture = "none"
+                        elapsed_time = "0"
+                        prev_gesture = "none"
             else:
                 # when not recognizing, get hands with 'default' gesture and measure elapsed time
                 delete_list = []
@@ -271,22 +354,31 @@ while cap.isOpened():
                 for right_hand in right_hands:
                     lst, scale = normalize_points(right_hand)
 
-                    res = list(model(torch.tensor([element for row in lst for element in row], dtype=torch.float)))
+                    res = list(
+                        model(
+                            torch.tensor(
+                                [element for row in lst for element in row],
+                                dtype=torch.float,
+                            )
+                        )
+                    )
                     probability = max(res)
                     gesture_idx = res.index(probability) if probability >= 0.9 else 5
-                    if gestures[gesture_idx] == 'default':
+                    if gestures[gesture_idx] == "default":
                         wake_up_hands.append(right_hand)
 
                 checked = [0 for _ in range(len(wake_up_hands))]
                 for i, [prev_pos, start_time] in enumerate(wake_up_state):
-                    hand_idx, prev_pos = same_hand_tracking(wake_up_hands, prev_pos, same_hand_threshold)
+                    hand_idx, prev_pos = same_hand_tracking(
+                        wake_up_hands, prev_pos, same_hand_threshold
+                    )
                     if hand_idx == -1:
                         delete_list = [i] + delete_list
-                    elif time.time()-start_time > start_recognizing_time_threshold:
+                    elif time.time() - start_time > start_recognizing_time_threshold:
                         # when there are default gestured hand for enough time, start recognizing and track the hand
-                        print('start recognizing') 
+                        print("start recognizing")
                         recognized_hand_prev_pos = get_center(wake_up_hands[hand_idx])
-                        play_wav_file('start')
+                        play_wav_file("start")
                         recognizing = True
                         wake_up_state = []
                         break
@@ -300,36 +392,76 @@ while cap.isOpened():
 
                     for i in range(len(checked)):
                         if checked[i] == 0:
-                            wake_up_state.append([get_center(wake_up_hands[i]), time.time()])
+                            wake_up_state.append(
+                                [get_center(wake_up_hands[i]), time.time()]
+                            )
         else:
             # stop recognizing
             recognizing_hands = []
             recognizing_hand = []
-            text_a = ''
-            if recognizing and time.time() - last_hand_time > stop_recognizing_time_threshold:
-                print('stop recognizing')
-                play_wav_file('stop')
-                recognizing = False  
-                state = {'gesture':5, 'start_time':time.time(), 'prev_gesture':5, 'multi_action_start_time':-1, 'multi_action_cnt':0, 'prev_action':['', 0]}
-                
-                cur_gesture = 'none'
-                elapsed_time = '0'
-                prev_gesture = 'none'
-                
+            text_a = ""
+            if (
+                recognizing
+                and time.time() - last_hand_time > stop_recognizing_time_threshold
+            ):
+                print("stop recognizing")
+                play_wav_file("stop")
+                recognizing = False
+                state = {
+                    "gesture": 5,
+                    "start_time": time.time(),
+                    "prev_gesture": 5,
+                    "multi_action_start_time": -1,
+                    "multi_action_cnt": 0,
+                    "prev_action": ["", 0],
+                }
+
+                cur_gesture = "none"
+                elapsed_time = "0"
+                prev_gesture = "none"
+
     for rh in recognizing_hands:
         for x, y in rh:
             # Draw a circle at the fingertip position
-            cv2.circle(frame, (int(x * frame.shape[1]), int(y * frame.shape[0])), 5, (0, 255, 0), -1)
+            cv2.circle(
+                frame,
+                (int(x * frame.shape[1]), int(y * frame.shape[0])),
+                5,
+                (0, 255, 0),
+                -1,
+            )
     for x, y in recognizing_hand:
         # Draw a circle at the fingertip position
-        cv2.circle(frame, (int(x * frame.shape[1]), int(y * frame.shape[0])), 5, (255, 0, 0), -1)
+        cv2.circle(
+            frame,
+            (int(x * frame.shape[1]), int(y * frame.shape[0])),
+            5,
+            (255, 0, 0),
+            -1,
+        )
 
-    # Print Current Hand's Gesture    
-    cv2.putText(frame, text_a, (frame.shape[1] // 2 + 230, frame.shape[0] // 2 - 220), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 255), 3)
+    # Print Current Hand's Gesture
+    cv2.putText(
+        frame,
+        text_a,
+        (frame.shape[1] // 2 + 230, frame.shape[0] // 2 - 220),
+        cv2.FONT_HERSHEY_SIMPLEX,
+        2,
+        (0, 0, 255),
+        3,
+    )
 
     # print recognized gesture
-    if time.time() - state['prev_action'][1] < time_threshold * 2:
-        cv2.putText(frame, state['prev_action'][0], (frame.shape[1] // 2 + 250, frame.shape[0] // 2 + 250), cv2.FONT_HERSHEY_SIMPLEX, 2, (255, 0, 0), 3)
+    if time.time() - state["prev_action"][1] < time_threshold * 2:
+        cv2.putText(
+            frame,
+            state["prev_action"][0],
+            (frame.shape[1] // 2 + 250, frame.shape[0] // 2 + 250),
+            cv2.FONT_HERSHEY_SIMPLEX,
+            2,
+            (255, 0, 0),
+            3,
+        )
 
     # Print Table
     header_data = ["curr_gesture", "elapsed_time", "prev_gesture"]
@@ -342,31 +474,46 @@ while cap.isOpened():
         for j, cell in enumerate(data):
             x = 50 + cell_width * j + 30
             y = text_position[1] + 20 + i * cell_height + cell_height // 2 + 10
-            cv2.putText(frame, str(cell), (x, y), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2)
+            cv2.putText(
+                frame, str(cell), (x, y), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2
+            )
 
             if i == 0:
-                cv2.rectangle(frame, (50 + cell_width * j, text_position[1] + 20),
-                                (50 + cell_width * (j + 1), text_position[1] + 20 + cell_height), (255, 0, 0), 2)
+                cv2.rectangle(
+                    frame,
+                    (50 + cell_width * j, text_position[1] + 20),
+                    (50 + cell_width * (j + 1), text_position[1] + 20 + cell_height),
+                    (255, 0, 0),
+                    2,
+                )
             else:
-                cv2.rectangle(frame, (50 + cell_width * j, text_position[1] + 20 + i * cell_height),
-                                (50 + cell_width * (j + 1), text_position[1] + 20 + (i + 1) * cell_height), (255, 0, 0), 2)
+                cv2.rectangle(
+                    frame,
+                    (50 + cell_width * j, text_position[1] + 20 + i * cell_height),
+                    (
+                        50 + cell_width * (j + 1),
+                        text_position[1] + 20 + (i + 1) * cell_height,
+                    ),
+                    (255, 0, 0),
+                    2,
+                )
 
     # Display the output
-    cv2.imshow('gesture recognition', frame)
+    cv2.imshow("gesture recognition", frame)
 
     # Check if 'q' is pressed to exit
-    if cv2.waitKey(1) & 0xFF == ord('q'):
+    if cv2.waitKey(1) & 0xFF == ord("q"):
         break
 
 # save paramters
 parameter = {
-    'time': cv2.getTrackbarPos('time','gesture recognition'),
-    'same_hand': cv2.getTrackbarPos('same_hand','gesture recognition'),
-    'skip_frame': cv2.getTrackbarPos('skip_frame','gesture recognition'),
-    'start_time': cv2.getTrackbarPos('start_time','gesture recognition'),
-    'stop_time': cv2.getTrackbarPos('stop_time','gesture recognition'),
-    'multi_time': cv2.getTrackbarPos('multi_time','gesture recognition'),
-    'multi_cooltime': cv2.getTrackbarPos('multi_cooltime','gesture recognition')
+    "time": cv2.getTrackbarPos("time", "gesture recognition"),
+    "same_hand": cv2.getTrackbarPos("same_hand", "gesture recognition"),
+    "skip_frame": cv2.getTrackbarPos("skip_frame", "gesture recognition"),
+    "start_time": cv2.getTrackbarPos("start_time", "gesture recognition"),
+    "stop_time": cv2.getTrackbarPos("stop_time", "gesture recognition"),
+    "multi_time": cv2.getTrackbarPos("multi_time", "gesture recognition"),
+    "multi_cooltime": cv2.getTrackbarPos("multi_cooltime", "gesture recognition"),
 }
 
 # Release the webcam and close all windows
@@ -374,10 +521,10 @@ cap.release()
 cv2.destroyAllWindows()
 
 # print average inference time
-print('landmark:', landmark_time / landmark_num)
-print('gesture:', gesture_time / gesture_num)
+print("landmark:", landmark_time / landmark_num)
+print("gesture:", gesture_time / gesture_num)
 
-res = input('want to save current parameters? [ y / n ]\n>>> ')
-if res == 'y':
+res = input("want to save current parameters? [ y / n ]\n>>> ")
+if res == "y":
     with open(parameters_dir, "w") as f:
         json.dump(parameter, f)
