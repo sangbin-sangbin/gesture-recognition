@@ -39,6 +39,8 @@ class HandTracker:
         self.gesture_num = 0
         self.gestures = ["default", "left", "right", "select", "exit", "none"]
 
+        self.recognized = []
+
         if input_src.endswith(".jpg") or input_src.endswith(".png"):
             self.image_mode = True
             self.img = cv2.imread(input_src)
@@ -226,15 +228,17 @@ class HandTracker:
             # x,y,z -> x/w,y/h,z/w (here h=w)
             lm.append(lm_raw[3 * i : 3 * (i + 1)] / self.lm_w)
         region.landmarks = lm
+        self.lanmark_list = [[float(coords[0]), float(coords[1])] for coords in region.landmarks]
+        # self.recognized.append(self.lanmark_list)
 
     def lm_render(self, frame, region):
         if region.lm_score > self.lm_score_threshold:
-            lst = [[float(coords[0]), float(coords[1])] for coords in region.landmarks]
-
             if self.is_getdata:
                 # Store the lnadmarks in dataset when recording
                 if self.state == "recording":
-                    self.dataset.append({"landmarks": mpu.normalize_points(lst), "gesture": self.gesture_num})
+                    self.dataset.append(
+                        {"landmarks": mpu.normalize_points(self.lanmark_list), "gesture": self.gesture_num}
+                    )
 
                 if (time.time() - self.start_time) > 30 and self.state == "recording":
                     self.start_time = time.time()
@@ -265,13 +269,14 @@ class HandTracker:
                         3,
                     )
             else:
-                self.dataset.append({"landmarks": mpu.normalize_points(lst), "gesture": self.gesture_num})
-                self.coords.append(lst)
+                self.dataset.append({"landmarks": mpu.normalize_points(self.lanmark_list), "gesture": self.gesture_num})
 
             if self.show_rot_rect:
                 cv2.polylines(frame, [np.array(region.rect_points)], True, (0, 255, 255), 2, cv2.LINE_AA)
 
             if self.show_landmarks:
+                self.landmarks = []
+
                 src = np.array([(0, 0), (1, 0), (1, 1)], dtype=np.float32)
                 dst = np.array(
                     [(x, y) for x, y in region.rect_points[1:]], dtype=np.float32
@@ -289,8 +294,10 @@ class HandTracker:
                 ]
                 lines = [np.array([lm_xy[point] for point in line]) for line in list_connections]
                 cv2.polylines(frame, lines, False, (255, 0, 0), 2, cv2.LINE_AA)
-                for x, y in lm_xy:
-                    cv2.circle(frame, (x, y), 6, (0, 128, 255), -1)
+                self.landmarks.append(lm_xy)
+                if self.is_getdata:
+                    for x, y in lm_xy:
+                        cv2.circle(frame, (x, y), 6, (0, 128, 255), -1)
 
             if self.show_handedness:
                 cv2.putText(

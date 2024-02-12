@@ -33,7 +33,7 @@ def initialize_model():
     TARGET_SIZE = 6
 
     model = Model(INPUT_SIZE, HIDDEN_DIM, TARGET_SIZE)
-    model.load_state_dict(torch.load("model.pt"))
+    model.load_state_dict(torch.load("model2.pt"))
 
     return model
 

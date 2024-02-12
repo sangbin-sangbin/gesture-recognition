@@ -130,12 +130,22 @@ def run(hand_tracker, model):
             landmark_num += 1
 
             right_hands = []
+            recognized_hands = []
             if results2:
                 for result in results2:
                     if result.handedness > 0.5:  # Right Hand
-                        right_hands.append(hand_tracker.coords)
+                        lst = [[float(coords[0]), float(coords[1])] for coords in result.landmarks]
+                        right_hands.append(lst)
 
-                recognizing_hands = right_hands
+                        # Convert right hand coordinations for rendering
+                        src = np.array([(0, 0), (1, 0), (1, 1)], dtype=np.float32)
+                        dst = np.array(
+                            [(x, y) for x, y in result.rect_points[1:]], dtype=np.float32
+                        )  # region.rect_points[0] is left bottom point !
+                        mat = cv2.getAffineTransform(src, dst)
+                        lm_xy = np.expand_dims(np.array([(l[0], l[1]) for l in result.landmarks]), axis=0)
+                        lm_xy = np.squeeze(cv2.transform(lm_xy, mat)).astype(np.int32)
+                        recognized_hands.append(lm_xy)
 
                 if recognizing:
                     # find closest hand
@@ -147,7 +157,16 @@ def run(hand_tracker, model):
                         last_hand_time = time.time()
 
                         landmark = right_hands[hand_idx]
-                        recognizing_hand = landmark
+                        # Convert right hand coordinations for rendering
+                        src = np.array([(0, 0), (1, 0), (1, 1)], dtype=np.float32)
+                        dst = np.array(
+                            [(x, y) for x, y in result.rect_points[1:]], dtype=np.float32
+                        )  # region.rect_points[0] is left bottom point !
+                        mat = cv2.getAffineTransform(src, dst)
+                        lm_xy = np.expand_dims(np.array([(l[0], l[1]) for l in landmark]), axis=0)
+                        lm_xy = np.squeeze(cv2.transform(lm_xy, mat)).astype(np.int32)
+                        recognizing_hand = lm_xy
+                        # recognizing_hand = landmark
                         lst, scale = utils.normalize_points(landmark)
 
                         start = time.time_ns() // 1000000
@@ -220,51 +239,47 @@ def run(hand_tracker, model):
                     # when not recognizing, get hands with 'default' gesture and measure elapsed time
                     delete_list = []
                     wake_up_hands = []
-                    print(right_hands)
-                    if len(right_hands) > 0:
-                        for right_hand in right_hands:
-                            lst, scale = utils.normalize_points(right_hand)
-
-                            res = list(
-                                model(
-                                    torch.tensor(
-                                        [element for row in lst for element in row],
-                                        dtype=torch.float,
-                                    )
+                    for right_hand in right_hands:
+                        lst, scale = utils.normalize_points(right_hand)
+                        res = list(
+                            model(
+                                torch.tensor(
+                                    [element for row in lst for element in row],
+                                    dtype=torch.float,
                                 )
                             )
-                #         probability = max(res)
-                #         gesture_idx = res.index(probability) if probability >= 0.9 else 5
-                #         if gestures[gesture_idx] == "default":
-                #             wake_up_hands.append(right_hand)
+                        )
+                        probability = max(res)
+                        gesture_idx = res.index(probability) if probability >= 0.9 else 5
+                        if gestures[gesture_idx] == "default":
+                            wake_up_hands.append(right_hand)
+                    checked = [0 for _ in range(len(wake_up_hands))]
+                    for i, [prev_pos, start_time] in enumerate(wake_up_state):
+                        hand_idx, prev_pos = utils.same_hand_tracking(wake_up_hands, prev_pos, same_hand_threshold)
+                        if hand_idx == -1:
+                            delete_list = [i] + delete_list
+                        elif time.time() - start_time > start_recognizing_time_threshold:
+                            # when there are default gestured hand for enough time, start recognizing and track the hand
+                            print("start recognizing")
+                            recognized_hand_prev_pos = utils.get_center(wake_up_hands[hand_idx])
+                            utils.play_wav_file("start")
+                            recognizing = True
+                            wake_up_state = []
+                            break
+                        else:
+                            checked[hand_idx] = 1
 
-                #     checked = [0 for _ in range(len(wake_up_hands))]
-                #     for i, [prev_pos, start_time] in enumerate(wake_up_state):
-                #         hand_idx, prev_pos = utils.same_hand_tracking(wake_up_hands, prev_pos, same_hand_threshold)
-                #         if hand_idx == -1:
-                #             delete_list = [i] + delete_list
-                #         elif time.time() - start_time > start_recognizing_time_threshold:
-                #             # when there are default gestured hand for enough time, start recognizing and track the hand
-                #             print("start recognizing")
-                #             recognized_hand_prev_pos = utils.get_center(wake_up_hands[hand_idx])
-                #             utils.play_wav_file("start")
-                #             recognizing = True
-                #             wake_up_state = []
-                #             break
-                #         else:
-                #             checked[hand_idx] = 1
+                    # wake_up_state refreshing
+                    if not recognizing:
+                        for i in delete_list:
+                            wake_up_state.pop(i)
 
-                #     # wake_up_state refreshing
-                #     if not recognizing:
-                #         for i in delete_list:
-                #             wake_up_state.pop(i)
-
-                #         for i in range(len(checked)):
-                #             if checked[i] == 0:
-                #                 wake_up_state.append([utils.get_center(wake_up_hands[i]), time.time()])
+                        for i in range(len(checked)):
+                            if checked[i] == 0:
+                                wake_up_state.append([utils.get_center(wake_up_hands[i]), time.time()])
             else:
                 # stop recognizing
-                recognizing_hands = []
+                recognized_hands = []
                 recognizing_hand = []
                 text_a = ""
                 if recognizing and time.time() - last_hand_time > stop_recognizing_time_threshold:
@@ -284,25 +299,13 @@ def run(hand_tracker, model):
                     elapsed_time = "0"
                     prev_gesture = "none"
 
-        # for rh in recognizing_hands:
-        #     for x, y in rh:
-        #         # Draw a circle at the fingertip position
-        #         cv2.circle(
-        #             annotated_frame,
-        #             (int(x * annotated_frame.shape[1]), int(y * annotated_frame.shape[0])),
-        #             5,
-        #             (0, 255, 0),
-        #             -1,
-        #         )
+        for rh in recognized_hands:
+            for x, y in rh:
+                # Draw a circle at the fingertip position
+                cv2.circle(annotated_frame, (x, y), 6, (255, 0, 0), -1)
         for x, y in recognizing_hand:
             # Draw a circle at the fingertip position
-            cv2.circle(
-                annotated_frame,
-                (int(x * annotated_frame.shape[1]), int(y * annotated_frame.shape[0])),
-                5,
-                (255, 0, 0),
-                -1,
-            )
+            cv2.circle(annotated_frame, (x, y), 6, (255, 0, 0), -1)
 
         # Print Current Hand's Gesture
         cv2.putText(
