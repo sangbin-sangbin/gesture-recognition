@@ -1,11 +1,7 @@
 import cv2
-import mediapipe as mp
 import time
 import torch
-import torch.nn as nn
-import json
 import subprocess
-from HandTracker import HandTracker
 import test_utils as utils
 from FPS import FPS, now
 import numpy as np
@@ -37,8 +33,8 @@ def run(hand_tracker, model):
     gesture_time = 0
     gesture_num = 0
 
-    recognizing_hands = []
-    recognizing_hand = []
+    recognized_hands = []
+    recognized_hand = []
     text_a = ""
     cur_gesture = gestures[5]
     elapsed_time = "0"
@@ -165,8 +161,7 @@ def run(hand_tracker, model):
                         mat = cv2.getAffineTransform(src, dst)
                         lm_xy = np.expand_dims(np.array([(l[0], l[1]) for l in landmark]), axis=0)
                         lm_xy = np.squeeze(cv2.transform(lm_xy, mat)).astype(np.int32)
-                        recognizing_hand = lm_xy
-                        # recognizing_hand = landmark
+                        recognized_hand = lm_xy
                         lst, scale = utils.normalize_points(landmark)
 
                         start = time.time_ns() // 1000000
@@ -217,7 +212,7 @@ def run(hand_tracker, model):
                             }
                     else:
                         # stop recognizing
-                        recognizing_hand = []
+                        recognized_hand = []
                         text_a = ""
                         if recognizing and time.time() - last_hand_time > stop_recognizing_time_threshold:
                             print("stop recognizing")
@@ -280,7 +275,7 @@ def run(hand_tracker, model):
             else:
                 # stop recognizing
                 recognized_hands = []
-                recognizing_hand = []
+                recognized_hand = []
                 text_a = ""
                 if recognizing and time.time() - last_hand_time > stop_recognizing_time_threshold:
                     print("stop recognizing")
@@ -303,7 +298,7 @@ def run(hand_tracker, model):
             for x, y in rh:
                 # Draw a circle at the fingertip position
                 cv2.circle(annotated_frame, (x, y), 6, (255, 0, 0), -1)
-        for x, y in recognizing_hand:
+        for x, y in recognized_hand:
             # Draw a circle at the fingertip position
             cv2.circle(annotated_frame, (x, y), 6, (255, 0, 0), -1)
 
@@ -323,7 +318,7 @@ def run(hand_tracker, model):
             cv2.putText(
                 annotated_frame,
                 state["prev_action"][0],
-                (annotated_frame.shape[1] // 2 + 250, annotated_frame.shape[0] // 2 + 250),
+                (annotated_frame.shape[1] // 2 + 250, annotated_frame.shape[0] // 2 - 100),
                 cv2.FONT_HERSHEY_SIMPLEX,
                 2,
                 (255, 0, 0),
@@ -335,7 +330,7 @@ def run(hand_tracker, model):
         table_data = [cur_gesture, elapsed_time, prev_gesture]
         cell_height = 50
         cell_width = 250
-        text_position = (50, 50)
+        text_position = (10, 30)
 
         for i, data in enumerate([header_data] + [table_data]):
             for j, cell in enumerate(data):

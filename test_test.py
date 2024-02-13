@@ -1,15 +1,9 @@
 import cv2
-import mediapipe as mp
-import time
 import torch
 import torch.nn as nn
 import json
-import subprocess
 from HandTracker import HandTracker
 import test_utils as utils
-from FPS import FPS, now
-import numpy as np
-import mediapipe_utils as mpu
 from run import run
 
 
@@ -36,30 +30,6 @@ def initialize_model():
     model.load_state_dict(torch.load("model2.pt"))
 
     return model
-
-
-def initialize_mediapipe_hands():
-    mp_hands = mp.solutions.hands
-    mp_drawing = mp.solutions.drawing_utils
-
-    # Initialize MediaPipe Hands model
-    hands = mp_hands.Hands(max_num_hands=5)
-    ht = HandTracker(
-        input_src="1",
-        pd_xml="mediapipe_models/palm_detection_FP32.xml",
-        pd_device="CPU",
-        pd_score_thresh=0.5,
-        pd_nms_thresh=0.3,
-        use_lm=True,
-        lm_xml="mediapipe_models/hand_landmark_FP32.xml",
-        lm_device="CPU",
-        lm_score_threshold=0.5,
-        use_gesture=False,
-        crop=False,
-        is_getdata=False,
-    )
-
-    return hands, mp_drawing
 
 
 def load_parameters(parameters_dir):
@@ -116,35 +86,11 @@ if __name__ == "__main__":
 
     model = initialize_model()
 
-    run(ht, model)
-
-    mp_hands = mp.solutions.hands
-    mp_drawing = mp.solutions.drawing_utils
-
-    # Initialize MediaPipe Hands model
-    # hands, mp_drawing = initialize_mediapipe_hands()
-
-    # Open a webcam
-    # w = 1280
-    # h = 720
-    # cap = cv2.VideoCapture(1)
-    # cap.set(cv2.CAP_PROP_FRAME_WIDTH, w)
-    # cap.set(cv2.CAP_PROP_FRAME_HEIGHT, h)
-
     parameters_dir = "./parameters.json"
-    # parameter = load_parameters(parameters_dir)
-    # create_trackbars(parameter)
+    parameter = load_parameters(parameters_dir)
+    create_trackbars(parameter)
 
-    # save paramters
-    parameter = {
-        "time": cv2.getTrackbarPos("time", "gesture recognition"),
-        "same_hand": cv2.getTrackbarPos("same_hand", "gesture recognition"),
-        "skip_frame": cv2.getTrackbarPos("skip_frame", "gesture recognition"),
-        "start_time": cv2.getTrackbarPos("start_time", "gesture recognition"),
-        "stop_time": cv2.getTrackbarPos("stop_time", "gesture recognition"),
-        "multi_time": cv2.getTrackbarPos("multi_time", "gesture recognition"),
-        "multi_cooltime": cv2.getTrackbarPos("multi_cooltime", "gesture recognition"),
-    }
+    run(ht, model)
 
     # Release the webcam and close all windows
     ht.cap.release()
@@ -154,4 +100,4 @@ if __name__ == "__main__":
     # print("landmark:", landmark_time / landmark_num)
     # print("gesture:", gesture_time / gesture_num)
 
-    # save_current_parameters(parameters_dir)
+    save_current_parameters(parameters_dir)
