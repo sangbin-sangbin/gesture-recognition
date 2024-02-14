@@ -295,7 +295,7 @@ def run(hand_tracker, model):
         for rh in recognized_hands:
             for x, y in rh:
                 # Draw a circle at the fingertip position
-                cv2.circle(annotated_frame, (x, y), 6, (255, 0, 0), -1)
+                cv2.circle(annotated_frame, (x, y), 6, (0, 255, 0), -1)
         for x, y in recognized_hand:
             # Draw a circle at the fingertip position
             cv2.circle(annotated_frame, (x, y), 6, (255, 0, 0), -1)

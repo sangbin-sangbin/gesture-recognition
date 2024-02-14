@@ -52,7 +52,7 @@ total_epochs = 20
 total_steps = len(train_dataset)
 
 prev_loss = float("inf")
-tolerance = 3
+tolerance = 20
 
 for epoch in range(total_epochs):
     start_time = time.time()
