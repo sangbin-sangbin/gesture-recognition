@@ -29,7 +29,7 @@ model = Model(INPUT_SIZE, HIDDEN_DIM, TARGET_SIZE)
 loss_function = nn.CrossEntropyLoss()
 optimizer = optim.SGD(model.parameters(), lr=0.1)
 
-dataset = json.load(open("dataset.json"))
+dataset = json.load(open("dataset2.json"))
 random.shuffle(dataset)
 train_dataset = dataset[: int(len(dataset) * 0.8)]
 val_dataset = dataset[int(len(dataset) * 0.8) : int(len(dataset) * 0.9)]
@@ -124,4 +124,4 @@ for data in test_dataset:
         bad += 1
 print(f"Accuracy: { good / (good + bad) * 100}")
 
-torch.save(model.state_dict(), "./model.pt")
+torch.save(model.state_dict(), "./model2.pt")

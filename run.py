@@ -95,9 +95,10 @@ def run(hand_tracker, model):
         # Get palm detection
         pd_rtrip_time = now()
         inference = hand_tracker.pd_exec_net.infer(inputs={hand_tracker.pd_input_blob: frame_nn})
-        glob_pd_rtrip_time += now() - pd_rtrip_time
+        # glob_pd_rtrip_time += now() - pd_rtrip_time
         hand_tracker.pd_postprocess(inference)
         hand_tracker.pd_render(annotated_frame)
+        glob_pd_rtrip_time += now() - pd_rtrip_time
         nb_pd_inferences += 1
 
         # Hand landmarks
@@ -110,25 +111,22 @@ def run(hand_tracker, model):
                 # Get hand landmarks
                 lm_rtrip_time = now()
                 inference = hand_tracker.lm_exec_net.infer(inputs={hand_tracker.lm_input_blob: frame_nn})
-                glob_lm_rtrip_time += now() - lm_rtrip_time
+                # glob_lm_rtrip_time += now() - lm_rtrip_time
                 nb_lm_inferences += 1
                 hand_tracker.lm_postprocess(r, inference)
                 hand_tracker.lm_render(annotated_frame, r)
+                glob_lm_rtrip_time += now() - lm_rtrip_time
 
         frame_num += 1
         if frame_num % landmark_skip_frame == 0:
             # Process the frame with MediaPipe Hands
-            start = time.time_ns() // 1000000
-            # results = hands.process(rgb_frame)
-            results2 = hand_tracker.regions
-            end = time.time_ns() // 1000000
-            landmark_time += end - start
+            results = hand_tracker.regions
             landmark_num += 1
 
             right_hands = []
             recognized_hands = []
-            if results2:
-                for result in results2:
+            if results:
+                for result in results:
                     if result.handedness > 0.5:  # Right Hand
                         lst = [[float(coords[0]), float(coords[1])] for coords in result.landmarks]
                         right_hands.append(lst)
@@ -325,44 +323,11 @@ def run(hand_tracker, model):
                 3,
             )
 
-        # Print Table
-        header_data = ["curr_gesture", "elapsed_time", "prev_gesture"]
-        table_data = [cur_gesture, elapsed_time, prev_gesture]
-        cell_height = 50
-        cell_width = 250
-        text_position = (10, 30)
-
-        for i, data in enumerate([header_data] + [table_data]):
-            for j, cell in enumerate(data):
-                x = 50 + cell_width * j + 30
-                y = text_position[1] + 20 + i * cell_height + cell_height // 2 + 10
-                cv2.putText(annotated_frame, str(cell), (x, y), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2)
-
-                if i == 0:
-                    cv2.rectangle(
-                        annotated_frame,
-                        (50 + cell_width * j, text_position[1] + 20),
-                        (50 + cell_width * (j + 1), text_position[1] + 20 + cell_height),
-                        (255, 0, 0),
-                        2,
-                    )
-                else:
-                    cv2.rectangle(
-                        annotated_frame,
-                        (50 + cell_width * j, text_position[1] + 20 + i * cell_height),
-                        (
-                            50 + cell_width * (j + 1),
-                            text_position[1] + 20 + (i + 1) * cell_height,
-                        ),
-                        (255, 0, 0),
-                        2,
-                    )
-
         if not hand_tracker.crop:
             annotated_frame = annotated_frame[pad_h : pad_h + h, pad_w : pad_w + w]
 
         hand_tracker.fps.display(annotated_frame, orig=(50, 50), color=(240, 180, 100))
-        cv2.imshow("video", annotated_frame)
+        cv2.imshow("gesture recognition", annotated_frame)
 
         key = cv2.waitKey(1)
         if key == ord("q") or key == 27:
