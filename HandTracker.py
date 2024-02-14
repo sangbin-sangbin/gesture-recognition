@@ -81,7 +81,7 @@ class HandTracker:
         # Rendering flags
         if self.use_lm:
             self.show_pd_box = False
-            self.show_pd_kps = True
+            self.show_pd_kps = False
             self.show_rot_rect = False
             self.show_handedness = False
             self.show_landmarks = True
