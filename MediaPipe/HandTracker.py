@@ -1,12 +1,11 @@
 import numpy as np
-import mediapipe_utils as mpu
 import cv2
-from FPS import FPS, now
 import os
 import re
 import time
 import openvino.runtime as ov
-
+from MediaPipe import mediapipe_utils as mpu
+from MediaPipe.FPS import FPS, now
 
 class HandTracker:
     def __init__(
@@ -49,7 +48,7 @@ class HandTracker:
             # Open a webcam
             w = 1280
             h = 720
-            self.cap = cv2.VideoCapture(input_src, cv2.CAP_DSHOW)
+            self.cap = cv2.VideoCapture(input_src)
             self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, w)
             self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, h)
 

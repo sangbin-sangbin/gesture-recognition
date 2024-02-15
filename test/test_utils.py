@@ -38,13 +38,31 @@ def same_hand_tracking(hands, prev_pos, same_hand_threshold):
 
 def play_audio_file(file_name):
     pygame.mixer.init()
-    if os.path.isfile("./sound/" + file_name + ".wav"):
-        pygame.mixer.music.load("./sound/" + file_name + ".wav")
-    elif os.path.isfile("./sound/" + file_name + ".mp3"):
-        pygame.mixer.music.load("./sound/" + file_name + ".mp3")
+
+    # Get the directory of test.py
+    current_dir = os.path.dirname(os.path.relpath(__file__))
+
+    # Navigate up one level to the parent directory of test
+    parent_dir = os.path.dirname(current_dir)
+
+    # Construct the path to sound directory
+    sound_dir = os.path.join(parent_dir, "sound")
+
+    # Construct the file paths for both .wav and .mp3 files
+    wav_file_path = os.path.join(sound_dir, file_name + ".wav")
+    mp3_file_path = os.path.join(sound_dir, file_name + ".mp3")
+
+    # Check if the .wav file exists, if not, check for .mp3 file
+    if os.path.isfile(wav_file_path):
+        audio_file_path = wav_file_path
+    elif os.path.isfile(mp3_file_path):
+        audio_file_path = mp3_file_path
     else:
         print("No such audio file!")
         return
+
+    # Load and play the audio file
+    pygame.mixer.music.load(audio_file_path)
     pygame.mixer.music.play()
 
 

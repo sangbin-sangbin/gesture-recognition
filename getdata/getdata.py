@@ -1,10 +1,15 @@
 import cv2
 import numpy as np
 import json
-import mediapipe_utils as mpu
-from HandTracker import HandTracker
-from FPS import FPS, now
 import datetime as dt
+
+import sys, os
+sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
+
+from MediaPipe import mediapipe_utils as mpu
+from MediaPipe.HandTracker import HandTracker
+from MediaPipe.FPS import FPS, now
+
 
 
 def run(hand_tracker):
@@ -107,25 +112,51 @@ def run(hand_tracker):
 def get_data(hand_tracker):
     run(hand_tracker)
 
-    dataset_dir = "./dataset/tmp/"
+    # Get the directory of getdata.py
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+
+    # Navigate up one level to the parent directory of dataset
+    parent_dir = os.path.dirname(current_dir)
+
+    # Construct the path to dataset/tmp
+    dataset_dir = os.path.join(parent_dir, "dataset", "tmp")
+
+    # Check if the directory exists, if not, create it
+    if not os.path.exists(dataset_dir):
+        os.makedirs(dataset_dir)
+
     print(len(hand_tracker.dataset), "data generated")
+
     save = input("want to save? [ y / n ]\n>>> ")
     if save == "y":
         name = input("what is your name?\n>>> ")
         datetime = dt.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-        with open(dataset_dir + name + "_" + datetime + ".json", "w") as f:
-            json.dump(hand_tracker.dataset, f, indent=4)
+        # Construct the output file path using os.path.join()
+        output_file_path = os.path.join(dataset_dir, f"{name}_{datetime}.json")
+        try:
+            with open(output_file_path, "w") as f:
+                json.dump(hand_tracker.dataset, f, indent=4)
+            print(f"Data saved to {output_file_path}")
+        except Exception as e:
+            print(f"Error occurred while saving data: {e}")
 
 
 if __name__ == "__main__":
+    # Get the directory of getdata.py
+    current_dir = os.path.dirname(os.path.relpath(__file__))
+
+    # Construct the path to palm_detection.xml
+    pd_model_path = os.path.join(current_dir, "..", "MediaPipe", "mediapipe_models", "palm_detection_FP16.xml")
+    lm_model_path = os.path.join(current_dir, "..", "MediaPipe", "mediapipe_models", "hand_landmark_FP16.xml")
+
     ht = HandTracker(
         input_src="0",
-        pd_xml="mediapipe_models/palm_detection_FP16.xml",
+        pd_xml=pd_model_path,
         pd_device="GPU",
         pd_score_thresh=0.5,
         pd_nms_thresh=0.3,
         use_lm=True,
-        lm_xml="mediapipe_models/hand_landmark_FP16.xml",
+        lm_xml=lm_model_path,
         lm_device="GPU",
         lm_score_threshold=0.5,
         crop=False,

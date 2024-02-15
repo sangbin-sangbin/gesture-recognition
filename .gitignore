@@ -1,1 +1,4 @@
 __pycache__/
+getdata/__pycache__/
+train/__pycache__/
+test/__pycache__/

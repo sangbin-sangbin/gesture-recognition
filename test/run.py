@@ -2,10 +2,14 @@ import cv2
 import time
 import torch
 import subprocess
-import test_utils as utils
-from FPS import FPS, now
 import numpy as np
-import mediapipe_utils as mpu
+import test_utils as utils
+
+import sys, os
+sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
+
+from MediaPipe import mediapipe_utils as mpu
+from MediaPipe.FPS import FPS, now
 
 
 def run(hand_tracker, model):
@@ -28,7 +32,6 @@ def run(hand_tracker, model):
         shell=True,
     )
 
-    landmark_time = 0
     landmark_num = 0
     gesture_time = 0
     gesture_num = 0
@@ -36,9 +39,6 @@ def run(hand_tracker, model):
     recognized_hands = []
     recognized_hand = []
     text_a = ""
-    cur_gesture = gestures[5]
-    elapsed_time = "0"
-    prev_gesture = gestures[5]
 
     recognizing = False
     last_hand_time = time.time()
@@ -162,7 +162,7 @@ def run(hand_tracker, model):
                         recognized_hand = recognized_hands[hand_idx]
                         recognized_hand_prev_pos = utils.get_center(recognized_hand)
 
-                        lst, scale = utils.normalize_points(recognized_hand)
+                        lst, _ = utils.normalize_points(recognized_hand)
 
                         start = time.time_ns() // 1000000
                         res = list(
@@ -180,10 +180,6 @@ def run(hand_tracker, model):
                         probability = max(res)
                         gesture_idx = res.index(probability) if probability >= 0.9 else 5
                         text_a = f"{gestures[gesture_idx]} {int(probability*100)}%"
-
-                        cur_gesture = gestures[state["gesture"]]
-                        elapsed_time = str(round(time.time() - state["start_time"], 2))
-                        prev_gesture = gestures[state["prev_gesture"]]
 
                         if state["gesture"] == gesture_idx:
                             # start multi action when user hold one gesture enough time
@@ -226,16 +222,12 @@ def run(hand_tracker, model):
                                 "multi_action_cnt": 0,
                                 "prev_action": ["", 0],
                             }
-
-                            cur_gesture = "none"
-                            elapsed_time = "0"
-                            prev_gesture = "none"
                 else:
                     # when not recognizing, get hands with 'default' gesture and measure elapsed time
                     delete_list = []
                     wake_up_hands = []
                     for right_hand in right_hands:
-                        lst, scale = utils.normalize_points(right_hand)
+                        lst, _ = utils.normalize_points(right_hand)
                         res = list(
                             model(
                                 torch.tensor(
@@ -289,10 +281,6 @@ def run(hand_tracker, model):
                         "multi_action_cnt": 0,
                         "prev_action": ["", 0],
                     }
-
-                    cur_gesture = "none"
-                    elapsed_time = "0"
-                    prev_gesture = "none"
 
         for rh in recognized_hands:
             for x, y in rh:
@@ -349,8 +337,6 @@ def run(hand_tracker, model):
             hand_tracker.show_handedness = not hand_tracker.show_handedness
         elif key == ord("6"):
             hand_tracker.show_scores = not hand_tracker.show_scores
-        elif key == ord("7"):
-            hand_tracker.show_gesture = not hand_tracker.show_gesture
 
     # Print some stats
     print("average inference time: ", inference_time_sum / inference_num, "ms")

@@ -6,7 +6,7 @@ import random
 import time
 from datetime import timedelta
 import glob
-
+import os
 
 class Model(nn.Module):
     def __init__(self, input_size, hidden_dim1, hidden_dim2, target_size):
@@ -33,7 +33,12 @@ model = Model(INPUT_SIZE, HIDDEN_DIM1, HIDDEN_DIM2, TARGET_SIZE)
 loss_function = nn.CrossEntropyLoss()
 optimizer = optim.SGD(model.parameters(), lr=0.01)
 
-data_dir = "./dataset/used/*"
+# Get the directory of train.py
+current_dir = os.path.dirname(os.path.abspath(__file__))
+# Navigate up one level to the parent directory of dataset
+parent_dir = os.path.dirname(current_dir)
+# Construct the path to dataset/tmp
+data_dir = os.path.join(parent_dir, "dataset", "used/*")
 file_list = glob.glob(data_dir)
 file_list_json = [file for file in file_list if file.endswith(".json")]
 
@@ -139,4 +144,4 @@ for data in test_dataset:
         bad += 1
 print(f"Accuracy: { good / (good + bad) * 100}")
 
-torch.save(model.state_dict(), "./model.pt")
+torch.save(model.state_dict(), "../model.pt")
