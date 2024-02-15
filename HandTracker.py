@@ -3,6 +3,7 @@ import mediapipe_utils as mpu
 import cv2
 from FPS import FPS, now
 import os
+import re
 import time
 import openvino.runtime as ov
 
@@ -130,8 +131,13 @@ class HandTracker:
         print(f"Input blob: {self.pd_input_blob} - shape: {input_shape}")
         _, _, self.pd_h, self.pd_w = (next(iter(self.pd_model.inputs)).shape)
 
+        pattern = re.compile(r'^(?!.*:)(?:Identity.*$|.*\/BiasAdd\/Add$)')
+
         for o in self.pd_model.outputs:
-            print(f"Output blob: {list(o.names)[1]} - shape: {list(o.shape)}")
+            output_names = list(o.names)
+            for name in output_names:
+                if pattern.match(name):
+                    print(f"Output blob: {name} - shape: {list(o.shape)}")
             self.pd_scores = "Identity_1"
             self.pd_bboxes = "Identity"
         print("Loading palm detection model into the plugin")
@@ -166,13 +172,14 @@ class HandTracker:
             # Output blob: Identity_dense/BiasAdd/Add - shape: [1, 63]
             self.lm_input_blob = next(iter(next(iter(self.lm_model.inputs)).names))
             input_shape = next(iter(self.pd_model.inputs)).shape
-            print(self.lm_input_blob)
             print(f"Input blob: {self.pd_input_blob} - shape: {input_shape}")
             
             _, _, self.lm_h, self.lm_w = (next(iter(self.lm_model.inputs)).shape)
-            # Batch reshaping if lm_2 is True
             for o in self.lm_model.outputs:
-                print(f"Output blob: {list(o.names)[1]} - shape: {list(o.shape)}")
+                output_names = list(o.names)
+                for name in output_names:
+                    if pattern.match(name):
+                        print(f"Output blob: {name} - shape: {list(o.shape)}")
             self.lm_score = "Identity_1"
             self.lm_handedness = "Identity_2"
             self.lm_landmarks = "Identity_dense/BiasAdd/Add"
