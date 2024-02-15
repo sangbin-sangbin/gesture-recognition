@@ -4,6 +4,7 @@ import json
 import mediapipe_utils as mpu
 from HandTracker import HandTracker
 from FPS import FPS, now
+import datetime as dt
 
 
 def run(hand_tracker):
@@ -104,17 +105,15 @@ def run(hand_tracker):
 
 
 def get_data(hand_tracker):
-    dataset_dir = "./dataset2.json"
-    save = input("want to add previous dataset? [ y / n ]\n>>> ")
-    if save == "y":
-        hand_tracker.dataset = json.load(open(dataset_dir))
-
     run(hand_tracker)
 
+    dataset_dir = "./dataset/tmp/"
     print(len(hand_tracker.dataset), "data generated")
     save = input("want to save? [ y / n ]\n>>> ")
     if save == "y":
-        with open(dataset_dir, "w") as f:
+        name = input("what is your name?\n>>> ")
+        datetime = dt.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+        with open(dataset_dir + name + "_" + datetime + ".json", "w") as f:
             json.dump(hand_tracker.dataset, f, indent=4)
 
 
