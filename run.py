@@ -358,5 +358,3 @@ def run(hand_tracker, model):
     print(f"# hand landmark inferences  : {nb_lm_inferences}")
     print(f"Palm detection round trip   : {glob_pd_rtrip_time/nb_pd_inferences*1000:.1f} ms")
     print(f"Hand landmark round trip    : {glob_lm_rtrip_time/nb_lm_inferences*1000:.1f} ms")
-    print(f"Palm detection latency      : {(pd_end_time - pd_start_time)*1000:.1f} ms")
-    print(f"Hand landmark latency       : {(lm_end_time - lm_start_time)*1000:.1f} ms")
