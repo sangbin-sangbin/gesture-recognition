@@ -119,13 +119,13 @@ def get_data(hand_tracker):
 if __name__ == "__main__":
     ht = HandTracker(
         input_src="0",
-        pd_xml="mediapipe_models/palm_detection_FP32.xml",
-        pd_device="CPU",
+        pd_xml="mediapipe_models/palm_detection_FP16.xml",
+        pd_device="GPU",
         pd_score_thresh=0.5,
         pd_nms_thresh=0.3,
         use_lm=True,
-        lm_xml="mediapipe_models/hand_landmark_FP32.xml",
-        lm_device="CPU",
+        lm_xml="mediapipe_models/hand_landmark_FP16.xml",
+        lm_device="GPU",
         lm_score_threshold=0.5,
         use_gesture=False,
         crop=False,

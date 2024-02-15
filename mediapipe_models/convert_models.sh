@@ -1,6 +1,6 @@
 # This script has to be run from the docker container started by ./docker_tflite2tensorflow.sh
 
-FP=${1:-FP32}
+FP=${1:-FP16}
 
 source /opt/intel/openvino_2021/bin/setupvars.sh
 

@@ -11,12 +11,12 @@ class HandTracker:
     def __init__(
         self,
         input_src=None,
-        pd_xml="mediapipe_models/palm_detection_FP32.xml",
+        pd_xml="mediapipe_models/palm_detection_FP16.xml",
         pd_device="CPU",
         pd_score_thresh=0.5,
         pd_nms_thresh=0.3,
         use_lm=True,
-        lm_xml="mediapipe_models/hand_landmark_FP32.xml",
+        lm_xml="mediapipe_models/hand_landmark_FP16.xml",
         lm_device="CPU",
         lm_score_threshold=0.5,
         use_gesture=False,
@@ -419,59 +419,3 @@ class HandTracker:
         print(f"# hand landmark inferences  : {nb_lm_inferences}")
         print(f"Palm detection round trip   : {glob_pd_rtrip_time/nb_pd_inferences*1000:.1f} ms")
         print(f"Hand landmark round trip    : {glob_lm_rtrip_time/nb_lm_inferences*1000:.1f} ms")
-
-
-# if __name__ == "__main__":
-#     parser = argparse.ArgumentParser()
-#     parser.add_argument(
-#         "-i", "--input", type=str, default="0", help="Path to video or image file to use as input (default=%(default)s)"
-#     )
-#     parser.add_argument("-g", "--gesture", action="store_true", help="enable gesture recognition")
-#     parser.add_argument(
-#         "--pd_m",
-#         default="models/palm_detection_FP32.xml",
-#         type=str,
-#         help="Path to an .xml file for palm detection model (default=%(default)s)",
-#     )
-#     parser.add_argument(
-#         "--pd_device", default="CPU", type=str, help="Target device for the palm detection model (default=%(default)s)"
-#     )
-#     parser.add_argument(
-#         "--no_lm", action="store_true", help="only the palm detection model is run, not the hand landmark model"
-#     )
-#     parser.add_argument(
-#         "--lm_m",
-#         default="models/hand_landmark_FP32.xml",
-#         type=str,
-#         help="Path to an .xml file for landmark model (default=%(default)s)",
-#     )
-#     parser.add_argument(
-#         "--lm_device",
-#         default="CPU",
-#         type=str,
-#         help="Target device for the landmark regression model (default=%(default)s)",
-#     )
-#     parser.add_argument(
-#         "-c",
-#         "--crop",
-#         action="store_true",
-#         help="center crop frames to a square shape before feeding palm detection model",
-#     )
-#     parser.add_argument(
-#         "-g",
-#         "--get",
-#         action="store_false",
-#         help="get data for training gesture recognition",
-#     )
-
-#     args = parser.parse_args()
-
-# ht = HandTracker(
-#     input_src=args.input,
-#     pd_device=args.pd_device,
-#     use_lm=not args.no_lm,
-#     lm_device=args.lm_device,
-#     use_gesture=args.gesture,
-#     crop=args.crop,
-# )
-# ht.run()
