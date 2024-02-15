@@ -64,7 +64,8 @@ total_epochs = 10
 total_steps = len(train_dataset)
 
 prev_loss = float("inf")
-tolerance = 20
+# don't use tolerance
+# tolerance = 20
 
 for epoch in range(total_epochs):
     start_time = time.time()
@@ -110,10 +111,12 @@ for epoch in range(total_epochs):
     average_loss = val_loss / len(val_dataset)  # Calculate average loss for the epoch
     print(f"\nValidation Loss: {average_loss:.4f}\n")
 
+    '''
     if prev_loss < average_loss:
         tolerance -= 1
         if tolerance == 0:
             break
+    '''
 
     prev_loss = average_loss
 
