@@ -2,7 +2,11 @@ import cv2
 import torch
 import torch.nn as nn
 import json
-from HandTracker import HandTracker
+
+import sys, os
+sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
+
+from MediaPipe.HandTracker import HandTracker
 import test_utils as utils
 from run import run
 
@@ -30,7 +34,7 @@ def initialize_model():
     TARGET_SIZE = 8
 
     model = Model(INPUT_SIZE, HIDDEN_DIM1, HIDDEN_DIM2, TARGET_SIZE)
-    model.load_state_dict(torch.load("model.pt"))
+    model.load_state_dict(torch.load("../model.pt"))
 
     return model
 
@@ -72,14 +76,21 @@ def save_current_parameters(parameters_dir):
 
 
 if __name__ == "__main__":
+    # Get the directory of test.py
+    current_dir = os.path.dirname(os.path.relpath(__file__))
+
+    # Construct the path to palm_detection.xml
+    pd_model_path = os.path.join(current_dir, "..", "MediaPipe", "mediapipe_models", "palm_detection_FP16.xml")
+    lm_model_path = os.path.join(current_dir, "..", "MediaPipe", "mediapipe_models", "hand_landmark_FP16.xml")
+
     ht = HandTracker(
         input_src="0",
-        pd_xml="mediapipe_models/palm_detection_FP16.xml",
+        pd_xml=pd_model_path,
         pd_device="GPU",
         pd_score_thresh=0.6,
         pd_nms_thresh=0.3,
         use_lm=True,
-        lm_xml="mediapipe_models/hand_landmark_FP16.xml",
+        lm_xml=lm_model_path,
         lm_device="GPU",
         lm_score_threshold=0.6,
         crop=False,
