@@ -4,7 +4,6 @@ import cv2
 from FPS import FPS, now
 import os
 import time
-from openvino.inference_engine import IECore
 import openvino.runtime as ov
 
 
