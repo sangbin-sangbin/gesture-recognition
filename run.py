@@ -71,6 +71,7 @@ def run(hand_tracker, model):
                 break
 
         h, w = vid_frame.shape[:2]
+
         if hand_tracker.crop:
             # Cropping the long side to get a square shape
             hand_tracker.frame_size = min(h, w)
@@ -92,15 +93,18 @@ def run(hand_tracker, model):
 
         annotated_frame = video_frame.copy()
 
+
+        pd_start_time = now()
         # Get palm detection
         pd_rtrip_time = now()
         inference = hand_tracker.pd_exec_net.infer(inputs={hand_tracker.pd_input_blob: frame_nn})
-        # glob_pd_rtrip_time += now() - pd_rtrip_time
+        glob_pd_rtrip_time += now() - pd_rtrip_time
         hand_tracker.pd_postprocess(inference)
         hand_tracker.pd_render(annotated_frame)
-        glob_pd_rtrip_time += now() - pd_rtrip_time
+        pd_end_time = now()
         nb_pd_inferences += 1
 
+        lm_start_time = now()
         # Hand landmarks
         if hand_tracker.use_lm:
             for i, r in enumerate(hand_tracker.regions):
@@ -111,11 +115,11 @@ def run(hand_tracker, model):
                 # Get hand landmarks
                 lm_rtrip_time = now()
                 inference = hand_tracker.lm_exec_net.infer(inputs={hand_tracker.lm_input_blob: frame_nn})
-                # glob_lm_rtrip_time += now() - lm_rtrip_time
+                glob_lm_rtrip_time += now() - lm_rtrip_time
                 nb_lm_inferences += 1
                 hand_tracker.lm_postprocess(r, inference)
                 hand_tracker.lm_render(annotated_frame, r)
-                glob_lm_rtrip_time += now() - lm_rtrip_time
+        lm_end_time = now()
 
         frame_num += 1
         if frame_num % landmark_skip_frame == 0:
@@ -355,3 +359,5 @@ def run(hand_tracker, model):
     print(f"# hand landmark inferences  : {nb_lm_inferences}")
     print(f"Palm detection round trip   : {glob_pd_rtrip_time/nb_pd_inferences*1000:.1f} ms")
     print(f"Hand landmark round trip    : {glob_lm_rtrip_time/nb_lm_inferences*1000:.1f} ms")
+    print(f"Palm detection latency      : {(pd_end_time - pd_start_time)*1000:.1f} ms")
+    print(f"Hand landmark latency       : {(lm_end_time - lm_start_time)*1000:.1f} ms")
