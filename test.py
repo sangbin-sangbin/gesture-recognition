@@ -8,26 +8,29 @@ from run import run
 
 
 class Model(nn.Module):
-    def __init__(self, input_size, hidden_dim, tagset_size):
+    def __init__(self, input_size, hidden_dim1, hidden_dim2, target_size):
         super(Model, self).__init__()
-        self.fc1 = nn.Linear(input_size, hidden_dim)
-        self.fc2 = nn.Linear(hidden_dim, tagset_size)
+        self.fc1 = nn.Linear(input_size, hidden_dim1)
+        self.fc2 = nn.Linear(hidden_dim1, hidden_dim2)
+        self.fc3 = nn.Linear(hidden_dim2, target_size)
         self.softmax = nn.Softmax(dim=0)
 
     def forward(self, landmarks):
         x = self.fc1(landmarks)
         x = self.fc2(x)
+        x = self.fc3(x)
         res = self.softmax(x)
         return res
 
 
 def initialize_model():
     INPUT_SIZE = 42
-    HIDDEN_DIM = 32
-    TARGET_SIZE = 6
+    HIDDEN_DIM1 = 32
+    HIDDEN_DIM2 = 32
+    TARGET_SIZE = 8
 
-    model = Model(INPUT_SIZE, HIDDEN_DIM, TARGET_SIZE)
-    model.load_state_dict(torch.load("model2.pt"))
+    model = Model(INPUT_SIZE, HIDDEN_DIM1, HIDDEN_DIM2, TARGET_SIZE)
+    model.load_state_dict(torch.load("model.pt"))
 
     return model
 
@@ -73,12 +76,12 @@ if __name__ == "__main__":
         input_src="0",
         pd_xml="mediapipe_models/palm_detection_FP16.xml",
         pd_device="GPU",
-        pd_score_thresh=0.3,
+        pd_score_thresh=0.6,
         pd_nms_thresh=0.3,
         use_lm=True,
         lm_xml="mediapipe_models/hand_landmark_FP16.xml",
         lm_device="GPU",
-        lm_score_threshold=0.5,
+        lm_score_threshold=0.6,
         use_gesture=False,
         crop=False,
         is_getdata=False,

@@ -87,4 +87,14 @@ def perform_action(action):
         print("exit")
         play_wav_file("action")
         return ["exit", time.time()]
+    elif action == "shortcut1":
+        subprocess.run("adb shell input keyevent SHORTCUT1", shell=True)
+        print("shortcut 1")
+        play_wav_file("action")
+        return ["shortcut1", time.time()]
+    elif action == "shortcut2":
+        subprocess.run("adb shell input keyevent SHORTCUT2", shell=True)
+        print("shortcut 2")
+        play_wav_file("action")
+        return ["shortcut2", time.time()]
     return ["", 0]
