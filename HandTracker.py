@@ -172,7 +172,6 @@ class HandTracker:
             # Output blob: Identity_dense/BiasAdd/Add - shape: [1, 63]
             self.lm_input_blob = next(iter(next(iter(self.lm_model.inputs)).names))
             input_shape = next(iter(self.pd_model.inputs)).shape
-            print(self.lm_input_blob)
             print(f"Input blob: {self.pd_input_blob} - shape: {input_shape}")
             
             _, _, self.lm_h, self.lm_w = (next(iter(self.lm_model.inputs)).shape)
