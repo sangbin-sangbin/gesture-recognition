@@ -42,7 +42,7 @@ def load_parameters(parameters_dir):
     else:
         parameter = {
             "time": 10,
-            "same_hand": 300,
+            "same_hand": 10,
             "skip_frame": 1,
             "start_time": 1,
             "stop_time": 1,
@@ -56,7 +56,7 @@ def load_parameters(parameters_dir):
 def create_trackbars(parameter):
     cv2.namedWindow("gesture recognition")
     cv2.createTrackbar("time", "gesture recognition", parameter["time"], 100, utils.nothing)
-    cv2.createTrackbar("same_hand", "gesture recognition", parameter["same_hand"], 1000, utils.nothing)
+    cv2.createTrackbar("same_hand", "gesture recognition", parameter["same_hand"], 100, utils.nothing)
     cv2.createTrackbar("skip_frame", "gesture recognition", parameter["skip_frame"], 50, utils.nothing)
     cv2.createTrackbar("start_time", "gesture recognition", parameter["start_time"], 10, utils.nothing)
     cv2.createTrackbar("stop_time", "gesture recognition", parameter["stop_time"], 10, utils.nothing)
@@ -76,12 +76,12 @@ if __name__ == "__main__":
         input_src="0",
         pd_xml="mediapipe_models/palm_detection_FP32.xml",
         pd_device="GPU",
-        pd_score_thresh=0.5,
+        pd_score_thresh=0.6,
         pd_nms_thresh=0.3,
         use_lm=True,
         lm_xml="mediapipe_models/hand_landmark_FP32.xml",
         lm_device="GPU",
-        lm_score_threshold=0.5,
+        lm_score_threshold=0.6,
         use_gesture=False,
         crop=False,
         is_getdata=False,

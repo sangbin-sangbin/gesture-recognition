@@ -59,7 +59,7 @@ def run(hand_tracker, model):
             # require more time than time_threshold to recognize it as an gesture
             time_threshold = cv2.getTrackbarPos("time", "gesture recognition") / 100
             # distance between this frame's hand and last frame's recognized hand should be smaller than same_hand_threshold to regard them as same hand
-            same_hand_threshold = cv2.getTrackbarPos("same_hand", "gesture recognition")
+            same_hand_threshold = cv2.getTrackbarPos("same_hand", "gesture recognition") * 100
             landmark_skip_frame = max(cv2.getTrackbarPos("skip_frame", "gesture recognition"), 1)
             start_recognizing_time_threshold = cv2.getTrackbarPos("start_time", "gesture recognition")
             stop_recognizing_time_threshold = cv2.getTrackbarPos("stop_time", "gesture recognition")
