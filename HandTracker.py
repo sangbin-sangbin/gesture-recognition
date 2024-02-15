@@ -5,6 +5,7 @@ from FPS import FPS, now
 import os
 import time
 from openvino.inference_engine import IECore
+import openvino.runtime as ov
 
 
 class HandTracker:
@@ -19,7 +20,6 @@ class HandTracker:
         lm_xml="mediapipe_models/hand_landmark_FP16.xml",
         lm_device="CPU",
         lm_score_threshold=0.5,
-        use_gesture=False,
         crop=False,
         is_getdata=False,
     ):
@@ -28,12 +28,10 @@ class HandTracker:
         self.pd_nms_thresh = pd_nms_thresh
         self.use_lm = use_lm
         self.lm_score_threshold = lm_score_threshold
-        self.use_gesture = use_gesture
         self.crop = crop
 
         self.is_getdata = is_getdata
         self.dataset = []
-        self.coords = []
         self.state = "break"
         self.start_time = time.time()
         self.gesture_num = 0
@@ -109,9 +107,9 @@ class HandTracker:
     def load_models(self, pd_xml, pd_device, lm_xml, lm_device):
 
         print("Loading Inference Engine")
-        self.ie = IECore()
+        self.core = ov.Core()
         print("Device info:")
-        versions = self.ie.get_versions(pd_device)
+        versions = self.core.get_versions(pd_device)
         print("{}{}".format(" " * 8, pd_device))
         print(
             "{}MKLDNNPlugin version ......... {}.{}".format(
@@ -124,22 +122,21 @@ class HandTracker:
         pd_name = os.path.splitext(pd_xml)[0]
         pd_bin = pd_name + ".bin"
         print("Palm Detection model - Reading network files:\n\t{}\n\t{}".format(pd_xml, pd_bin))
-        self.pd_net = self.ie.read_network(model=pd_xml, weights=pd_bin)
+        self.pd_model = self.core.read_model(model=pd_xml, weights=pd_bin)
         # Input blob: input_1 - shape: [1, 3, 192, 192]
         # Output blob: Identity - shape: [1, 2016, 18]
         # Output blob: Identity_1 - shape: [1, 2016, 1]
-        self.pd_input_blob = next(iter(self.pd_net.input_info))
-        print(
-            f"Input blob: {self.pd_input_blob} - shape: {self.pd_net.input_info[self.pd_input_blob].input_data.shape}"
-        )
-        _, _, self.pd_h, self.pd_w = self.pd_net.input_info[self.pd_input_blob].input_data.shape
+        self.pd_input_blob = next(iter(next(iter(self.pd_model.inputs)).names))
+        input_shape = next(iter(self.pd_model.inputs)).shape
+        print(f"Input blob: {self.pd_input_blob} - shape: {input_shape}")
+        _, _, self.pd_h, self.pd_w = (next(iter(self.pd_model.inputs)).shape)
 
-        for o in self.pd_net.outputs.keys():
-            print(f"Output blob: {o} - shape: {self.pd_net.outputs[o].shape}")
+        for o in self.pd_model.outputs:
+            print(f"Output blob: {list(o.names)[1]} - shape: {list(o.shape)}")
             self.pd_scores = "Identity_1"
             self.pd_bboxes = "Identity"
         print("Loading palm detection model into the plugin")
-        self.pd_exec_net = self.ie.load_network(network=self.pd_net, num_requests=1, device_name=pd_device)
+        self.pd_exec_model = self.core.compile_model(model=self.pd_model, device_name=pd_device)
         self.pd_infer_time_cumul = 0
         self.pd_infer_nb = 0
 
@@ -150,7 +147,7 @@ class HandTracker:
         if self.use_lm:
             if lm_device != pd_device:
                 print("Device info:")
-                versions = self.ie.get_versions(pd_device)
+                versions = self.core.get_versions(pd_device)
                 print("{}{}".format(" " * 8, pd_device))
                 print(
                     "{}MKLDNNPlugin version ......... {}.{}".format(
@@ -162,25 +159,26 @@ class HandTracker:
             lm_name = os.path.splitext(lm_xml)[0]
             lm_bin = lm_name + ".bin"
             print("Landmark model - Reading network files:\n\t{}\n\t{}".format(lm_xml, lm_bin))
-            self.lm_net = self.ie.read_network(model=lm_xml, weights=lm_bin)
+            self.lm_model = self.core.read_model(model=lm_xml, weights=lm_bin)
             # Input blob: input_1 - shape: [1, 3, 224, 224]
             # Output blob: Identity_1 - shape: [1, 1]
             # Output blob: Identity_2 - shape: [1, 1]
             # Output blob: Identity_3_dense/BiasAdd/Add - shape: [1, 63]
             # Output blob: Identity_dense/BiasAdd/Add - shape: [1, 63]
-            self.lm_input_blob = next(iter(self.lm_net.input_info))
-            print(
-                f"Input blob: {self.lm_input_blob} - shape: {self.lm_net.input_info[self.lm_input_blob].input_data.shape}"
-            )
-            _, _, self.lm_h, self.lm_w = self.lm_net.input_info[self.lm_input_blob].input_data.shape
+            self.lm_input_blob = next(iter(next(iter(self.lm_model.inputs)).names))
+            input_shape = next(iter(self.pd_model.inputs)).shape
+            print(self.lm_input_blob)
+            print(f"Input blob: {self.pd_input_blob} - shape: {input_shape}")
+            
+            _, _, self.lm_h, self.lm_w = (next(iter(self.lm_model.inputs)).shape)
             # Batch reshaping if lm_2 is True
-            for o in self.lm_net.outputs.keys():
-                print(f"Output blob: {o} - shape: {self.lm_net.outputs[o].shape}")
+            for o in self.lm_model.outputs:
+                print(f"Output blob: {list(o.names)[1]} - shape: {list(o.shape)}")
             self.lm_score = "Identity_1"
             self.lm_handedness = "Identity_2"
             self.lm_landmarks = "Identity_dense/BiasAdd/Add"
             print("Loading landmark model to the plugin")
-            self.lm_exec_net = self.ie.load_network(network=self.lm_net, num_requests=1, device_name=lm_device)
+            self.lm_exec_model = self.core.compile_model(model=self.lm_model, device_name=lm_device)
             self.lm_infer_time_cumul = 0
             self.lm_infer_nb = 0
             self.lm_hand_nb = 0
@@ -366,7 +364,8 @@ class HandTracker:
 
             # Get palm detection
             pd_rtrip_time = now()
-            inference = self.pd_exec_net.infer(inputs={self.pd_input_blob: frame_nn})
+            pd_infer_request = self.pd_exec_model.create_infer_request()
+            inference = pd_infer_request.infer(inputs={self.pd_input_blob: frame_nn})
             glob_pd_rtrip_time += now() - pd_rtrip_time
             self.pd_postprocess(inference)
             self.pd_render(annotated_frame)
@@ -381,7 +380,8 @@ class HandTracker:
 
                     # Get hand landmarks
                     lm_rtrip_time = now()
-                    inference = self.lm_exec_net.infer(inputs={self.lm_input_blob: frame_nn})
+                    lm_infer_request = self.lm_exec_model.create_infer_request()
+                    inference = lm_infer_request.infer(inputs={self.lm_input_blob: frame_nn})
                     glob_lm_rtrip_time += now() - lm_rtrip_time
                     nb_lm_inferences += 1
                     self.lm_postprocess(r, inference)
