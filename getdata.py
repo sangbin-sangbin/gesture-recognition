@@ -47,7 +47,8 @@ def run(hand_tracker):
 
         # Get palm detection
         pd_rtrip_time = now()
-        inference = hand_tracker.pd_exec_net.infer(inputs={hand_tracker.pd_input_blob: frame_nn})
+        infer_request = hand_tracker.pd_exec_model.create_infer_request()
+        inference = infer_request.infer(inputs={hand_tracker.pd_input_blob: frame_nn})
         glob_pd_rtrip_time += now() - pd_rtrip_time
         hand_tracker.pd_postprocess(inference)
         hand_tracker.pd_render(annotated_frame)
@@ -62,7 +63,8 @@ def run(hand_tracker):
 
                 # Get hand landmarks
                 lm_rtrip_time = now()
-                inference = hand_tracker.lm_exec_net.infer(inputs={hand_tracker.lm_input_blob: frame_nn})
+                lm_infer_request = hand_tracker.lm_exec_model.create_infer_request()
+                inference = lm_infer_request.infer(inputs={hand_tracker.lm_input_blob: frame_nn})
                 glob_lm_rtrip_time += now() - lm_rtrip_time
                 nb_lm_inferences += 1
                 hand_tracker.lm_postprocess(r, inference)
@@ -126,7 +128,6 @@ if __name__ == "__main__":
         lm_xml="mediapipe_models/hand_landmark_FP16.xml",
         lm_device="GPU",
         lm_score_threshold=0.5,
-        use_gesture=False,
         crop=False,
         is_getdata=True,
     )
