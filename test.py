@@ -81,7 +81,6 @@ if __name__ == "__main__":
         use_lm=True,
         lm_xml="mediapipe_models/hand_landmark_FP16.xml",
         lm_device="GPU",
-        lm_score_threshold=0.5,
         lm_score_threshold=0.6,
         crop=False,
         is_getdata=False,
