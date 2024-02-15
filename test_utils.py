@@ -30,8 +30,6 @@ def same_hand_tracking(hands, prev_pos, same_hand_threshold):
             min_idx = i
             min_val = distance
 
-    print(min_val)
-
     if min_val > same_hand_threshold:
         return -1, prev_pos
     return min_idx, [positions[min_idx][0], positions[min_idx][1]]
