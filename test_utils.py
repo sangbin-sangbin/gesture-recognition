@@ -30,6 +30,8 @@ def same_hand_tracking(hands, prev_pos, same_hand_threshold):
             min_idx = i
             min_val = distance
 
+    print(min_val)
+
     if min_val > same_hand_threshold:
         return -1, prev_pos
     return min_idx, [positions[min_idx][0], positions[min_idx][1]]
@@ -87,4 +89,14 @@ def perform_action(action):
         print("exit")
         play_wav_file("action")
         return ["exit", time.time()]
+    elif action == "shortcut1":
+        subprocess.run("adb shell input keyevent SHORTCUT1", shell=True)
+        print("shortcut 1")
+        play_wav_file("action")
+        return ["shortcut1", time.time()]
+    elif action == "shortcut2":
+        subprocess.run("adb shell input keyevent SHORTCUT2", shell=True)
+        print("shortcut 2")
+        play_wav_file("action")
+        return ["shortcut2", time.time()]
     return ["", 0]

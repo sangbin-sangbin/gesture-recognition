@@ -9,7 +9,7 @@ import mediapipe_utils as mpu
 
 
 def run(hand_tracker, model):
-    gestures = ["default", "left", "right", "select", "exit", "none"]
+    gestures = ["default", "left", "right", "select", "exit", "shortcut1", "shortcut2", "none"]
     gesture_num = 0
 
     state = {
@@ -59,7 +59,7 @@ def run(hand_tracker, model):
             # require more time than time_threshold to recognize it as an gesture
             time_threshold = cv2.getTrackbarPos("time", "gesture recognition") / 100
             # distance between this frame's hand and last frame's recognized hand should be smaller than same_hand_threshold to regard them as same hand
-            same_hand_threshold = cv2.getTrackbarPos("same_hand", "gesture recognition") / 1000
+            same_hand_threshold = cv2.getTrackbarPos("same_hand", "gesture recognition")
             landmark_skip_frame = max(cv2.getTrackbarPos("skip_frame", "gesture recognition"), 1)
             start_recognizing_time_threshold = cv2.getTrackbarPos("start_time", "gesture recognition")
             stop_recognizing_time_threshold = cv2.getTrackbarPos("stop_time", "gesture recognition")
@@ -127,10 +127,7 @@ def run(hand_tracker, model):
             recognized_hands = []
             if results:
                 for result in results:
-                    if result.handedness > 0.5:  # Right Hand
-                        lst = [[float(coords[0]), float(coords[1])] for coords in result.landmarks]
-                        right_hands.append(lst)
-
+                    if True or result.handedness > 0.5:  # Right Hand
                         # Convert right hand coordinations for rendering
                         src = np.array([(0, 0), (1, 0), (1, 1)], dtype=np.float32)
                         dst = np.array(
@@ -139,6 +136,7 @@ def run(hand_tracker, model):
                         mat = cv2.getAffineTransform(src, dst)
                         lm_xy = np.expand_dims(np.array([(l[0], l[1]) for l in result.landmarks]), axis=0)
                         lm_xy = np.squeeze(cv2.transform(lm_xy, mat)).astype(np.int32)
+                        right_hands.append(lm_xy)
                         recognized_hands.append(lm_xy)
 
                 if recognizing:
@@ -150,17 +148,10 @@ def run(hand_tracker, model):
                     if hand_idx != -1:
                         last_hand_time = time.time()
 
-                        landmark = right_hands[hand_idx]
-                        # Convert right hand coordinations for rendering
-                        src = np.array([(0, 0), (1, 0), (1, 1)], dtype=np.float32)
-                        dst = np.array(
-                            [(x, y) for x, y in result.rect_points[1:]], dtype=np.float32
-                        )  # region.rect_points[0] is left bottom point !
-                        mat = cv2.getAffineTransform(src, dst)
-                        lm_xy = np.expand_dims(np.array([(l[0], l[1]) for l in landmark]), axis=0)
-                        lm_xy = np.squeeze(cv2.transform(lm_xy, mat)).astype(np.int32)
-                        recognized_hand = lm_xy
-                        lst, scale = utils.normalize_points(landmark)
+                        recognized_hand = recognized_hands[hand_idx]
+                        recognized_hand_prev_pos = utils.get_center(recognized_hand)
+
+                        lst, scale = utils.normalize_points(recognized_hand)
 
                         start = time.time_ns() // 1000000
                         res = list(
