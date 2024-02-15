@@ -211,7 +211,7 @@ def run(hand_tracker, model):
                         text_a = ""
                         if recognizing and time.time() - last_hand_time > stop_recognizing_time_threshold:
                             print("stop recognizing")
-                            utils.play_wav_file("stop")
+                            utils.play_audio_file("Stop")
                             recognizing = False
                             state = {
                                 "gesture": 5,
@@ -252,7 +252,7 @@ def run(hand_tracker, model):
                             # when there are default gestured hand for enough time, start recognizing and track the hand
                             print("start recognizing")
                             recognized_hand_prev_pos = utils.get_center(wake_up_hands[hand_idx])
-                            utils.play_wav_file("start")
+                            utils.play_audio_file("Start")
                             recognizing = True
                             wake_up_state = []
                             break
@@ -274,7 +274,7 @@ def run(hand_tracker, model):
                 text_a = ""
                 if recognizing and time.time() - last_hand_time > stop_recognizing_time_threshold:
                     print("stop recognizing")
-                    utils.play_wav_file("stop")
+                    utils.play_audio_file("Stop")
                     recognizing = False
                     state = {
                         "gesture": 5,
