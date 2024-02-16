@@ -48,7 +48,7 @@ class HandTracker:
             # Open a webcam
             w = 1280
             h = 720
-            self.cap = cv2.VideoCapture(input_src)
+            self.cap = cv2.VideoCapture(input_src, cv2.CAP_DSHOW)
             self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, w)
             self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, h)
 
