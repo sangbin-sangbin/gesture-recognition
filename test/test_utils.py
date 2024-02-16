@@ -91,16 +91,22 @@ def normalize_points(points):
     return normalized_points, scale
 
 
-def perform_action(action):
+def perform_action(action, infinite=False):
     if action == "right":
         subprocess.run("adb shell input keyevent KEYCODE_DPAD_RIGHT", shell=True)
         print("right")
-        play_audio_file("Right")
+        if infinite:
+            play_audio_file("Swipe1")
+        else:
+            play_audio_file("Right")
         return ["right", time.time()]
     elif action == "left":
         subprocess.run("adb shell input keyevent KEYCODE_DPAD_LEFT", shell=True)
         print("left")
-        play_audio_file("Left")
+        if infinite:
+            play_audio_file("Swipe2")
+        else:
+            play_audio_file("Left")
         return ["left", time.time()]
     elif action == "select":
         subprocess.run("adb shell input keyevent KEYCODE_BUTTON_SELECT", shell=True)
@@ -115,11 +121,11 @@ def perform_action(action):
     elif action == "shortcut1":
         subprocess.run("adb shell input keyevent SHORTCUT1", shell=True)
         print("shortcut 1")
-        play_audio_file("Swipe1")
+        play_audio_file("First")
         return ["shortcut1", time.time()]
     elif action == "shortcut2":
         subprocess.run("adb shell input keyevent SHORTCUT2", shell=True)
         print("shortcut 2")
-        play_audio_file("Swipe2")
+        play_audio_file("Second")
         return ["shortcut2", time.time()]
     return ["", 0]

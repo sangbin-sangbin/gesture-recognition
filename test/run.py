@@ -191,7 +191,7 @@ def run(hand_tracker, model):
                                     > multi_action_cooltime * state["multi_action_cnt"]
                                 ):
                                     state["multi_action_cnt"] += 1
-                                    state["prev_action"] = utils.perform_action(state["prev_action"][0])
+                                    state["prev_action"] = utils.perform_action(state["prev_action"][0], infinite=True)
 
                             elif time.time() - state["start_time"] > time_threshold:
                                 if gestures[state["prev_gesture"]] == "default":
