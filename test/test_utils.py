@@ -40,7 +40,7 @@ def play_audio_file(file_name):
     pygame.mixer.init()
 
     # Get the directory of test.py
-    current_dir = os.path.dirname(os.path.relpath(__file__))
+    current_dir = os.path.dirname(os.path.abspath(__file__))
 
     # Navigate up one level to the parent directory of test
     parent_dir = os.path.dirname(current_dir)
