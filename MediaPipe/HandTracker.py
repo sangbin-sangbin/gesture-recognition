@@ -226,7 +226,6 @@ class HandTracker:
             lm.append(lm_raw[3 * i : 3 * (i + 1)] / self.lm_w)
         region.landmarks = lm
         self.lanmark_list = [[float(coords[0]), float(coords[1])] for coords in region.landmarks]
-        # self.recognized.append(self.lanmark_list)
 
     def lm_render(self, frame, region):
         if region.lm_score > self.lm_score_threshold:
