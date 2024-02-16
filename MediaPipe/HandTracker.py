@@ -91,16 +91,10 @@ class HandTracker:
 
     # Getter method
     def __getattribute__(self, name):
-        if name == "dataset":
-            return object.__getattribute__(self, "dataset")
-        else:
             return object.__getattribute__(self, name)
 
     # Setter method
     def __setattr__(self, name, value):
-        if name == "dataset":
-            object.__setattr__(self, "dataset", value)
-        else:
             object.__setattr__(self, name, value)
 
     def load_models(self, pd_xml, pd_device, lm_xml, lm_device):
@@ -137,8 +131,8 @@ class HandTracker:
             for name in output_names:
                 if pattern.match(name):
                     print(f"Output blob: {name} - shape: {list(o.shape)}")
-            self.pd_scores = "Identity_1"
-            self.pd_bboxes = "Identity"
+        self.pd_scores = "Identity_1"
+        self.pd_bboxes = "Identity"
         print("Loading palm detection model into the plugin")
         self.pd_exec_model = self.core.compile_model(model=self.pd_model, device_name=pd_device)
         self.pd_infer_time_cumul = 0
