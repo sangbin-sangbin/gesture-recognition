@@ -152,8 +152,8 @@ def decode_bboxes(score_thresh, scores, bboxes, anchors):
         }
     }
 
-    scores: shape = [number of anchors 896]
-    bboxes: shape = [ number of anchors x 18], 18 = 4 (bounding box : (cx,cy,w,h) + 14 (7 palm keypoints)
+    scores: shape = [number of anchors 2016]
+    bboxes: shape = [number of anchors x 18], 18 = 4 (bounding box : (cx,cy,w,h) + 14 (7 palm keypoints)
     """
     regions = []
     # scores = 1 / (1 + np.exp(-scores))
