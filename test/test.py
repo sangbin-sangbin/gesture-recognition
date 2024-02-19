@@ -41,7 +41,7 @@ def initialize_model():
 
 
 def load_parameters(parameters_dir):
-    res = input("want to use saved parameters? [ y / n ]\n>>> ")
+    res = "y" # input("want to use saved parameters? [ y / n ]\n>>> ")
     if res == "y":
         parameter = json.load(open(parameters_dir))
     else:
