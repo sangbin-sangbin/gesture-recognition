@@ -4,12 +4,12 @@ import json
 import datetime as dt
 
 import sys, os
+
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 
 from MediaPipe import mediapipe_utils as mpu
 from MediaPipe.HandTracker import HandTracker
 from MediaPipe.FPS import FPS, now
-
 
 
 def run(hand_tracker):
@@ -34,16 +34,24 @@ def run(hand_tracker):
             hand_tracker.frame_size = min(h, w)
             dx = (w - hand_tracker.frame_size) // 2
             dy = (h - hand_tracker.frame_size) // 2
-            video_frame = vid_frame[dy : dy + hand_tracker.frame_size, dx : dx + hand_tracker.frame_size]
+            video_frame = vid_frame[
+                dy : dy + hand_tracker.frame_size, dx : dx + hand_tracker.frame_size
+            ]
         else:
             # Padding on the small side to get a square shape
             hand_tracker.frame_size = max(h, w)
             pad_h = int((hand_tracker.frame_size - h) / 2)
             pad_w = int((hand_tracker.frame_size - w) / 2)
-            video_frame = cv2.copyMakeBorder(vid_frame, pad_h, pad_h, pad_w, pad_w, cv2.BORDER_CONSTANT)
+            video_frame = cv2.copyMakeBorder(
+                vid_frame, pad_h, pad_h, pad_w, pad_w, cv2.BORDER_CONSTANT
+            )
 
         # Resize image to NN square input shape
-        frame_nn = cv2.resize(video_frame, (hand_tracker.pd_w, hand_tracker.pd_h), interpolation=cv2.INTER_AREA)
+        frame_nn = cv2.resize(
+            video_frame,
+            (hand_tracker.pd_w, hand_tracker.pd_h),
+            interpolation=cv2.INTER_AREA,
+        )
 
         # Transpose hxwx3 -> 1x3xhxw
         frame_nn = np.transpose(frame_nn, (2, 0, 1))[None,]
@@ -62,14 +70,18 @@ def run(hand_tracker):
         # Hand landmarks
         if hand_tracker.use_lm:
             for i, r in enumerate(hand_tracker.regions):
-                frame_nn = mpu.warp_rect_img(r.rect_points, video_frame, hand_tracker.lm_w, hand_tracker.lm_h)
+                frame_nn = mpu.warp_rect_img(
+                    r.rect_points, video_frame, hand_tracker.lm_w, hand_tracker.lm_h
+                )
                 # Transpose hxwx3 -> 1x3xhxw
                 frame_nn = np.transpose(frame_nn, (2, 0, 1))[None,]
 
                 # Get hand landmarks
                 lm_rtrip_time = now()
                 lm_infer_request = hand_tracker.lm_exec_model.create_infer_request()
-                inference = lm_infer_request.infer(inputs={hand_tracker.lm_input_blob: frame_nn})
+                inference = lm_infer_request.infer(
+                    inputs={hand_tracker.lm_input_blob: frame_nn}
+                )
                 glob_lm_rtrip_time += now() - lm_rtrip_time
                 nb_lm_inferences += 1
                 hand_tracker.lm_postprocess(r, inference)
@@ -105,8 +117,12 @@ def run(hand_tracker):
     # Print some stats
     print(f"# palm detection inferences : {nb_pd_inferences}")
     print(f"# hand landmark inferences  : {nb_lm_inferences}")
-    print(f"Palm detection round trip   : {glob_pd_rtrip_time/nb_pd_inferences*1000:.1f} ms")
-    print(f"Hand landmark round trip    : {glob_lm_rtrip_time/nb_lm_inferences*1000:.1f} ms")
+    print(
+        f"Palm detection round trip   : {glob_pd_rtrip_time/nb_pd_inferences*1000:.1f} ms"
+    )
+    print(
+        f"Hand landmark round trip    : {glob_lm_rtrip_time/nb_lm_inferences*1000:.1f} ms"
+    )
 
 
 def get_data(hand_tracker):
@@ -146,8 +162,12 @@ if __name__ == "__main__":
     current_dir = os.path.dirname(os.path.relpath(__file__))
 
     # Construct the path to palm_detection.xml
-    pd_model_path = os.path.join(current_dir, "..", "MediaPipe", "mediapipe_models", "palm_detection_FP16.xml")
-    lm_model_path = os.path.join(current_dir, "..", "MediaPipe", "mediapipe_models", "hand_landmark_FP16.xml")
+    pd_model_path = os.path.join(
+        current_dir, "..", "MediaPipe", "mediapipe_models", "palm_detection_FP16.xml"
+    )
+    lm_model_path = os.path.join(
+        current_dir, "..", "MediaPipe", "mediapipe_models", "hand_landmark_FP16.xml"
+    )
 
     ht = HandTracker(
         input_src="0",

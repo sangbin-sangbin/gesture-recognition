@@ -8,30 +8,10 @@ from datetime import timedelta
 import glob
 import os
 
-class Model(nn.Module):
-    def __init__(self, input_size, hidden_dim1, hidden_dim2, target_size):
-        super(Model, self).__init__()
-        self.fc1 = nn.Linear(input_size, hidden_dim1)
-        self.fc2 = nn.Linear(hidden_dim1, hidden_dim2)
-        self.fc3 = nn.Linear(hidden_dim2, target_size)
-        self.dropout1 = nn.Dropout(0.2)
-        self.dropout2 = nn.Dropout(0.2)
-        self.softmax = nn.Softmax(dim = 0)
-        self.relu = nn.ReLU()
-
-    def forward(self, landmarks):
-        x = self.dropout1(self.relu(self.fc1(landmarks)))
-        x = self.dropout2(self.relu(self.fc2(x)))
-        res = self.softmax(self.fc3(x))
-        return res
+from model.model import Model
 
 
-INPUT_SIZE = 42
-HIDDEN_DIM1 = 32
-HIDDEN_DIM2 = 32
-TARGET_SIZE = 8
-
-model = Model(INPUT_SIZE, HIDDEN_DIM1, HIDDEN_DIM2, TARGET_SIZE)
+model = Model()
 loss_function = nn.CrossEntropyLoss()
 optimizer = optim.SGD(model.parameters(), lr=0.01)
 
@@ -48,14 +28,16 @@ dataset = []
 for dataset_dir in file_list_json:
     tmp = json.load(open(dataset_dir))
     dataset += tmp
-print(len(dataset), ' data')
+print(len(dataset), " data")
 random.shuffle(dataset)
 train_dataset = dataset[: int(len(dataset) * 0.8)]
 val_dataset = dataset[int(len(dataset) * 0.8) : int(len(dataset) * 0.9)]
 test_dataset = dataset[int(len(dataset) * 0.9) :]
 
 
-def print_progress_bar(iteration, total, time_per_step, prefix="", suffix="", length=30, fill="="):
+def print_progress_bar(
+    iteration, total, time_per_step, prefix="", suffix="", length=30, fill="="
+):
     percent = ("{0:.1f}").format(100 * (iteration / float(total)))
     filled_length = int(length * iteration // total)
     bar = fill * filled_length + "-" * (length - filled_length)
@@ -79,9 +61,11 @@ for epoch in range(total_epochs):
     for step, data in enumerate(train_dataset):
         model.zero_grad()
 
-        landmarks = torch.tensor([element for row in data["landmarks"] for element in row], dtype=torch.float)
+        landmarks = torch.tensor(
+            [element for row in data["landmarks"] for element in row], dtype=torch.float
+        )
 
-        ans = [0 for _ in range(TARGET_SIZE)]
+        ans = [0 for _ in range(model.target_size)]
         ans[data["gesture"]] = 1
         ans = torch.tensor(ans, dtype=torch.float)
 
@@ -107,8 +91,10 @@ for epoch in range(total_epochs):
     # Prevent from overfitting
     val_loss = 0.0
     for data in val_dataset:
-        landmarks = torch.tensor([element for row in data["landmarks"] for element in row], dtype=torch.float)
-        ans = [0 for _ in range(TARGET_SIZE)]
+        landmarks = torch.tensor(
+            [element for row in data["landmarks"] for element in row], dtype=torch.float
+        )
+        ans = [0 for _ in range(model.target_size)]
         ans[data["gesture"]] = 1
         ans = torch.tensor(ans, dtype=torch.float)
         res = model(landmarks)
@@ -118,12 +104,12 @@ for epoch in range(total_epochs):
     average_loss = val_loss / len(val_dataset)  # Calculate average loss for the epoch
     print(f"\nValidation Loss: {average_loss:.4f}\n")
 
-    '''
+    """
     if prev_loss < average_loss:
         tolerance -= 1
         if tolerance == 0:
             break
-    '''
+    """
 
     prev_loss = average_loss
 

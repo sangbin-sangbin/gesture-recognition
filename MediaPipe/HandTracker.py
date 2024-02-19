@@ -7,6 +7,7 @@ import openvino.runtime as ov
 from MediaPipe import mediapipe_utils as mpu
 from MediaPipe.FPS import FPS, now
 
+
 class HandTracker:
     def __init__(
         self,
@@ -34,7 +35,16 @@ class HandTracker:
         self.state = "break"
         self.start_time = time.time()
         self.gesture_num = 0
-        self.gestures = ["default", "left", "right", "select", "exit", "shortcut1", "shortcut2", "none"]
+        self.gestures = [
+            "default",
+            "left",
+            "right",
+            "select",
+            "exit",
+            "shortcut1",
+            "shortcut2",
+            "none",
+        ]
 
         self.recognized = []
 
@@ -48,7 +58,7 @@ class HandTracker:
             # Open a webcam
             w = 1280
             h = 720
-            self.cap = cv2.VideoCapture(input_src) #, cv2.CAP_DSHOW)
+            self.cap = cv2.VideoCapture(input_src)  # , cv2.CAP_DSHOW)
             self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, w)
             self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, h)
 
@@ -91,11 +101,11 @@ class HandTracker:
 
     # Getter method
     def __getattribute__(self, name):
-            return object.__getattribute__(self, name)
+        return object.__getattribute__(self, name)
 
     # Setter method
     def __setattr__(self, name, value):
-            object.__setattr__(self, name, value)
+        object.__setattr__(self, name, value)
 
     def load_models(self, pd_xml, pd_device, lm_xml, lm_device):
 
@@ -109,12 +119,18 @@ class HandTracker:
                 " " * 8, versions[pd_device].major, versions[pd_device].minor
             )
         )
-        print("{}Build ........... {}".format(" " * 8, versions[pd_device].build_number))
+        print(
+            "{}Build ........... {}".format(" " * 8, versions[pd_device].build_number)
+        )
 
         # Pose detection model
         pd_name = os.path.splitext(pd_xml)[0]
         pd_bin = pd_name + ".bin"
-        print("Palm Detection model - Reading network files:\n\t{}\n\t{}".format(pd_xml, pd_bin))
+        print(
+            "Palm Detection model - Reading network files:\n\t{}\n\t{}".format(
+                pd_xml, pd_bin
+            )
+        )
         self.pd_model = self.core.read_model(model=pd_xml, weights=pd_bin)
         # Input blob: input_1 - shape: [1, 3, 192, 192]
         # Output blob: Identity - shape: [1, 2016, 18]
@@ -122,9 +138,9 @@ class HandTracker:
         self.pd_input_blob = next(iter(next(iter(self.pd_model.inputs)).names))
         input_shape = next(iter(self.pd_model.inputs)).shape
         print(f"Input blob: {self.pd_input_blob} - shape: {input_shape}")
-        _, _, self.pd_h, self.pd_w = (next(iter(self.pd_model.inputs)).shape)
+        _, _, self.pd_h, self.pd_w = next(iter(self.pd_model.inputs)).shape
 
-        pattern = re.compile(r'^(?!.*:)(?:Identity.*$|.*\/BiasAdd\/Add$)')
+        pattern = re.compile(r"^(?!.*:)(?:Identity.*$|.*\/BiasAdd\/Add$)")
 
         for o in self.pd_model.outputs:
             output_names = list(o.names)
@@ -134,7 +150,9 @@ class HandTracker:
         self.pd_scores = "Identity_1"
         self.pd_bboxes = "Identity"
         print("Loading palm detection model into the plugin")
-        self.pd_exec_model = self.core.compile_model(model=self.pd_model, device_name=pd_device)
+        self.pd_exec_model = self.core.compile_model(
+            model=self.pd_model, device_name=pd_device
+        )
         self.pd_infer_time_cumul = 0
         self.pd_infer_nb = 0
 
@@ -152,11 +170,19 @@ class HandTracker:
                         " " * 8, versions[pd_device].major, versions[pd_device].minor
                     )
                 )
-                print("{}Build ........... {}".format(" " * 8, versions[pd_device].build_number))
+                print(
+                    "{}Build ........... {}".format(
+                        " " * 8, versions[pd_device].build_number
+                    )
+                )
 
             lm_name = os.path.splitext(lm_xml)[0]
             lm_bin = lm_name + ".bin"
-            print("Landmark model - Reading network files:\n\t{}\n\t{}".format(lm_xml, lm_bin))
+            print(
+                "Landmark model - Reading network files:\n\t{}\n\t{}".format(
+                    lm_xml, lm_bin
+                )
+            )
             self.lm_model = self.core.read_model(model=lm_xml, weights=lm_bin)
             # Input blob: input_1 - shape: [1, 3, 224, 224]
             # Output blob: Identity_1 - shape: [1, 1]
@@ -166,8 +192,8 @@ class HandTracker:
             self.lm_input_blob = next(iter(next(iter(self.lm_model.inputs)).names))
             input_shape = next(iter(self.pd_model.inputs)).shape
             print(f"Input blob: {self.pd_input_blob} - shape: {input_shape}")
-            
-            _, _, self.lm_h, self.lm_w = (next(iter(self.lm_model.inputs)).shape)
+
+            _, _, self.lm_h, self.lm_w = next(iter(self.lm_model.inputs)).shape
             for o in self.lm_model.outputs:
                 output_names = list(o.names)
                 for name in output_names:
@@ -177,7 +203,9 @@ class HandTracker:
             self.lm_handedness = "Identity_2"
             self.lm_landmarks = "Identity_dense/BiasAdd/Add"
             print("Loading landmark model to the plugin")
-            self.lm_exec_model = self.core.compile_model(model=self.lm_model, device_name=lm_device)
+            self.lm_exec_model = self.core.compile_model(
+                model=self.lm_model, device_name=lm_device
+            )
             self.lm_infer_time_cumul = 0
             self.lm_infer_nb = 0
             self.lm_hand_nb = 0
@@ -186,7 +214,9 @@ class HandTracker:
         scores = np.squeeze(inference[self.pd_scores])  # 2016
         bboxes = inference[self.pd_bboxes][0]  # 2016x18
         # Decode bboxes
-        self.regions = mpu.decode_bboxes(self.pd_score_thresh, scores, bboxes, self.anchors)
+        self.regions = mpu.decode_bboxes(
+            self.pd_score_thresh, scores, bboxes, self.anchors
+        )
         # Non maximum suppression
         self.regions = mpu.non_max_suppression(self.regions, self.pd_nms_thresh)
         if self.use_lm:
@@ -197,18 +227,35 @@ class HandTracker:
         for r in self.regions:
             if self.show_pd_box:
                 box = (np.array(r.pd_box) * self.frame_size).astype(int)
-                cv2.rectangle(frame, (box[0], box[1]), (box[0] + box[2], box[1] + box[3]), (0, 255, 0), 2)
+                cv2.rectangle(
+                    frame,
+                    (box[0], box[1]),
+                    (box[0] + box[2], box[1] + box[3]),
+                    (0, 255, 0),
+                    2,
+                )
             if self.show_pd_kps:
                 for i, kp in enumerate(r.pd_kps):
                     x = int(kp[0] * self.frame_size)
                     y = int(kp[1] * self.frame_size)
                     cv2.circle(frame, (x, y), 6, (0, 0, 255), -1)
-                    cv2.putText(frame, str(i), (x, y + 12), cv2.FONT_HERSHEY_PLAIN, 1.5, (0, 255, 0), 2)
+                    cv2.putText(
+                        frame,
+                        str(i),
+                        (x, y + 12),
+                        cv2.FONT_HERSHEY_PLAIN,
+                        1.5,
+                        (0, 255, 0),
+                        2,
+                    )
             if self.show_scores:
                 cv2.putText(
                     frame,
                     f"Palm score: {r.pd_score:.2f}",
-                    (int(r.pd_box[0] * self.frame_size + 10), int((r.pd_box[1] + r.pd_box[3]) * self.frame_size + 60)),
+                    (
+                        int(r.pd_box[0] * self.frame_size + 10),
+                        int((r.pd_box[1] + r.pd_box[3]) * self.frame_size + 60),
+                    ),
                     cv2.FONT_HERSHEY_PLAIN,
                     2,
                     (255, 255, 0),
@@ -225,7 +272,9 @@ class HandTracker:
             # x,y,z -> x/w,y/h,z/w (here h=w)
             lm.append(lm_raw[3 * i : 3 * (i + 1)] / self.lm_w)
         region.landmarks = lm
-        self.lanmark_list = [[float(coords[0]), float(coords[1])] for coords in region.landmarks]
+        self.lanmark_list = [
+            [float(coords[0]), float(coords[1])] for coords in region.landmarks
+        ]
 
     def lm_render(self, frame, region):
         if region.lm_score > self.lm_score_threshold:
@@ -233,7 +282,10 @@ class HandTracker:
                 # Store the lnadmarks in dataset when recording
                 if self.state == "recording":
                     self.dataset.append(
-                        {"landmarks": mpu.normalize_points(self.lanmark_list), "gesture": self.gesture_num}
+                        {
+                            "landmarks": mpu.normalize_points(self.lanmark_list),
+                            "gesture": self.gesture_num,
+                        }
                     )
 
                 if (time.time() - self.start_time) > 30 and self.state == "recording":
@@ -247,7 +299,9 @@ class HandTracker:
                 if self.state == "break":
                     cv2.putText(
                         frame,
-                        'Break.. Next gesture is "' + self.gestures[self.gesture_num] + '"',
+                        'Break.. Next gesture is "'
+                        + self.gestures[self.gesture_num]
+                        + '"',
                         (frame.shape[1] // 2 - 430, frame.shape[0] // 2 - 220),
                         cv2.FONT_HERSHEY_SIMPLEX,
                         2,
@@ -265,10 +319,22 @@ class HandTracker:
                         3,
                     )
             else:
-                self.dataset.append({"landmarks": mpu.normalize_points(self.lanmark_list), "gesture": self.gesture_num})
+                self.dataset.append(
+                    {
+                        "landmarks": mpu.normalize_points(self.lanmark_list),
+                        "gesture": self.gesture_num,
+                    }
+                )
 
             if self.show_rot_rect:
-                cv2.polylines(frame, [np.array(region.rect_points)], True, (0, 255, 255), 2, cv2.LINE_AA)
+                cv2.polylines(
+                    frame,
+                    [np.array(region.rect_points)],
+                    True,
+                    (0, 255, 255),
+                    2,
+                    cv2.LINE_AA,
+                )
 
             if self.show_landmarks:
                 self.landmarks = []
@@ -278,7 +344,9 @@ class HandTracker:
                     [(x, y) for x, y in region.rect_points[1:]], dtype=np.float32
                 )  # region.rect_points[0] is left bottom point !
                 mat = cv2.getAffineTransform(src, dst)
-                lm_xy = np.expand_dims(np.array([(l[0], l[1]) for l in region.landmarks]), axis=0)
+                lm_xy = np.expand_dims(
+                    np.array([(l[0], l[1]) for l in region.landmarks]), axis=0
+                )
                 lm_xy = np.squeeze(cv2.transform(lm_xy, mat)).astype(np.int32)
                 list_connections = [
                     [0, 1, 2, 3, 4],
@@ -288,7 +356,10 @@ class HandTracker:
                     [13, 17],
                     [0, 17, 18, 19, 20],
                 ]
-                lines = [np.array([lm_xy[point] for point in line]) for line in list_connections]
+                lines = [
+                    np.array([lm_xy[point] for point in line])
+                    for line in list_connections
+                ]
                 cv2.polylines(frame, lines, False, (255, 0, 0), 2, cv2.LINE_AA)
                 self.landmarks.append(lm_xy)
                 if self.is_getdata:
@@ -298,10 +369,16 @@ class HandTracker:
             if self.show_handedness:
                 cv2.putText(
                     frame,
-                    f"RIGHT {region.handedness:.2f}" if region.handedness > 0.5 else f"LEFT {1-region.handedness:.2f}",
+                    (
+                        f"RIGHT {region.handedness:.2f}"
+                        if region.handedness > 0.5
+                        else f"LEFT {1-region.handedness:.2f}"
+                    ),
                     (
                         int(region.pd_box[0] * self.frame_size + 10),
-                        int((region.pd_box[1] + region.pd_box[3]) * self.frame_size + 20),
+                        int(
+                            (region.pd_box[1] + region.pd_box[3]) * self.frame_size + 20
+                        ),
                     ),
                     cv2.FONT_HERSHEY_PLAIN,
                     2,
@@ -314,7 +391,9 @@ class HandTracker:
                     f"Landmark score: {region.lm_score:.2f}",
                     (
                         int(region.pd_box[0] * self.frame_size + 10),
-                        int((region.pd_box[1] + region.pd_box[3]) * self.frame_size + 90),
+                        int(
+                            (region.pd_box[1] + region.pd_box[3]) * self.frame_size + 90
+                        ),
                     ),
                     cv2.FONT_HERSHEY_PLAIN,
                     2,
@@ -344,16 +423,22 @@ class HandTracker:
                 self.frame_size = min(h, w)
                 dx = (w - self.frame_size) // 2
                 dy = (h - self.frame_size) // 2
-                video_frame = vid_frame[dy : dy + self.frame_size, dx : dx + self.frame_size]
+                video_frame = vid_frame[
+                    dy : dy + self.frame_size, dx : dx + self.frame_size
+                ]
             else:
                 # Padding on the small side to get a square shape
                 self.frame_size = max(h, w)
                 pad_h = int((self.frame_size - h) / 2)
                 pad_w = int((self.frame_size - w) / 2)
-                video_frame = cv2.copyMakeBorder(vid_frame, pad_h, pad_h, pad_w, pad_w, cv2.BORDER_CONSTANT)
+                video_frame = cv2.copyMakeBorder(
+                    vid_frame, pad_h, pad_h, pad_w, pad_w, cv2.BORDER_CONSTANT
+                )
 
             # Resize image to NN square input shape
-            frame_nn = cv2.resize(video_frame, (self.pd_w, self.pd_h), interpolation=cv2.INTER_AREA)
+            frame_nn = cv2.resize(
+                video_frame, (self.pd_w, self.pd_h), interpolation=cv2.INTER_AREA
+            )
 
             # Transpose hxwx3 -> 1x3xhxw
             frame_nn = np.transpose(frame_nn, (2, 0, 1))[None,]
@@ -372,14 +457,18 @@ class HandTracker:
             # Hand landmarks
             if self.use_lm:
                 for i, r in enumerate(self.regions):
-                    frame_nn = mpu.warp_rect_img(r.rect_points, video_frame, self.lm_w, self.lm_h)
+                    frame_nn = mpu.warp_rect_img(
+                        r.rect_points, video_frame, self.lm_w, self.lm_h
+                    )
                     # Transpose hxwx3 -> 1x3xhxw
                     frame_nn = np.transpose(frame_nn, (2, 0, 1))[None,]
 
                     # Get hand landmarks
                     lm_rtrip_time = now()
                     lm_infer_request = self.lm_exec_model.create_infer_request()
-                    inference = lm_infer_request.infer(inputs={self.lm_input_blob: frame_nn})
+                    inference = lm_infer_request.infer(
+                        inputs={self.lm_input_blob: frame_nn}
+                    )
                     glob_lm_rtrip_time += now() - lm_rtrip_time
                     nb_lm_inferences += 1
                     self.lm_postprocess(r, inference)
@@ -415,5 +504,9 @@ class HandTracker:
         # Print some stats
         print(f"# palm detection inferences : {nb_pd_inferences}")
         print(f"# hand landmark inferences  : {nb_lm_inferences}")
-        print(f"Palm detection round trip   : {glob_pd_rtrip_time/nb_pd_inferences*1000:.1f} ms")
-        print(f"Hand landmark round trip    : {glob_lm_rtrip_time/nb_lm_inferences*1000:.1f} ms")
+        print(
+            f"Palm detection round trip   : {glob_pd_rtrip_time/nb_pd_inferences*1000:.1f} ms"
+        )
+        print(
+            f"Hand landmark round trip    : {glob_lm_rtrip_time/nb_lm_inferences*1000:.1f} ms"
+        )

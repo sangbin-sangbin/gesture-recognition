@@ -6,6 +6,7 @@ import numpy as np
 import test_utils as utils
 
 import sys, os
+
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 
 from MediaPipe import mediapipe_utils as mpu
@@ -13,7 +14,16 @@ from MediaPipe.FPS import FPS, now
 
 
 def run(hand_tracker, model):
-    gestures = ["default", "left", "right", "select", "exit", "shortcut1", "shortcut2", "none"]
+    gestures = [
+        "default",
+        "left",
+        "right",
+        "select",
+        "exit",
+        "shortcut1",
+        "shortcut2",
+        "none",
+    ]
     gesture_num = 0
 
     state = {
@@ -63,12 +73,24 @@ def run(hand_tracker, model):
             # require more time than time_threshold to recognize it as an gesture
             time_threshold = cv2.getTrackbarPos("time", "gesture recognition") / 100
             # distance between this frame's hand and last frame's recognized hand should be smaller than same_hand_threshold to regard them as same hand
-            same_hand_threshold = cv2.getTrackbarPos("same_hand", "gesture recognition") * 100
-            landmark_skip_frame = max(cv2.getTrackbarPos("skip_frame", "gesture recognition"), 1)
-            start_recognizing_time_threshold = cv2.getTrackbarPos("start_time", "gesture recognition")
-            stop_recognizing_time_threshold = cv2.getTrackbarPos("stop_time", "gesture recognition")
-            multi_action_time_threshold = cv2.getTrackbarPos("multi_time", "gesture recognition")
-            multi_action_cooltime = cv2.getTrackbarPos("multi_cooltime", "gesture recognition") / 10
+            same_hand_threshold = (
+                cv2.getTrackbarPos("same_hand", "gesture recognition") * 100
+            )
+            landmark_skip_frame = max(
+                cv2.getTrackbarPos("skip_frame", "gesture recognition"), 1
+            )
+            start_recognizing_time_threshold = cv2.getTrackbarPos(
+                "start_time", "gesture recognition"
+            )
+            stop_recognizing_time_threshold = cv2.getTrackbarPos(
+                "stop_time", "gesture recognition"
+            )
+            multi_action_time_threshold = cv2.getTrackbarPos(
+                "multi_time", "gesture recognition"
+            )
+            multi_action_cooltime = (
+                cv2.getTrackbarPos("multi_cooltime", "gesture recognition") / 10
+            )
 
             ok, vid_frame = hand_tracker.cap.read()
             if not ok:
@@ -81,22 +103,29 @@ def run(hand_tracker, model):
             hand_tracker.frame_size = min(h, w)
             dx = (w - hand_tracker.frame_size) // 2
             dy = (h - hand_tracker.frame_size) // 2
-            video_frame = vid_frame[dy : dy + hand_tracker.frame_size, dx : dx + hand_tracker.frame_size]
+            video_frame = vid_frame[
+                dy : dy + hand_tracker.frame_size, dx : dx + hand_tracker.frame_size
+            ]
         else:
             # Padding on the small side to get a square shape
             hand_tracker.frame_size = max(h, w)
             pad_h = int((hand_tracker.frame_size - h) / 2)
             pad_w = int((hand_tracker.frame_size - w) / 2)
-            video_frame = cv2.copyMakeBorder(vid_frame, pad_h, pad_h, pad_w, pad_w, cv2.BORDER_CONSTANT)
+            video_frame = cv2.copyMakeBorder(
+                vid_frame, pad_h, pad_h, pad_w, pad_w, cv2.BORDER_CONSTANT
+            )
 
         # Resize image to NN square input shape
-        frame_nn = cv2.resize(video_frame, (hand_tracker.pd_w, hand_tracker.pd_h), interpolation=cv2.INTER_AREA)
+        frame_nn = cv2.resize(
+            video_frame,
+            (hand_tracker.pd_w, hand_tracker.pd_h),
+            interpolation=cv2.INTER_AREA,
+        )
 
         # Transpose hxwx3 -> 1x3xhxw
         frame_nn = np.transpose(frame_nn, (2, 0, 1))[None,]
 
         annotated_frame = video_frame.copy()
-
 
         inference_start = time.time_ns() // 1000000
         # Get palm detection
@@ -111,14 +140,18 @@ def run(hand_tracker, model):
         # Hand landmarks
         if hand_tracker.use_lm:
             for i, r in enumerate(hand_tracker.regions):
-                frame_nn = mpu.warp_rect_img(r.rect_points, video_frame, hand_tracker.lm_w, hand_tracker.lm_h)
+                frame_nn = mpu.warp_rect_img(
+                    r.rect_points, video_frame, hand_tracker.lm_w, hand_tracker.lm_h
+                )
                 # Transpose hxwx3 -> 1x3xhxw
                 frame_nn = np.transpose(frame_nn, (2, 0, 1))[None,]
 
                 # Get hand landmarks
                 lm_rtrip_time = now()
                 lm_infer_request = hand_tracker.lm_exec_model.create_infer_request()
-                inference = lm_infer_request.infer(inputs={hand_tracker.lm_input_blob: frame_nn})
+                inference = lm_infer_request.infer(
+                    inputs={hand_tracker.lm_input_blob: frame_nn}
+                )
                 glob_lm_rtrip_time += now() - lm_rtrip_time
                 nb_lm_inferences += 1
                 hand_tracker.lm_postprocess(r, inference)
@@ -142,10 +175,13 @@ def run(hand_tracker, model):
                         # Convert right hand coordinations for rendering
                         src = np.array([(0, 0), (1, 0), (1, 1)], dtype=np.float32)
                         dst = np.array(
-                            [(x, y) for x, y in result.rect_points[1:]], dtype=np.float32
+                            [(x, y) for x, y in result.rect_points[1:]],
+                            dtype=np.float32,
                         )  # region.rect_points[0] is left bottom point !
                         mat = cv2.getAffineTransform(src, dst)
-                        lm_xy = np.expand_dims(np.array([(l[0], l[1]) for l in result.landmarks]), axis=0)
+                        lm_xy = np.expand_dims(
+                            np.array([(l[0], l[1]) for l in result.landmarks]), axis=0
+                        )
                         lm_xy = np.squeeze(cv2.transform(lm_xy, mat)).astype(np.int32)
                         right_hands.append(lm_xy)
                         recognized_hands.append(lm_xy)
@@ -178,12 +214,17 @@ def run(hand_tracker, model):
                         gesture_num += 1
 
                         probability = max(res)
-                        gesture_idx = res.index(probability) if probability >= 0.9 else 5
+                        gesture_idx = (
+                            res.index(probability) if probability >= 0.9 else 5
+                        )
                         text_a = f"{gestures[gesture_idx]} {int(probability*100)}%"
 
                         if state["gesture"] == gesture_idx:
                             # start multi action when user hold one gesture enough time
-                            if time.time() - state["start_time"] > multi_action_time_threshold:
+                            if (
+                                time.time() - state["start_time"]
+                                > multi_action_time_threshold
+                            ):
                                 if state["multi_action_start_time"] == -1:
                                     state["multi_action_start_time"] = time.time()
                                 if (
@@ -191,11 +232,15 @@ def run(hand_tracker, model):
                                     > multi_action_cooltime * state["multi_action_cnt"]
                                 ):
                                     state["multi_action_cnt"] += 1
-                                    state["prev_action"] = utils.perform_action(state["prev_action"][0], infinite=True)
+                                    state["prev_action"] = utils.perform_action(
+                                        state["prev_action"][0], infinite=True
+                                    )
 
                             elif time.time() - state["start_time"] > time_threshold:
                                 if gestures[state["prev_gesture"]] == "default":
-                                    state["prev_action"] = utils.perform_action(gestures[state["gesture"]])
+                                    state["prev_action"] = utils.perform_action(
+                                        gestures[state["gesture"]]
+                                    )
                                 state["prev_gesture"] = gesture_idx
                         else:
                             state = {
@@ -210,7 +255,11 @@ def run(hand_tracker, model):
                         # stop recognizing
                         recognized_hand = []
                         text_a = ""
-                        if recognizing and time.time() - last_hand_time > stop_recognizing_time_threshold:
+                        if (
+                            recognizing
+                            and time.time() - last_hand_time
+                            > stop_recognizing_time_threshold
+                        ):
                             print("stop recognizing")
                             utils.play_audio_file("Stop")
                             recognizing = False
@@ -237,18 +286,26 @@ def run(hand_tracker, model):
                             )
                         )
                         probability = max(res)
-                        gesture_idx = res.index(probability) if probability >= 0.9 else 5
+                        gesture_idx = (
+                            res.index(probability) if probability >= 0.9 else 5
+                        )
                         if gestures[gesture_idx] == "default":
                             wake_up_hands.append(right_hand)
                     checked = [0 for _ in range(len(wake_up_hands))]
                     for i, [prev_pos, start_time] in enumerate(wake_up_state):
-                        hand_idx, prev_pos = utils.same_hand_tracking(wake_up_hands, prev_pos, same_hand_threshold)
+                        hand_idx, prev_pos = utils.same_hand_tracking(
+                            wake_up_hands, prev_pos, same_hand_threshold
+                        )
                         if hand_idx == -1:
                             delete_list = [i] + delete_list
-                        elif time.time() - start_time > start_recognizing_time_threshold:
+                        elif (
+                            time.time() - start_time > start_recognizing_time_threshold
+                        ):
                             # when there are default gestured hand for enough time, start recognizing and track the hand
                             print("start recognizing")
-                            recognized_hand_prev_pos = utils.get_center(wake_up_hands[hand_idx])
+                            recognized_hand_prev_pos = utils.get_center(
+                                wake_up_hands[hand_idx]
+                            )
                             utils.play_audio_file("Start")
                             recognizing = True
                             wake_up_state = []
@@ -263,13 +320,18 @@ def run(hand_tracker, model):
 
                         for i in range(len(checked)):
                             if checked[i] == 0:
-                                wake_up_state.append([utils.get_center(wake_up_hands[i]), time.time()])
+                                wake_up_state.append(
+                                    [utils.get_center(wake_up_hands[i]), time.time()]
+                                )
             else:
                 # stop recognizing
                 recognized_hands = []
                 recognized_hand = []
                 text_a = ""
-                if recognizing and time.time() - last_hand_time > stop_recognizing_time_threshold:
+                if (
+                    recognizing
+                    and time.time() - last_hand_time > stop_recognizing_time_threshold
+                ):
                     print("stop recognizing")
                     utils.play_audio_file("Stop")
                     recognizing = False
@@ -306,7 +368,10 @@ def run(hand_tracker, model):
             cv2.putText(
                 annotated_frame,
                 state["prev_action"][0],
-                (annotated_frame.shape[1] // 2 + 250, annotated_frame.shape[0] // 2 - 100),
+                (
+                    annotated_frame.shape[1] // 2 + 250,
+                    annotated_frame.shape[0] // 2 - 100,
+                ),
                 cv2.FONT_HERSHEY_SIMPLEX,
                 2,
                 (255, 0, 0),
@@ -342,5 +407,9 @@ def run(hand_tracker, model):
     print("average inference time: ", inference_time_sum / inference_num, "ms")
     print(f"# palm detection inferences : {nb_pd_inferences}")
     print(f"# hand landmark inferences  : {nb_lm_inferences}")
-    print(f"Palm detection round trip   : {glob_pd_rtrip_time/nb_pd_inferences*1000:.1f} ms")
-    print(f"Hand landmark round trip    : {glob_lm_rtrip_time/nb_lm_inferences*1000:.1f} ms")
+    print(
+        f"Palm detection round trip   : {glob_pd_rtrip_time/nb_pd_inferences*1000:.1f} ms"
+    )
+    print(
+        f"Hand landmark round trip    : {glob_lm_rtrip_time/nb_lm_inferences*1000:.1f} ms"
+    )
