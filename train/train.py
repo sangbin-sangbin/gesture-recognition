@@ -67,7 +67,7 @@ def print_progress_bar(iteration, total, time_per_step, prefix="", suffix="", le
     )
 
 
-total_epochs = 50
+total_epochs = 10
 total_steps = len(train_dataset)
 
 prev_loss = float("inf")

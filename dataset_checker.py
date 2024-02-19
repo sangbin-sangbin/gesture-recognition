@@ -15,13 +15,15 @@ class Model(nn.Module):
         self.fc1 = nn.Linear(input_size, hidden_dim1)
         self.fc2 = nn.Linear(hidden_dim1, hidden_dim2)
         self.fc3 = nn.Linear(hidden_dim2, target_size)
-        self.softmax = nn.Softmax(dim=0)
+        self.dropout1 = nn.Dropout(0.2)
+        self.dropout2 = nn.Dropout(0.2)
+        self.softmax = nn.Softmax(dim = 0)
+        self.relu = nn.ReLU()
 
     def forward(self, landmarks):
-        x = self.fc1(landmarks)
-        x = self.fc2(x)
-        x = self.fc3(x)
-        res = self.softmax(x)
+        x = self.dropout1(self.relu(self.fc1(landmarks)))
+        x = self.dropout2(self.relu(self.fc2(x)))
+        res = self.softmax(self.fc3(x))
         return res
 
 
@@ -59,7 +61,7 @@ for data_dir in file_list_json:
 
     model = Model(INPUT_SIZE, HIDDEN_DIM1, HIDDEN_DIM2, TARGET_SIZE)
     loss_function = nn.CrossEntropyLoss()
-    optimizer = optim.SGD(model.parameters(), lr=0.01)
+    optimizer = optim.SGD(model.parameters(), lr=0.001)
 
     total_epochs = 10
     total_steps = len(train_dataset)
@@ -132,7 +134,8 @@ for data_dir in file_list_json:
             )
         )
         if data["gesture"] == res.index(max(res)):
-            good += 1
+            if data["gesture"] != 7:
+                good += 1
         else:
             bad += 1
     accuracy = good / (good + bad) * 100
