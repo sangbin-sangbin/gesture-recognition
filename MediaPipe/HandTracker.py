@@ -1,9 +1,11 @@
-import numpy as np
-import cv2
 import os
 import re
 import time
+
+import cv2
+import numpy as np
 import openvino.runtime as ov
+
 from MediaPipe import mediapipe_utils as mpu
 from MediaPipe.FPS import FPS, now
 

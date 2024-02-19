@@ -1,7 +1,8 @@
-import subprocess
-import pygame
-import time
 import os
+import subprocess
+import time
+
+import pygame
 
 
 def get_center(landmark):

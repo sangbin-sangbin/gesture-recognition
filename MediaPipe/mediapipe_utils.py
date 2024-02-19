@@ -1,8 +1,9 @@
+from collections import namedtuple
+from math import atan2, ceil, cos, exp, floor, pi, sin, sqrt
+
 import cv2
 import numpy as np
-from collections import namedtuple
 import scipy
-from math import ceil, sqrt, exp, pi, floor, sin, cos, atan2
 
 
 class HandRegion:

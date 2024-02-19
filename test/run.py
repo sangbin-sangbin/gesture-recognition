@@ -1,11 +1,12 @@
-import cv2
-import time
-import torch
+import os
 import subprocess
+import sys
+import time
+
+import cv2
 import numpy as np
 import test_utils as utils
-
-import sys, os
+import torch
 
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 

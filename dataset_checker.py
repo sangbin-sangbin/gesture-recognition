@@ -1,13 +1,15 @@
+import glob
+import json
+import random
+import shutil
+import time
+from datetime import timedelta
+
 import torch
 import torch.nn as nn
 import torch.optim as optim
-import json
-import random
-import time
-from datetime import timedelta
-import glob
-import shutil
-from model.model import Model
+
+from Models.Model import Model
 
 test_data_dir = "./dataset/test_data.json"
 data_dir = "./dataset/tmp/*"

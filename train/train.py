@@ -1,15 +1,18 @@
+import glob
+import json
+import os
+import random
+import sys
+import time
+from datetime import timedelta
+
+sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
+
 import torch
 import torch.nn as nn
 import torch.optim as optim
-import json
-import random
-import time
-from datetime import timedelta
-import glob
-import os
 
-from model.model import Model
-
+from Models.Model import Model
 
 model = Model()
 loss_function = nn.CrossEntropyLoss()

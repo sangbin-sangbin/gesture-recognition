@@ -1,15 +1,16 @@
+import datetime as dt
+import json
+import os
+import sys
+
 import cv2
 import numpy as np
-import json
-import datetime as dt
-
-import sys, os
 
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 
 from MediaPipe import mediapipe_utils as mpu
-from MediaPipe.HandTracker import HandTracker
 from MediaPipe.FPS import FPS, now
+from MediaPipe.HandTracker import HandTracker
 
 
 def run(hand_tracker):

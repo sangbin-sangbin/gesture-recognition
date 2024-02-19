@@ -1,16 +1,17 @@
+import json
+import os
+import sys
+
 import cv2
 import torch
-import json
-
-import sys, os
 
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 
-from MediaPipe.HandTracker import HandTracker
 import test_utils as utils
 from run import run
 
-from model.model import Model
+from MediaPipe.HandTracker import HandTracker
+from Models.Model import Model
 
 
 def initialize_model():
