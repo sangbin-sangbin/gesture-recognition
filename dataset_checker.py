@@ -37,7 +37,7 @@ for data_dir in file_list_json:
     dataset = json.load(open(data_dir))
     random.shuffle(dataset)
     train_dataset = dataset[: int(len(dataset) * 0.9)]
-    val_dataset = dataset[int(len(dataset) * 0.9) :]
+    val_dataset = dataset[int(len(dataset) * 0.9):]
 
     model = Model()
     loss_function = nn.CrossEntropyLoss()

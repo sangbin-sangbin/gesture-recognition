@@ -1,8 +1,14 @@
-import torch.nn as nn
+from torch import nn
 
 
 class Model(nn.Module):
-    def __init__(self, input_size=42, hidden_dim1=32, hidden_dim2=32, target_size=8):
+    def __init__(
+        self,
+        input_size=42,
+        hidden_dim1=32,
+        hidden_dim2=32,
+        target_size=8
+    ):
         super(Model, self).__init__()
         self.target_size = target_size
 

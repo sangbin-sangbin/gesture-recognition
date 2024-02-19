@@ -1,11 +1,8 @@
 import json
 import os
-import sys
 
 import cv2
 import torch
-
-sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 
 import test_utils as utils
 from run import run
@@ -68,7 +65,7 @@ def create_trackbars(parameter):
     )
 
 
-def save_current_parameters(parameters_dir):
+def save_current_parameters(parameters_dir, parameter):
     res = input("want to save current parameters? [ y / n ]\n>>> ")
     if res == "y":
         with open(parameters_dir, "w") as f:
@@ -81,10 +78,18 @@ if __name__ == "__main__":
 
     # Construct the path to palm_detection.xml
     pd_model_path = os.path.join(
-        current_dir, "..", "MediaPipe", "mediapipe_models", "palm_detection_FP16.xml"
+        current_dir,
+        "..",
+        "MediaPipe",
+        "mediapipe_models",
+        "palm_detection_FP16.xml"
     )
     lm_model_path = os.path.join(
-        current_dir, "..", "MediaPipe", "mediapipe_models", "hand_landmark_FP16.xml"
+        current_dir,
+        "..",
+        "MediaPipe",
+        "mediapipe_models",
+        "hand_landmark_FP16.xml"
     )
 
     ht = HandTracker(
@@ -113,4 +118,4 @@ if __name__ == "__main__":
     ht.cap.release()
     cv2.destroyAllWindows()
 
-    save_current_parameters(parameters_dir)
+    save_current_parameters(parameters_dir, parameter)

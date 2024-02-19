@@ -1,14 +1,10 @@
-import os
 import subprocess
-import sys
 import time
 
 import cv2
 import numpy as np
 import test_utils as utils
 import torch
-
-sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 
 from MediaPipe import mediapipe_utils as mpu
 from MediaPipe.FPS import FPS, now
@@ -41,6 +37,7 @@ def run(hand_tracker, model):
     subprocess.run(
         "adb connect 192.168.1.103:5555; adb root; adb connect 192.168.1.103:5555",
         shell=True,
+        check=False,
     )
 
     landmark_num = 0
@@ -72,7 +69,9 @@ def run(hand_tracker, model):
             vid_frame = hand_tracker.img
         else:
             # require more time than time_threshold to recognize it as an gesture
-            time_threshold = cv2.getTrackbarPos("time", "gesture recognition") / 100
+            time_threshold = (
+                cv2.getTrackbarPos("time", "gesture recognition") / 100
+            )
             # distance between this frame's hand and last frame's recognized hand should be smaller than same_hand_threshold to regard them as same hand
             same_hand_threshold = (
                 cv2.getTrackbarPos("same_hand", "gesture recognition") * 100
@@ -105,7 +104,8 @@ def run(hand_tracker, model):
             dx = (w - hand_tracker.frame_size) // 2
             dy = (h - hand_tracker.frame_size) // 2
             video_frame = vid_frame[
-                dy : dy + hand_tracker.frame_size, dx : dx + hand_tracker.frame_size
+                dy: dy + hand_tracker.frame_size,
+                dx: dx + hand_tracker.frame_size
             ]
         else:
             # Padding on the small side to get a square shape
@@ -132,7 +132,9 @@ def run(hand_tracker, model):
         # Get palm detection
         pd_rtrip_time = now()
         infer_request = hand_tracker.pd_exec_model.create_infer_request()
-        inference = infer_request.infer(inputs={hand_tracker.pd_input_blob: frame_nn})
+        inference = infer_request.infer(
+            inputs={hand_tracker.pd_input_blob: frame_nn}
+        )
         glob_pd_rtrip_time += now() - pd_rtrip_time
         hand_tracker.pd_postprocess(inference)
         hand_tracker.pd_render(annotated_frame)
@@ -174,14 +176,18 @@ def run(hand_tracker, model):
                 for result in results:
                     if True or result.handedness > 0.5:  # Right Hand
                         # Convert right hand coordinations for rendering
-                        src = np.array([(0, 0), (1, 0), (1, 1)], dtype=np.float32)
+                        src = np.array(
+                            [(0, 0), (1, 0), (1, 1)],
+                            dtype=np.float32
+                        )
                         dst = np.array(
                             [(x, y) for x, y in result.rect_points[1:]],
                             dtype=np.float32,
                         )  # region.rect_points[0] is left bottom point !
                         mat = cv2.getAffineTransform(src, dst)
                         lm_xy = np.expand_dims(
-                            np.array([(l[0], l[1]) for l in result.landmarks]), axis=0
+                            np.array([(l[0], l[1]) for l in result.landmarks]),
+                            axis=0
                         )
                         lm_xy = np.squeeze(cv2.transform(lm_xy, mat)).astype(np.int32)
                         right_hands.append(lm_xy)

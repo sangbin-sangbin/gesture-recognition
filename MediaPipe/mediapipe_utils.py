@@ -1,5 +1,5 @@
 from collections import namedtuple
-from math import atan2, ceil, cos, exp, floor, pi, sin, sqrt
+from math import atan2, ceil, cos, floor, pi, sin, sqrt
 
 import cv2
 import numpy as np
@@ -63,7 +63,10 @@ def generate_anchors(options):
             and options.strides[last_same_stride_layer] == options.strides[layer_id]
         ):
             scale = calculate_scale(
-                options.min_scale, options.max_scale, last_same_stride_layer, n_strides
+                options.min_scale,
+                options.max_scale,
+                last_same_stride_layer,
+                n_strides
             )
             if last_same_stride_layer == 0 and options.reduce_boxes_in_lowest_layer:
                 # For first layer, it can be specified to use predefined anchors.
@@ -175,9 +178,7 @@ def decode_bboxes(score_thresh, scores, bboxes, anchors):
     # cy = cy * anchor.h / hi + anchor.y_center
     # lx = lx * anchor.w / wi + anchor.x_center
     # ly = ly * anchor.h / hi + anchor.y_center
-    det_bboxes = det_bboxes * np.tile(det_anchors[:, 2:4], 9) / scale + np.tile(
-        det_anchors[:, 0:2], 9
-    )
+    det_bboxes = det_bboxes * np.tile(det_anchors[:, 2:4], 9) / scale + np.tile(det_anchors[:, 0:2], 9)
     # w = w * anchor.w / wi (in the prvious line, we add anchor.x_center and anchor.y_center to w and h, we need to substract them now)
     # h = h * anchor.h / hi
     det_bboxes[:, 2:4] = det_bboxes[:, 2:4] - det_anchors[:, 0:2]
@@ -263,7 +264,6 @@ def detections_to_rect(regions):
 def rotated_rect_to_points(cx, cy, w, h, rotation, wi, hi):
     b = cos(rotation) * 0.5
     a = sin(rotation) * 0.5
-    points = []
     p0x = cx - a * h - b * w
     p0y = cy + b * h - a * w
     p1x = cx + a * h - b * w
@@ -308,12 +308,8 @@ def rect_transformation(regions, w, h):
             region.rect_x_center_a = (region.rect_x_center + width * shift_x) * w
             region.rect_y_center_a = (region.rect_y_center + height * shift_y) * h
         else:
-            x_shift = w * width * shift_x * cos(rotation) - h * height * shift_y * sin(
-                rotation
-            )  # / w
-            y_shift = w * width * shift_x * sin(rotation) + h * height * shift_y * cos(
-                rotation
-            )  # / h
+            x_shift = w * width * shift_x * cos(rotation) - h * height * shift_y * sin(rotation)  # / w
+            y_shift = w * width * shift_x * sin(rotation) + h * height * shift_y * cos(rotation)  # / h
             region.rect_x_center_a = region.rect_x_center * w + x_shift
             region.rect_y_center_a = region.rect_y_center * h + y_shift
 

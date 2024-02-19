@@ -42,4 +42,12 @@ class FPS:  # To measure the number of frame per second
         color=(0, 255, 0),
         thickness=2,
     ):
-        cv2.putText(win, f"FPS={self.get():.2f}", orig, font, size, color, thickness)
+        cv2.putText(
+            win,
+            f"FPS={self.get():.2f}",
+            orig,
+            font,
+            size,
+            color,
+            thickness
+        )

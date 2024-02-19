@@ -101,6 +101,8 @@ class HandTracker:
             self.show_rot_rect = False
             self.show_scores = False
 
+        self.landmarks = []
+
     # Getter method
     def __getattribute__(self, name):
         return object.__getattribute__(self, name)
@@ -220,10 +222,17 @@ class HandTracker:
             self.pd_score_thresh, scores, bboxes, self.anchors
         )
         # Non maximum suppression
-        self.regions = mpu.non_max_suppression(self.regions, self.pd_nms_thresh)
+        self.regions = mpu.non_max_suppression(
+            self.regions,
+            self.pd_nms_thresh
+        )
         if self.use_lm:
             mpu.detections_to_rect(self.regions)
-            mpu.rect_transformation(self.regions, self.frame_size, self.frame_size)
+            mpu.rect_transformation(
+                self.regions,
+                self.frame_size,
+                self.frame_size
+            )
 
     def pd_render(self, frame):
         for r in self.regions:
@@ -272,7 +281,7 @@ class HandTracker:
         lm = []
         for i in range(int(len(lm_raw) / 3)):
             # x,y,z -> x/w,y/h,z/w (here h=w)
-            lm.append(lm_raw[3 * i : 3 * (i + 1)] / self.lm_w)
+            lm.append(lm_raw[3 * i: 3 * (i + 1)] / self.lm_w)
         region.landmarks = lm
         self.lanmark_list = [
             [float(coords[0]), float(coords[1])] for coords in region.landmarks
@@ -450,7 +459,9 @@ class HandTracker:
             # Get palm detection
             pd_rtrip_time = now()
             pd_infer_request = self.pd_exec_model.create_infer_request()
-            inference = pd_infer_request.infer(inputs={self.pd_input_blob: frame_nn})
+            inference = pd_infer_request.infer(
+                inputs={self.pd_input_blob: frame_nn}
+            )
             glob_pd_rtrip_time += now() - pd_rtrip_time
             self.pd_postprocess(inference)
             self.pd_render(annotated_frame)
@@ -477,9 +488,16 @@ class HandTracker:
                     self.lm_render(annotated_frame, r)
 
             if not self.crop:
-                annotated_frame = annotated_frame[pad_h : pad_h + h, pad_w : pad_w + w]
+                annotated_frame = annotated_frame[
+                    pad_h: pad_h + h,
+                    pad_w: pad_w + w
+                ]
 
-            self.fps.display(annotated_frame, orig=(50, 50), color=(240, 180, 100))
+            self.fps.display(
+                annotated_frame,
+                orig=(50, 50),
+                color=(240, 180, 100)
+            )
             cv2.imshow("video", annotated_frame)
 
             key = cv2.waitKey(1)
@@ -500,15 +518,3 @@ class HandTracker:
                 self.show_handedness = not self.show_handedness
             elif key == ord("6"):
                 self.show_scores = not self.show_scores
-            elif key == ord("7"):
-                self.show_gesture = not self.show_gesture
-
-        # Print some stats
-        print(f"# palm detection inferences : {nb_pd_inferences}")
-        print(f"# hand landmark inferences  : {nb_lm_inferences}")
-        print(
-            f"Palm detection round trip   : {glob_pd_rtrip_time/nb_pd_inferences*1000:.1f} ms"
-        )
-        print(
-            f"Hand landmark round trip    : {glob_lm_rtrip_time/nb_lm_inferences*1000:.1f} ms"
-        )

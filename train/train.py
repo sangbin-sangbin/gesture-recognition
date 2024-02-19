@@ -5,14 +5,13 @@ import random
 import sys
 import time
 from datetime import timedelta
-
-sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
-
 import torch
-import torch.nn as nn
-import torch.optim as optim
+from torch import nn
+from torch import optim
 
 from Models.Model import Model
+
+sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 
 model = Model()
 loss_function = nn.CrossEntropyLoss()
@@ -34,8 +33,8 @@ for dataset_dir in file_list_json:
 print(len(dataset), " data")
 random.shuffle(dataset)
 train_dataset = dataset[: int(len(dataset) * 0.8)]
-val_dataset = dataset[int(len(dataset) * 0.8) : int(len(dataset) * 0.9)]
-test_dataset = dataset[int(len(dataset) * 0.9) :]
+val_dataset = dataset[int(len(dataset) * 0.8): int(len(dataset) * 0.9)]
+test_dataset = dataset[int(len(dataset) * 0.9):]
 
 
 def print_progress_bar(
@@ -65,7 +64,8 @@ for epoch in range(total_epochs):
         model.zero_grad()
 
         landmarks = torch.tensor(
-            [element for row in data["landmarks"] for element in row], dtype=torch.float
+            [element for row in data["landmarks"] for element in row],
+            dtype=torch.float
         )
 
         ans = [0 for _ in range(model.target_size)]
@@ -95,7 +95,8 @@ for epoch in range(total_epochs):
     val_loss = 0.0
     for data in val_dataset:
         landmarks = torch.tensor(
-            [element for row in data["landmarks"] for element in row], dtype=torch.float
+            [element for row in data["landmarks"] for element in row],
+            dtype=torch.float
         )
         ans = [0 for _ in range(model.target_size)]
         ans[data["gesture"]] = 1
@@ -104,15 +105,8 @@ for epoch in range(total_epochs):
         loss = loss_function(res, ans)
         val_loss += loss.item()  # Accumulate loss value
 
-    average_loss = val_loss / len(val_dataset)  # Calculate average loss for the epoch
+    average_loss = val_loss / len(val_dataset)  # Calculate average loss
     print(f"\nValidation Loss: {average_loss:.4f}\n")
-
-    """
-    if prev_loss < average_loss:
-        tolerance -= 1
-        if tolerance == 0:
-            break
-    """
 
     prev_loss = average_loss
 
@@ -133,6 +127,6 @@ for data in test_dataset:
         good += 1
     else:
         bad += 1
-print(f"Accuracy: { good / (good + bad) * 100}")
+print(f"Accuracy: {good / (good + bad) * 100}")
 
 torch.save(model.state_dict(), "../model.pt")
