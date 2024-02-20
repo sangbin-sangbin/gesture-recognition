@@ -1,26 +1,25 @@
 import subprocess
 import time
+import sys
+import os
 
 import cv2
 import numpy as np
-import test_utils as utils
 import torch
 
-from MediaPipe import mediapipe_utils as mpu
-from MediaPipe.FPS import FPS, now
+sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 
+from openvino_utils import mediapipe_utils as mpu
+from openvino_utils.fps import FPS, now
+import utils
+import yaml
+
+
+with open('../config.yaml', 'r') as f:
+    config = yaml.safe_load(f)
 
 def run(hand_tracker, model):
-    gestures = [
-        "default",
-        "left",
-        "right",
-        "select",
-        "exit",
-        "shortcut1",
-        "shortcut2",
-        "none",
-    ]
+    gestures = config["gestures"]
     gesture_num = 0
 
     state = {
@@ -49,6 +48,8 @@ def run(hand_tracker, model):
     text_a = ""
 
     recognizing = False
+    recognized_hand_prev_pos = [-999, -999]
+
     last_hand_time = time.time()
 
     wake_up_state = []
@@ -174,7 +175,7 @@ def run(hand_tracker, model):
             recognized_hands = []
             if results:
                 for result in results:
-                    if True or result.handedness > 0.5:  # Right Hand
+                    if result.handedness > 0.5:  # Right Hand
                         # Convert right hand coordinations for rendering
                         src = np.array(
                             [(0, 0), (1, 0), (1, 1)],
@@ -386,7 +387,7 @@ def run(hand_tracker, model):
             )
 
         if not hand_tracker.crop:
-            annotated_frame = annotated_frame[pad_h : pad_h + h, pad_w : pad_w + w]
+            annotated_frame = annotated_frame[pad_h: pad_h + h, pad_w: pad_w + w]
 
         hand_tracker.fps.display(annotated_frame, orig=(50, 50), color=(240, 180, 100))
         cv2.imshow("gesture recognition", annotated_frame)

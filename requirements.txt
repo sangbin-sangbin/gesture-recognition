@@ -1,1 +1,5 @@
 opencv-python >= 4.5.5.62
+scipy
+openvino
+torch
+pygame

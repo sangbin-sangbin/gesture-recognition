@@ -1,0 +1,14 @@
+
+gestures: 
+  - "default"
+  - "left"
+  - "right"
+  - "select"
+  - "exit"
+  - "shortcut1"
+  - "shortcut2"
+  - "custom"
+
+custom_gesture_index: 1
+
+device: "CPU" #"GPU"

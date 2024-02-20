@@ -4,7 +4,8 @@
 
 This project is gesture recognizer for controlling car console.
 
-There are four main parts: Model Conversion, Data Collection, Train, and Test.
+To recognize hand landmarks, [MediaPipe](https://developers.google.com/mediapipe/solutions/vision/hand_landmarker) is used.
+
 
 ## Prerequisites
 
@@ -25,6 +26,9 @@ There are four main parts: Model Conversion, Data Collection, Train, and Test.
 
 ## Data Collection
 Run getdata/getdata.py
+```
+python getdata.py
+```
 
 ![image](images/getdata1.png)
 ![image](images/getdata2.png)
@@ -35,10 +39,16 @@ Run getdata/getdata.py
 
 ## Train
 Run train/train.py
+```
+python train.py
+```
 * Train, evaluate, and store models with all the data in *dataset/used*
 
 ## Test
 Run test/test.py
+```
+python test.py
+```
 
 ### How to use
 ![image](images/how_to_use.png)

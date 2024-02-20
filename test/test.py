@@ -1,22 +1,31 @@
 import json
 import os
+import sys
 
 import cv2
 import torch
 
-import test_utils as utils
 from run import run
 
-from MediaPipe.HandTracker import HandTracker
-from Models.Model import Model
+sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 
+from openvino_utils.hand_tracker import HandTracker
+from models.model import Model
+import utils
+
+from multiprocessing import Process
+import yaml
+
+with open('../config.yaml', 'r') as f:
+    config = yaml.safe_load(f)
 
 def initialize_model():
     model = Model()
-    model.load_state_dict(torch.load("../model.pt"))
-
+    if os.path.exists("../models/model.pt"):
+        model.load_state_dict(torch.load("../models/model.pt"))
+    else:
+        model.load_state_dict(torch.load("../models/base_model.pt"))
     return model
-
 
 def load_parameters(parameters_dir):
     res = "y"  # input("want to use saved parameters? [ y / n ]\n>>> ")
@@ -32,9 +41,7 @@ def load_parameters(parameters_dir):
             "multi_time": 1,
             "multi_cooltime": 2,
         }
-
     return parameter
-
 
 def create_trackbars(parameter):
     cv2.namedWindow("gesture recognition")
@@ -72,7 +79,12 @@ def save_current_parameters(parameters_dir, parameter):
             json.dump(parameter, f)
 
 
-if __name__ == "__main__":
+if __name__ == "__main__":    
+    os.environ["KMP_DUPLICATE_LIB_OK"]="TRUE" #This could cause error
+    pid = os.getpid() 
+    cpu_process = Process(target=utils.monitor, args=(config["device"], pid))
+    cpu_process.start()
+
     # Get the directory of test.py
     current_dir = os.path.dirname(os.path.relpath(__file__))
 
@@ -80,14 +92,14 @@ if __name__ == "__main__":
     pd_model_path = os.path.join(
         current_dir,
         "..",
-        "MediaPipe",
+        "openvino_utils",
         "mediapipe_models",
         "palm_detection_FP16.xml"
     )
     lm_model_path = os.path.join(
         current_dir,
         "..",
-        "MediaPipe",
+        "openvino_utils",
         "mediapipe_models",
         "hand_landmark_FP16.xml"
     )
@@ -95,12 +107,12 @@ if __name__ == "__main__":
     ht = HandTracker(
         input_src="0",
         pd_xml=pd_model_path,
-        pd_device="CPU",
+        pd_device=config["device"],
         pd_score_thresh=0.6,
         pd_nms_thresh=0.3,
         use_lm=True,
         lm_xml=lm_model_path,
-        lm_device="CPU",
+        lm_device=config["device"],
         lm_score_threshold=0.6,
         crop=False,
         is_getdata=False,
