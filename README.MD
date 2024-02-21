@@ -53,9 +53,9 @@ The _convert_models.sh_ converts the tflite models in tensorflow (.pb), then con
 
 ## Data Collection
 
-Run getdata/getdata.py
+Run collect_data/collect_gesture_data.py
 ```
-python getdata.py
+python collect_gesture_data.py
 ```
 
 ![image](images/getdata1.png)
@@ -98,3 +98,12 @@ python test.py
 - Stop_time: stop showing recognized hand for ‘stop_time’ second to stop recognizing
 - Multi_time: hold one gesture for ‘multi_time’ second to start multi action
 - Multi_cooltime: perform action at ‘multi_cooltime’ / 10 second intervals
+
+## Train custom gesture
+
+- Run collect_data/collect_custom_gesture_data.py
+  - Should collect at least 500 data
+- Run train/train_custom.py
+  - If collected custom data is hard to distinguish, new model will not be saved. Then you should collect custom data again.
+- Run test/test.py to check your custom gesture
+  - You can perform custom action by making gesture from 'default' to 'custom'.

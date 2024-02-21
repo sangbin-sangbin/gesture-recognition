@@ -202,16 +202,18 @@ def run(hand_tracker, model, cv2_util):
 def get_data(hand_tracker, cv2_util):
     model = initialize_model()
 
-    dataset = run(hand_tracker, model, cv2_util)
-
     # Construct the path to dataset/tmp
     dataset_dir = os.path.join("..", "dataset")
 
-    # Check if the directory exists, if not, create it
-    if not os.path.exists(dataset_dir):
-        os.makedirs(dataset_dir)
+    min_dataset_len = 500
 
-    print(len(dataset), "data generated")
+    while True:
+        dataset = run(hand_tracker, model, cv2_util)
+        dataset_len = len(dataset)
+        print(len(dataset), "data generated")
+        if dataset_len >= min_dataset_len:
+            break
+        print(f"You should collect data more than {min_dataset_len}. Please collect your custom data again.")
 
     save = input("want to save? Previous custom gesture will be removed. [ y / n ]\n>>> ")
     if save == "y":
