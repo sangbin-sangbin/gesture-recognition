@@ -28,7 +28,7 @@ if __name__ == "__main__":
     file_list_json = [file for file in file_list if file.endswith(".json")]
 
     dataset = []
-    for dataset_dir in file_list_json:
+    for dataset_dir in file_list_json: 
         tmp = json.load(open(dataset_dir))
         dataset += tmp
     print(len(dataset), " data")
