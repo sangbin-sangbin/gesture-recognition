@@ -1,18 +1,16 @@
 import os
 import re
-import time
 import sys
+import time
 
 import cv2
 import numpy as np
 import openvino.runtime as ov
+import yaml
 
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 
 from openvino_utils import mediapipe_utils as mpu
-from openvino_utils.fps import FPS, now
-from utils import play_audio_file
-import yaml
 
 with open('../config.yaml', 'r') as f:
     config = yaml.safe_load(f)
@@ -26,21 +24,14 @@ class HandTracker:
         pd_device="CPU",
         pd_score_thresh=0.6,
         pd_nms_thresh=0.3,
-        use_lm=True,
         lm_xml="mediapipe_models/hand_landmark_FP16.xml",
         lm_device="CPU",
         lm_score_threshold=0.6,
-        crop=False,
-        is_getdata=False,
     ):
-
         self.pd_score_thresh = pd_score_thresh
         self.pd_nms_thresh = pd_nms_thresh
-        self.use_lm = use_lm
         self.lm_score_threshold = lm_score_threshold
-        self.crop = crop
 
-        self.is_getdata = is_getdata
         self.dataset = []
         self.state = "break"
         self.start_time = time.time()
@@ -86,22 +77,6 @@ class HandTracker:
         # Load Openvino models
         self.load_models(pd_xml, pd_device, lm_xml, lm_device)
 
-        # Rendering flags
-        if self.use_lm:
-            self.show_pd_box = False
-            self.show_pd_kps = False
-            self.show_rot_rect = False
-            self.show_handedness = False
-            self.show_landmarks = True
-            self.show_scores = False
-        else:
-            self.show_pd_box = True
-            self.show_pd_kps = True
-            self.show_rot_rect = False
-            self.show_scores = False
-
-        self.landmarks = []
-
     # Getter method
     def __getattribute__(self, name):
         return object.__getattribute__(self, name)
@@ -111,28 +86,23 @@ class HandTracker:
         object.__setattr__(self, name, value)
 
     def load_models(self, pd_xml, pd_device, lm_xml, lm_device):
-
         print("Loading Inference Engine")
         self.core = ov.Core()
         print("Device info:")
         versions = self.core.get_versions(pd_device)
-        print("{}{}".format(" " * 8, pd_device))
+        print(f"{' ' * 8}{pd_device}")
         print(
-            "{}MKLDNNPlugin version ......... {}.{}".format(
-                " " * 8, versions[pd_device].major, versions[pd_device].minor
-            )
+            f"{' ' * 8}MKLDNNPlugin version ......... {versions[pd_device].major}.{versions[pd_device].minor}"
         )
         print(
-            "{}Build ........... {}".format(" " * 8, versions[pd_device].build_number)
+            f"{' ' * 8}Build ........... {versions[pd_device].build_number}"
         )
 
         # Pose detection model
         pd_name = os.path.splitext(pd_xml)[0]
         pd_bin = pd_name + ".bin"
         print(
-            "Palm Detection model - Reading network files:\n\t{}\n\t{}".format(
-                pd_xml, pd_bin
-            )
+            f"Palm Detection model - Reading network files:\n\t{pd_xml}\n\t{pd_bin}"
         )
         self.pd_model = self.core.read_model(model=pd_xml, weights=pd_bin)
         # Input blob: input_1 - shape: [1, 3, 192, 192]
@@ -156,121 +126,67 @@ class HandTracker:
         self.pd_exec_model = self.core.compile_model(
             model=self.pd_model, device_name=pd_device
         )
-        self.pd_infer_time_cumul = 0
-        self.pd_infer_nb = 0
-
-        self.infer_nb = 0
-        self.infer_time_cumul = 0
 
         # Landmarks model
-        if self.use_lm:
-            if lm_device != pd_device:
-                print("Device info:")
-                versions = self.core.get_versions(pd_device)
-                print("{}{}".format(" " * 8, pd_device))
-                print(
-                    "{}MKLDNNPlugin version ......... {}.{}".format(
-                        " " * 8, versions[pd_device].major, versions[pd_device].minor
-                    )
-                )
-                print(
-                    "{}Build ........... {}".format(
-                        " " * 8, versions[pd_device].build_number
-                    )
-                )
-
-            lm_name = os.path.splitext(lm_xml)[0]
-            lm_bin = lm_name + ".bin"
+        if lm_device != pd_device:
+            print("Device info:")
+            versions = self.core.get_versions(pd_device)
+            print(f"{' ' * 8}{pd_device}")
             print(
-                "Landmark model - Reading network files:\n\t{}\n\t{}".format(
-                    lm_xml, lm_bin
-                )
+                f"{' ' * 8}MKLDNNPlugin version ......... {versions[pd_device].major}.{versions[pd_device].minor}"
             )
-            self.lm_model = self.core.read_model(model=lm_xml, weights=lm_bin)
-            # Input blob: input_1 - shape: [1, 3, 224, 224]
-            # Output blob: Identity_1 - shape: [1, 1]
-            # Output blob: Identity_2 - shape: [1, 1]
-            # Output blob: Identity_3_dense/BiasAdd/Add - shape: [1, 63]
-            # Output blob: Identity_dense/BiasAdd/Add - shape: [1, 63]
-            self.lm_input_blob = next(iter(next(iter(self.lm_model.inputs)).names))
-            input_shape = next(iter(self.pd_model.inputs)).shape
-            print(f"Input blob: {self.pd_input_blob} - shape: {input_shape}")
-
-            _, _, self.lm_h, self.lm_w = next(iter(self.lm_model.inputs)).shape
-            for o in self.lm_model.outputs:
-                output_names = list(o.names)
-                for name in output_names:
-                    if pattern.match(name):
-                        print(f"Output blob: {name} - shape: {list(o.shape)}")
-            self.lm_score = "Identity_1"
-            self.lm_handedness = "Identity_2"
-            self.lm_landmarks = "Identity_dense/BiasAdd/Add"
-            print("Loading landmark model to the plugin")
-            self.lm_exec_model = self.core.compile_model(
-                model=self.lm_model, device_name=lm_device
+            print(
+                f"{' ' * 8}Build ........... {versions[pd_device].build_number}"
             )
-            self.lm_infer_time_cumul = 0
-            self.lm_infer_nb = 0
-            self.lm_hand_nb = 0
 
-    def pd_postprocess(self, inference):
+        lm_name = os.path.splitext(lm_xml)[0]
+        lm_bin = lm_name + ".bin"
+        print(
+            f"Landmark model - Reading network files:\n\t{lm_xml}\n\t{lm_bin}"
+        )
+        self.lm_model = self.core.read_model(model=lm_xml, weights=lm_bin)
+        # Input blob: input_1 - shape: [1, 3, 224, 224]
+        # Output blob: Identity_1 - shape: [1, 1]
+        # Output blob: Identity_2 - shape: [1, 1]
+        # Output blob: Identity_3_dense/BiasAdd/Add - shape: [1, 63]
+        # Output blob: Identity_dense/BiasAdd/Add - shape: [1, 63]
+        self.lm_input_blob = next(iter(next(iter(self.lm_model.inputs)).names))
+        input_shape = next(iter(self.pd_model.inputs)).shape
+        print(f"Input blob: {self.pd_input_blob} - shape: {input_shape}")
+
+        _, _, self.lm_h, self.lm_w = next(iter(self.lm_model.inputs)).shape
+        for o in self.lm_model.outputs:
+            output_names = list(o.names)
+            for name in output_names:
+                if pattern.match(name):
+                    print(f"Output blob: {name} - shape: {list(o.shape)}")
+        self.lm_score = "Identity_1"
+        self.lm_handedness = "Identity_2"
+        self.lm_landmarks = "Identity_dense/BiasAdd/Add"
+        print("Loading landmark model to the plugin")
+        self.lm_exec_model = self.core.compile_model(
+            model=self.lm_model, device_name=lm_device
+        )
+
+    def pd_postprocess(self, inference, frame_size):
         scores = np.squeeze(inference[self.pd_scores])  # 2016
         bboxes = inference[self.pd_bboxes][0]  # 2016x18
         # Decode bboxes
-        self.regions = mpu.decode_bboxes(
+        regions = mpu.decode_bboxes(
             self.pd_score_thresh, scores, bboxes, self.anchors
         )
         # Non maximum suppression
-        self.regions = mpu.non_max_suppression(
-            self.regions,
+        regions = mpu.non_max_suppression(
+            regions,
             self.pd_nms_thresh
         )
-        if self.use_lm:
-            mpu.detections_to_rect(self.regions)
-            mpu.rect_transformation(
-                self.regions,
-                self.frame_size,
-                self.frame_size
-            )
-
-    def pd_render(self, frame):
-        for r in self.regions:
-            if self.show_pd_box:
-                box = (np.array(r.pd_box) * self.frame_size).astype(int)
-                cv2.rectangle(
-                    frame,
-                    (box[0], box[1]),
-                    (box[0] + box[2], box[1] + box[3]),
-                    (0, 255, 0),
-                    2,
-                )
-            if self.show_pd_kps:
-                for i, kp in enumerate(r.pd_kps):
-                    x = int(kp[0] * self.frame_size)
-                    y = int(kp[1] * self.frame_size)
-                    cv2.circle(frame, (x, y), 6, (0, 0, 255), -1)
-                    cv2.putText(
-                        frame,
-                        str(i),
-                        (x, y + 12),
-                        cv2.FONT_HERSHEY_PLAIN,
-                        1.5,
-                        (0, 255, 0),
-                        2,
-                    )
-            if self.show_scores:
-                cv2.putText(
-                    frame,
-                    f"Palm score: {r.pd_score:.2f}",
-                    (
-                        int(r.pd_box[0] * self.frame_size + 10),
-                        int((r.pd_box[1] + r.pd_box[3]) * self.frame_size + 60),
-                    ),
-                    cv2.FONT_HERSHEY_PLAIN,
-                    2,
-                    (255, 255, 0),
-                    2,
-                )
+        regions = mpu.detections_to_rect(regions)
+        regions = mpu.rect_transformation(
+            regions,
+            frame_size,
+            frame_size
+        )
+        return regions
 
     def lm_postprocess(self, region, inference):
         region.lm_score = np.squeeze(inference[self.lm_score])
@@ -282,231 +198,60 @@ class HandTracker:
             # x,y,z -> x/w,y/h,z/w (here h=w)
             lm.append(lm_raw[3 * i: 3 * (i + 1)] / self.lm_w)
         region.landmarks = lm
-        self.landmark_list = [
-            [float(coords[0]), float(coords[1])] for coords in region.landmarks
-        ]
+        return region
 
-    def lm_render(self, frame, region):
-        if region.lm_score > self.lm_score_threshold:
-            if self.is_getdata:
-                # Store the lnadmarks in dataset when recording
-                if self.state == "recording":
-                    self.dataset.append(
-                        {
-                            "landmarks": mpu.normalize_points(self.landmark_list),
-                            "gesture": self.gesture_num,
-                        }
-                    )
+    def lm_xy_coordinates(self, region):
+        src = np.array([(0, 0), (1, 0), (1, 1)], dtype=np.float32)
+        dst = np.array(
+            [(x, y) for x, y in region.rect_points[1:]], dtype=np.float32
+        )  # region.rect_points[0] is left bottom point !
+        mat = cv2.getAffineTransform(src, dst)
+        lm_xy = np.expand_dims(
+            np.array([(lm[0], lm[1]) for lm in region.landmarks]), axis=0
+        )
+        lm_xy = np.squeeze(cv2.transform(lm_xy, mat)).astype(np.int32)
+        return lm_xy
 
-                if (time.time() - self.start_time) > 30 and self.state == "recording":
-                    self.start_time = time.time()
-                    self.state = "break"
-                    self.gesture_num = (self.gesture_num + 1) % len(self.gestures)
-                    play_audio_file("Action")
-                elif (time.time() - self.start_time) > 10 and self.state == "break":
-                    self.start_time = time.time()
-                    self.state = "recording"
-                    play_audio_file("Action")
+    def inference(self, frame):
+        h, w = frame.shape[:2]
 
-                if self.state == "break":
-                    cv2.putText(
-                        frame,
-                        'Break.. Next gesture is "' + self.gestures[self.gesture_num] + '"',
-                        (frame.shape[1] // 2 - 430, frame.shape[0] // 2 - 220),
-                        cv2.FONT_HERSHEY_SIMPLEX,
-                        2,
-                        (255, 0, 0),
-                        3,
-                    )
-                else:
-                    cv2.putText(
-                        frame,
-                        'Recorging "' + self.gestures[self.gesture_num] + '"',
-                        (frame.shape[1] // 2 - 430, frame.shape[0] // 2 - 220),
-                        cv2.FONT_HERSHEY_SIMPLEX,
-                        2,
-                        (255, 0, 0),
-                        3,
-                    )
+        # Padding on the small side to get a square shape
+        frame_size = max(h, w)
+        pad_h = int((frame_size - h) / 2)
+        pad_w = int((frame_size - w) / 2)
+        frame = cv2.copyMakeBorder(
+            frame, pad_h, pad_h, pad_w, pad_w, cv2.BORDER_CONSTANT
+        )
 
-            if self.show_rot_rect:
-                cv2.polylines(
-                    frame,
-                    [np.array(region.rect_points)],
-                    True,
-                    (0, 255, 255),
-                    2,
-                    cv2.LINE_AA,
-                )
+        # Resize image to NN square input shape
+        frame_nn = cv2.resize(
+            frame, (self.pd_w, self.pd_h), interpolation=cv2.INTER_AREA
+        )
 
-            if self.show_landmarks:
-                self.landmarks = []
+        # Transpose hxwx3 -> 1x3xhxw
+        frame_nn = np.transpose(frame_nn, (2, 0, 1))[None,]
 
-                src = np.array([(0, 0), (1, 0), (1, 1)], dtype=np.float32)
-                dst = np.array(
-                    [(x, y) for x, y in region.rect_points[1:]], dtype=np.float32
-                )  # region.rect_points[0] is left bottom point !
-                mat = cv2.getAffineTransform(src, dst)
-                lm_xy = np.expand_dims(
-                    np.array([(l[0], l[1]) for l in region.landmarks]), axis=0
-                )
-                lm_xy = np.squeeze(cv2.transform(lm_xy, mat)).astype(np.int32)
-                list_connections = [
-                    [0, 1, 2, 3, 4],
-                    [0, 5, 6, 7, 8],
-                    [5, 9, 10, 11, 12],
-                    [9, 13, 14, 15, 16],
-                    [13, 17],
-                    [0, 17, 18, 19, 20],
-                ]
-                lines = [
-                    np.array([lm_xy[point] for point in line])
-                    for line in list_connections
-                ]
-                cv2.polylines(frame, lines, False, (255, 0, 0), 2, cv2.LINE_AA)
-                self.landmarks.append(lm_xy)
-                if self.is_getdata:
-                    for x, y in lm_xy:
-                        cv2.circle(frame, (x, y), 6, (0, 128, 255), -1)
+        # Get palm detection
+        pd_infer_request = self.pd_exec_model.create_infer_request()
+        inference = pd_infer_request.infer(
+            inputs={self.pd_input_blob: frame_nn}
+        )
+        regions = self.pd_postprocess(inference, frame_size)
 
-            if self.show_handedness:
-                cv2.putText(
-                    frame,
-                    (
-                        f"RIGHT {region.handedness:.2f}"
-                        if region.handedness > 0.5
-                        else f"LEFT {1-region.handedness:.2f}"
-                    ),
-                    (
-                        int(region.pd_box[0] * self.frame_size + 10),
-                        int(
-                            (region.pd_box[1] + region.pd_box[3]) * self.frame_size + 20
-                        ),
-                    ),
-                    cv2.FONT_HERSHEY_PLAIN,
-                    2,
-                    (0, 255, 0) if region.handedness > 0.5 else (0, 0, 255),
-                    2,
-                )
-            if self.show_scores:
-                cv2.putText(
-                    frame,
-                    f"Landmark score: {region.lm_score:.2f}",
-                    (
-                        int(region.pd_box[0] * self.frame_size + 10),
-                        int(
-                            (region.pd_box[1] + region.pd_box[3]) * self.frame_size + 90
-                        ),
-                    ),
-                    cv2.FONT_HERSHEY_PLAIN,
-                    2,
-                    (255, 255, 0),
-                    2,
-                )
-
-    def run(self):
-
-        self.fps = FPS(mean_nb_frames=20)
-
-        nb_pd_inferences = 0
-        nb_lm_inferences = 0
-        glob_pd_rtrip_time = 0
-        glob_lm_rtrip_time = 0
-        while True:
-            self.fps.update()
-            if self.image_mode:
-                vid_frame = self.img
-            else:
-                ok, vid_frame = self.cap.read()
-                if not ok:
-                    break
-            h, w = vid_frame.shape[:2]
-            if self.crop:
-                # Cropping the long side to get a square shape
-                self.frame_size = min(h, w)
-                dx = (w - self.frame_size) // 2
-                dy = (h - self.frame_size) // 2
-                video_frame = vid_frame[
-                    dy: dy + self.frame_size, dx: dx + self.frame_size
-                ]
-            else:
-                # Padding on the small side to get a square shape
-                self.frame_size = max(h, w)
-                pad_h = int((self.frame_size - h) / 2)
-                pad_w = int((self.frame_size - w) / 2)
-                video_frame = cv2.copyMakeBorder(
-                    vid_frame, pad_h, pad_h, pad_w, pad_w, cv2.BORDER_CONSTANT
-                )
-
-            # Resize image to NN square input shape
-            frame_nn = cv2.resize(
-                video_frame, (self.pd_w, self.pd_h), interpolation=cv2.INTER_AREA
+        # Hand landmarks
+        results = []
+        for region in regions:
+            frame_nn = mpu.warp_rect_img(
+                region.rect_points, frame, self.lm_w, self.lm_h
             )
-
             # Transpose hxwx3 -> 1x3xhxw
             frame_nn = np.transpose(frame_nn, (2, 0, 1))[None,]
 
-            annotated_frame = video_frame.copy()
-
-            # Get palm detection
-            pd_rtrip_time = now()
-            pd_infer_request = self.pd_exec_model.create_infer_request()
-            inference = pd_infer_request.infer(
-                inputs={self.pd_input_blob: frame_nn}
+            # Get hand landmarks
+            lm_infer_request = self.lm_exec_model.create_infer_request()
+            inference = lm_infer_request.infer(
+                inputs={self.lm_input_blob: frame_nn}
             )
-            glob_pd_rtrip_time += now() - pd_rtrip_time
-            self.pd_postprocess(inference)
-            self.pd_render(annotated_frame)
-            nb_pd_inferences += 1
-
-            # Hand landmarks
-            if self.use_lm:
-                for i, r in enumerate(self.regions):
-                    frame_nn = mpu.warp_rect_img(
-                        r.rect_points, video_frame, self.lm_w, self.lm_h
-                    )
-                    # Transpose hxwx3 -> 1x3xhxw
-                    frame_nn = np.transpose(frame_nn, (2, 0, 1))[None,]
-
-                    # Get hand landmarks
-                    lm_rtrip_time = now()
-                    lm_infer_request = self.lm_exec_model.create_infer_request()
-                    inference = lm_infer_request.infer(
-                        inputs={self.lm_input_blob: frame_nn}
-                    )
-                    glob_lm_rtrip_time += now() - lm_rtrip_time
-                    nb_lm_inferences += 1
-                    self.lm_postprocess(r, inference)
-                    self.lm_render(annotated_frame, r)
-
-            if not self.crop:
-                annotated_frame = annotated_frame[
-                    pad_h: pad_h + h,
-                    pad_w: pad_w + w
-                ]
-
-            self.fps.display(
-                annotated_frame,
-                orig=(50, 50),
-                color=(240, 180, 100)
-            )
-            cv2.imshow("video", annotated_frame)
-
-            key = cv2.waitKey(1)
-            if key == ord("q") or key == 27:
-                break
-            elif key == 32:
-                # Pause on space bar
-                cv2.waitKey(0)
-            elif key == ord("1"):
-                self.show_pd_box = not self.show_pd_box
-            elif key == ord("2"):
-                self.show_pd_kps = not self.show_pd_kps
-            elif key == ord("3"):
-                self.show_rot_rect = not self.show_rot_rect
-            elif key == ord("4"):
-                self.show_landmarks = not self.show_landmarks
-            elif key == ord("5"):
-                self.show_handedness = not self.show_handedness
-            elif key == ord("6"):
-                self.show_scores = not self.show_scores
+            region = self.lm_postprocess(region, inference)
+            results.append({"handedness": region.handedness, "landmark": self.lm_xy_coordinates(region)})
+        return results

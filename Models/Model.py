@@ -23,5 +23,11 @@ class Model(nn.Module):
     def forward(self, landmarks):
         x = self.dropout1(self.relu(self.fc1(landmarks)))
         x = self.dropout2(self.relu(self.fc2(x)))
+        x = self.fc3(x)
+        return x
+
+    def result_with_softmax(self, landmarks):
+        x = self.dropout1(self.relu(self.fc1(landmarks)))
+        x = self.dropout2(self.relu(self.fc2(x)))
         res = self.softmax(self.fc3(x))
         return res

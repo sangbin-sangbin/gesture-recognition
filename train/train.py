@@ -4,20 +4,19 @@ import os
 import random
 import sys
 import time
+
 import torch
-from torch import nn
-from torch import optim
+from torch import nn, optim
 
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 
-from models.model import Model
 import utils
-
+from models.model import Model
 
 if __name__ == "__main__":
     model = Model()
     loss_function = nn.CrossEntropyLoss()
-    optimizer = optim.SGD(model.parameters(), lr=0.01)
+    optimizer = optim.Adam(model.parameters(), lr=0.0005)
 
     # Get the directory of train.py
     current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -38,10 +37,11 @@ if __name__ == "__main__":
     val_dataset = dataset[int(len(dataset) * 0.8): int(len(dataset) * 0.9)]
     test_dataset = dataset[int(len(dataset) * 0.9):]
 
-    total_epochs = 7
+    TOTAL_EPOCHS = 20
     total_steps = len(train_dataset)
+    average_train_loss = 0
 
-    for epoch in range(total_epochs):
+    for epoch in range(TOTAL_EPOCHS):
         start_time = time.time()
         for step, data in enumerate(train_dataset):
             optimizer.zero_grad()
@@ -63,13 +63,14 @@ if __name__ == "__main__":
 
             optimizer.step()
 
+            average_train_loss = (average_train_loss * step + loss.item()) / (step + 1)
             # Display the progress bar
             utils.print_progress_bar(
                 step + 1,
                 total_steps,
                 time.time() - start_time,
-                prefix=f"Epoch {epoch + 1}/{total_epochs}",
-                suffix=f"Loss: {loss.item(): .4f}",
+                prefix=f"Epoch {epoch + 1}/{TOTAL_EPOCHS}",
+                suffix=f"Loss: {average_train_loss: .4f}",
             )
 
         # Prevent from overfitting

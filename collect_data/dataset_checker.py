@@ -1,59 +1,53 @@
 import glob
 import json
+import os
 import random
 import shutil
-import time
-from datetime import timedelta
 import sys
-import os
+import time
 
 import torch
-from torch import nn
-from torch import optim
+from torch import nn, optim
 
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 
+import utils
 from models.model import Model
 
-test_data_dir = "../dataset/test_data.json"
-data_dir = "../dataset/tmp/*"
-file_list = glob.glob(data_dir)
+
+TEST_DATA_DIR = os.path.join("..", "dataset", "test_data.json")
+TMP_DATA_DIR = os.path.join("..", "dataset", "tmp/*")
+tmp_file_list = glob.glob(TMP_DATA_DIR)
+tmp_file_list_json = [file for file in tmp_file_list if file.endswith(".json")]
+
+BASE_DATA_DIR = os.path.join("..", "dataset", "used/*")
+file_list = glob.glob(BASE_DATA_DIR)
 file_list_json = [file for file in file_list if file.endswith(".json")]
 
-test_dataset = json.load(open(test_data_dir))
+base_dataset = []
+for dataset_dir in file_list_json:
+    tmp = json.load(open(dataset_dir))
+    base_dataset += tmp
+print(len(base_dataset), " data")
+random.shuffle(base_dataset)
 
-
-def print_progress_bar(
-    iteration, total, time_per_step, prefix="", suffix="", length=30, fill="="
-):
-    percent = ("{0:.1f}").format(100 * (iteration / float(total)))
-    filled_length = int(length * iteration // total)
-    bar = fill * filled_length + "-" * (length - filled_length)
-    time_str = str(timedelta(seconds=int(time_per_step * total)))
-    print(
-        f"\r{prefix} [{bar}] - {percent}% - {suffix} - {time_str}/epoch",
-        end="",
-        flush=True,
-    )
-
-
-for data_dir in file_list_json:
-    dataset = json.load(open(data_dir))
+for tmp_data_dir in tmp_file_list_json:
+    tmp_dataset = json.load(open(tmp_data_dir))
+    dataset = base_dataset + tmp_dataset
     random.shuffle(dataset)
-    train_dataset = dataset[: int(len(dataset) * 0.9)]
-    val_dataset = dataset[int(len(dataset) * 0.9):]
+    train_dataset = dataset[: int(len(dataset) * 0.8)]
+    val_dataset = dataset[int(len(dataset) * 0.8): int(len(dataset) * 0.9)]
+    test_dataset = dataset[int(len(dataset) * 0.9):]
 
     model = Model()
     loss_function = nn.CrossEntropyLoss()
-    optimizer = optim.SGD(model.parameters(), lr=0.001)
+    optimizer = optim.Adam(model.parameters(), lr=0.001)
 
-    total_epochs = 10
+    TOTAL_EPOCHS = 10
     total_steps = len(train_dataset)
+    average_train_loss = 0
 
-    prev_loss = float("inf")
-    tolerance = 20
-
-    for epoch in range(total_epochs):
+    for epoch in range(TOTAL_EPOCHS):
         start_time = time.time()
         for step, data in enumerate(train_dataset):
             model.zero_grad()
@@ -77,13 +71,14 @@ for data_dir in file_list_json:
 
             optimizer.step()
 
+            average_train_loss = (average_train_loss * step + loss.item()) / (step + 1)
             # Display the progress bar
-            print_progress_bar(
+            utils.print_progress_bar(
                 step + 1,
                 total_steps,
                 time.time() - start_time,
-                prefix=f"Epoch {epoch + 1}/{total_epochs}",
-                suffix=f"Loss: {loss.item(): .4f}",
+                prefix=f"Epoch {epoch + 1}/{TOTAL_EPOCHS}",
+                suffix=f"Loss: {average_train_loss: .4f}",
             )
 
         # Prevent from overfitting
@@ -104,13 +99,6 @@ for data_dir in file_list_json:
             val_dataset
         )  # Calculate average loss for the epoch
         print(f"\nValidation Loss: {average_loss:.4f}\n")
-
-        if prev_loss < average_loss:
-            tolerance -= 1
-            if tolerance == 0:
-                break
-
-        prev_loss = average_loss
 
     print("Training completed.")
 
@@ -133,8 +121,10 @@ for data_dir in file_list_json:
     print(f"Accuracy: {accuracy}")
 
     if accuracy > 90:
-        print(data_dir, "is good dataset")
-        shutil.move(file_list_json[0], "../dataset/used")
+        print(tmp_data_dir, "is good dataset")
+        dataset_dir = os.path.join("..", "dataset", "used")
+        shutil.move(tmp_data_dir, dataset_dir)
     else:
-        print(data_dir, "is bad dataset")
-        shutil.move(file_list_json[0], "../dataset/unused")
+        print(tmp_data_dir, "is bad dataset")
+        dataset_dir = os.path.join("..", "dataset", "unused")
+        shutil.move(tmp_data_dir, dataset_dir)

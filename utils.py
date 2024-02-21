@@ -1,14 +1,13 @@
 import os
 import subprocess
 import time
+from datetime import timedelta
 
-import pygame
-
-import psutil
 import matplotlib.pyplot as plt
+import psutil
+import pygame
 from matplotlib.animation import FuncAnimation
 
-from datetime import timedelta
 
 def get_center(landmark):
     sum_x = 0
@@ -49,7 +48,7 @@ def play_audio_file(file_name):
     current_dir = os.path.dirname(os.path.abspath(__file__))
 
     # Construct the path to sound directory
-    sound_dir = os.path.join(current_dir, "sound")
+    sound_dir = os.path.join(current_dir, "sounds")
 
     # Construct the file paths for both .wav and .mp3 files
     wav_file_path = os.path.join(sound_dir, file_name + ".wav")
@@ -144,16 +143,16 @@ def perform_action(action, infinite=False):
         command = "adb shell input keyevent CUSTOM"
         subprocess.run(command, shell=True, check=False)
         print("custom")
-        play_audio_file("Hello")
+        play_audio_file("Yours")
         return ["custom", time.time()]
     return ["", 0]
 
 
-def monitor(device, pid = None):
-    fig, ax = plt.subplots()
+def monitor(device, pid=None):
+    fig, _ = plt.subplots()
     x_num = 50
     interval = 200
-    plt.xlim(-x_num*interval/1000, 0)
+    plt.xlim(-x_num * interval / 1000, 0)
     plt.ylim(0, 100)
     line, = plt.plot([], [], lw=2)
 
@@ -178,7 +177,7 @@ def monitor(device, pid = None):
         while len(cpu_percentages) > x_num:
             cpu_percentages.pop(0)
         x = range(len(cpu_percentages))
-        line.set_data(list(map(lambda x: (x-x_num+1)*interval/1000, x)), cpu_percentages)
+        line.set_data(list(map(lambda x: (x - x_num + 1) * interval / 1000, x)), cpu_percentages)
         return line,
 
     _ = FuncAnimation(fig, animate, frames=None, init_func=init, blit=True, interval=interval)
@@ -188,35 +187,16 @@ def monitor(device, pid = None):
     plt.title(f'Real-time CPU Utilization for Process {pid}')
     plt.show()
 
+
 def print_progress_bar(
     iteration, total, time_per_step, prefix="", suffix="", length=30, fill="="
 ):
     percent = ("{0:.1f}").format(100 * (iteration / float(total)))
     filled_length = int(length * iteration // total)
     bar = fill * filled_length + "-" * (length - filled_length)
-    time_str = str(timedelta(seconds=int(time_per_step * total)))
+    time_str = str(timedelta(seconds=int(time_per_step)))
     print(
         f"\r{prefix} [{bar}] - {percent}% - {suffix} - {time_str}/epoch",
         end="",
         flush=True,
     )
-
-def normalize_points(points):
-    min_x, min_y = points[0]
-    max_x, max_y = points[0]
-
-    for x, y in points:
-        min_x = min(min_x, x)
-        min_y = min(min_y, y)
-        max_x = max(max_x, x)
-        max_y = max(max_y, y)
-
-    scale = max(max_x - min_x, max_y - min_y)
-
-    normalized_points = []
-    for x, y in points:
-        normalized_x = (x - min_x) / scale
-        normalized_y = (y - min_y) / scale
-        normalized_points.append((normalized_x, normalized_y))
-
-    return normalized_points

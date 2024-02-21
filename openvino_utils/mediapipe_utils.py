@@ -59,8 +59,7 @@ def generate_anchors(options):
         # For same strides, we merge the anchors in the same order.
         last_same_stride_layer = layer_id
         while (
-            last_same_stride_layer < n_strides
-            and options.strides[last_same_stride_layer] == options.strides[layer_id]
+            last_same_stride_layer < n_strides and options.strides[last_same_stride_layer] == options.strides[layer_id]
         ):
             scale = calculate_scale(
                 options.min_scale,
@@ -100,7 +99,7 @@ def generate_anchors(options):
 
         for y in range(feature_map_height):
             for x in range(feature_map_width):
-                for anchor_id in range(len(anchor_height)):
+                for anchor_id, _ in enumerate(anchor_height):
                     x_center = (x + options.anchor_offset_x) / feature_map_width
                     y_center = (y + options.anchor_offset_y) / feature_map_height
                     # new_anchor = Anchor(x_center=x_center, y_center=y_center)
@@ -199,7 +198,7 @@ def decode_bboxes(score_thresh, scores, bboxes, anchors):
         # for j, name in enumerate(["0", "1", "2", "3", "4", "5", "6"]):
         #     kps[name] = det_bboxes[i,4+j*2:6+j*2]
         for kp in range(7):
-            kps.append(det_bboxes[i, 4 + kp * 2 : 6 + kp * 2])
+            kps.append(det_bboxes[i, 4 + kp * 2: 6 + kp * 2])
         regions.append(HandRegion(float(score), box, kps))
     return regions
 
@@ -260,8 +259,10 @@ def detections_to_rect(regions):
         rotation = target_angle - atan2(-(y1 - y0), x1 - x0)
         region.rotation = normalize_radians(rotation)
 
+    return regions
 
-def rotated_rect_to_points(cx, cy, w, h, rotation, wi, hi):
+
+def rotated_rect_to_points(cx, cy, w, h, rotation):
     b = cos(rotation) * 0.5
     a = sin(rotation) * 0.5
     p0x = cx - a * h - b * w
@@ -323,9 +324,9 @@ def rect_transformation(regions, w, h):
             region.rect_w_a,
             region.rect_h_a,
             region.rotation,
-            w,
-            h,
         )
+
+    return regions
 
 
 def warp_rect_img(rect_points, img, w, h):
@@ -342,14 +343,3 @@ def distance(a, b):
     a, b: 2 points in 3D (x,y,z)
     """
     return np.linalg.norm(a - b)
-
-
-def angle(a, b, c):
-    # https://stackoverflow.com/questions/35176451/python-code-to-calculate-angle-between-three-point-using-their-3d-coordinates
-    # a, b and c : points as np.array([x, y, z])
-    ba = a - b
-    bc = c - b
-    cosine_angle = np.dot(ba, bc) / (np.linalg.norm(ba) * np.linalg.norm(bc))
-    angle = np.arccos(cosine_angle)
-
-    return np.degrees(angle)

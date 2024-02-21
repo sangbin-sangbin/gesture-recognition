@@ -8,7 +8,10 @@ gestures:
   - "shortcut1"
   - "shortcut2"
   - "custom"
+  - "none"
 
-custom_gesture_index: 1
+custom_gesture_index: 7
+
+gesture_prob_threshold: 0.7
 
 device: "CPU" #"GPU"
