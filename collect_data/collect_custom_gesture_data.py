@@ -242,7 +242,6 @@ if __name__ == "__main__":
     )
 
     ht = HandTracker(
-        input_src="0",
         pd_xml=pd_model_path,
         pd_device=config["device"],
         pd_score_thresh=0.6,

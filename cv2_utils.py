@@ -8,7 +8,7 @@ class CV2Utils:
     def __init__(self):
         self.w = 1280
         self.h = 720
-        self.cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
+        self.cap = cv2.VideoCapture(0)  # , cv2.CAP_DSHOW)
         self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, self.w)
         self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, self.h)
 
