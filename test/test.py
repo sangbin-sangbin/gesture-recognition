@@ -411,7 +411,7 @@ if __name__ == "__main__":
     run(ht, model_obj, cv2_util_obj)
 
     # Release the webcam and close all windows
-    ht.cap.release()
+    cv2_util_obj.cap.release()
     cv2.destroyAllWindows()
 
     save_current_parameters(PARAMETERS_DIR, my_parameters)
