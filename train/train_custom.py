@@ -135,7 +135,6 @@ if __name__ == "__main__":
                 suffix=f"Loss: {average_train_loss: .4f}",
             )
 
-        # Prevent from overfitting
         val_loss = 0.0
         for data in val_dataset:
             landmarks = torch.tensor(

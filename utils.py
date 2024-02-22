@@ -10,6 +10,7 @@ from matplotlib.animation import FuncAnimation
 
 
 def get_center(landmark):
+    # Return mean coordinates of landmarks
     sum_x = 0
     sum_y = 0
     for x, y in landmark:
@@ -149,6 +150,9 @@ def perform_action(action, infinite=False):
 
 
 def monitor(device, pid=None):
+    # Monitor CPU or GPU utilization
+    # TODO: GPU utilization
+
     fig, _ = plt.subplots()
     x_num = 50
     interval = 200

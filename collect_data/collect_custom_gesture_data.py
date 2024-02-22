@@ -199,7 +199,7 @@ def run(hand_tracker, model, cv2_util):
     return dataset
 
 
-def get_data(hand_tracker, cv2_util):
+def collect_data(hand_tracker, cv2_util):
     model = initialize_model()
 
     # Construct the path to dataset/tmp
@@ -255,4 +255,4 @@ if __name__ == "__main__":
 
     cv2_util_obj = CV2Utils()
 
-    get_data(ht, cv2_util_obj)
+    collect_data(ht, cv2_util_obj)

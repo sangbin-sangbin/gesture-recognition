@@ -204,7 +204,6 @@ def decode_bboxes(score_thresh, scores, bboxes, anchors):
 
 
 def non_max_suppression(regions, nms_thresh):
-
     # cv2.dnn.NMSBoxes(boxes, scores, 0, nms_thresh) needs:
     # boxes = [ [x, y, w, h], ...] with x, y, w, h of type int
     # Currently, x, y, w, h are float between 0 and 1, so we arbitrarily multiply by 1000 and cast to int
