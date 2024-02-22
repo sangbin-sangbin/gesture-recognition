@@ -107,7 +107,7 @@ def perform_action(action, infinite=False):
         else:
             play_audio_file("Right")
         return ["right", time.time()]
-    elif action == "left":
+    if action == "left":
         command = "adb shell input keyevent KEYCODE_DPAD_LEFT"
         subprocess.run(command, shell=True, check=False)
         print("left")
@@ -116,36 +116,39 @@ def perform_action(action, infinite=False):
         else:
             play_audio_file("Left")
         return ["left", time.time()]
-    elif action == "select":
-        command = "adb shell input keyevent KEYCODE_BUTTON_SELECT"
-        subprocess.run(command, shell=True, check=False)
-        print("select")
-        play_audio_file("Select")
-        return ["select", time.time()]
-    elif action == "exit":
-        command = "adb shell input keyevent KEYCODE_BACK"
-        subprocess.run(command, shell=True, check=False)
-        print("exit")
-        play_audio_file("Exit")
-        return ["exit", time.time()]
-    elif action == "shortcut1":
-        command = "adb shell input keyevent SHORTCUT1"
-        subprocess.run(command, shell=True, check=False)
-        print("shortcut 1")
-        play_audio_file("First")
-        return ["shortcut1", time.time()]
-    elif action == "shortcut2":
-        command = "adb shell input keyevent SHORTCUT2"
-        subprocess.run(command, shell=True, check=False)
-        print("shortcut 2")
-        play_audio_file("Second")
-        return ["shortcut2", time.time()]
-    elif action == "custom":
-        command = "adb shell input keyevent CUSTOM"
-        subprocess.run(command, shell=True, check=False)
-        print("custom")
-        play_audio_file("Yours")
-        return ["custom", time.time()]
+
+    if not infinite:
+        if action == "select":
+            command = "adb shell input keyevent KEYCODE_BUTTON_SELECT"
+            subprocess.run(command, shell=True, check=False)
+            print("select")
+            play_audio_file("Select")
+            return ["select", time.time()]
+        if action == "exit":
+            command = "adb shell input keyevent KEYCODE_BACK"
+            subprocess.run(command, shell=True, check=False)
+            print("exit")
+            play_audio_file("Exit")
+            return ["exit", time.time()]
+        if action == "shortcut1":
+            command = "adb shell input keyevent SHORTCUT1"
+            subprocess.run(command, shell=True, check=False)
+            print("shortcut 1")
+            play_audio_file("First")
+            return ["shortcut1", time.time()]
+        if action == "shortcut2":
+            command = "adb shell input keyevent SHORTCUT2"
+            subprocess.run(command, shell=True, check=False)
+            print("shortcut 2")
+            play_audio_file("Second")
+            return ["shortcut2", time.time()]
+        if action == "custom":
+            command = "adb shell input keyevent CUSTOM"
+            subprocess.run(command, shell=True, check=False)
+            print("custom")
+            play_audio_file("Yours")
+            return ["custom", time.time()]
+        return ["", 0]
     return ["", 0]
 
 
@@ -159,16 +162,16 @@ def monitor(device, pid=None):
     plt.xlim(-x_num * interval / 1000, 0)
     plt.ylim(0, 100)
     line, = plt.plot([], [], lw=2)
+    process = psutil.Process(pid)
 
     # List to store CPU utilization
     cpu_percentages = [0 for _ in range(x_num)]
 
     def get_cpu_utilization():
         if not pid:
-            return psutil.cpu_percent(interval=0.1)
+            return psutil.cpu_percent(interval=interval / 1000)
 
-        process = psutil.Process(pid)
-        return process.cpu_percent(interval=0.1)
+        return process.cpu_percent(interval=interval / 1000) / psutil.cpu_count()
 
     def init():
         line.set_data([], [])

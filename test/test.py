@@ -138,14 +138,12 @@ def run(hand_tracker, model, cv2_util):
                         if state["gesture"] == gesture_idx:
                             # start multi action when user hold one gesture enough time
                             if (
-                                time.time() - state["start_time"]
-                                > multi_action_time_threshold
+                                time.time() - state["start_time"] > multi_action_time_threshold
                             ):
                                 if state["multi_action_start_time"] == -1:
                                     state["multi_action_start_time"] = time.time()
                                 if (
-                                    time.time() - state["multi_action_start_time"]
-                                    > multi_action_cooltime * state["multi_action_cnt"]
+                                    time.time() - state["multi_action_start_time"] > multi_action_cooltime * state["multi_action_cnt"]
                                 ):
                                     state["multi_action_cnt"] += 1
                                     state["prev_action"] = utils.perform_action(

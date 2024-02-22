@@ -14,6 +14,9 @@ This project is gesture recognizer for controlling car console.
 - openvino
 - torch
 - pygame
+- pyyaml
+- matplotlib
+- psutil
 
 ## Model Conversion to OpenVINO
 
