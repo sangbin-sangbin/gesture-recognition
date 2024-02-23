@@ -20,18 +20,52 @@ with open('../config.yaml', 'r') as f:
     config = yaml.safe_load(f)
 
 
+def recognize_gesture(prev_gestures, time_threshold, infinite=False):
+    CNT_THRES = 0.8
+    FPS = 25
+    LEN_THRES = 0.9
+
+    if len(prev_gestures) == 0:
+        return -1
+
+    cnt_per_gesture = [0 for _ in enumerate(config["gestures"])]
+    cnt = 0
+    start_time = -1
+    for i, prev_gesture in enumerate(prev_gestures):
+        if time.time() - prev_gesture['time'] < time_threshold:
+            cnt_per_gesture[prev_gesture['gesture']] += 1
+            cnt += 1
+            if start_time == -1:
+                if i > 0:
+                    cnt_per_gesture[prev_gestures[i - 1]['gesture']] += 1
+                    cnt += 1
+                    start_time = prev_gestures[i - 1]['time']
+                else:
+                    start_time = prev_gesture['time']
+    max_cnt = max(cnt_per_gesture)
+    if max_cnt / cnt > CNT_THRES and ((time.time() - start_time > time_threshold and cnt > FPS * time_threshold * LEN_THRES) or infinite):
+        return cnt_per_gesture.index(max(cnt_per_gesture))
+
+    return -1
+
+
+def update_prev_gestures(prev_gestures):
+    STORE_TIME_THRES = 3
+    while time.time() - prev_gestures[0]['time'] > STORE_TIME_THRES:
+        prev_gestures.pop(0)
+    return prev_gestures
+
+
 def run(hand_tracker, model, cv2_util):
     gestures = config["gestures"]
-    gesture_num = 0
 
     state = {
-        "gesture": 5,
-        "start_time": time.time(),
-        "prev_gesture": 5,
+        "prev_gesture": len(gestures) - 1,
         "multi_action_start_time": -1,
         "multi_action_cnt": 0,
         "prev_action": ["", 0],
     }
+    prev_gestures = []
 
     frame_num = 0
 
@@ -41,13 +75,9 @@ def run(hand_tracker, model, cv2_util):
         check=False,
     )
 
-    landmark_num = 0
-    gesture_time = 0
-    gesture_num = 0
-
     recognized_hands = []
     recognized_hand = []
-    text_a = ""
+    prob_text = ""
 
     recognizing = False
     recognized_hand_prev_pos = [-999, -999]
@@ -91,8 +121,6 @@ def run(hand_tracker, model, cv2_util):
             # Process the frame with MediaPipe Hands
             results = hand_tracker.inference(frame)
 
-            landmark_num += 1
-
             right_hands = []
             recognized_hands = []
             if results:
@@ -116,7 +144,6 @@ def run(hand_tracker, model, cv2_util):
 
                         lst, _ = utils.normalize_points(recognized_hand)
 
-                        start = time.time_ns() // 1000000
                         res = list(
                             model.result_with_softmax(
                                 torch.tensor(
@@ -125,50 +152,41 @@ def run(hand_tracker, model, cv2_util):
                                 )
                             )
                         )
-                        end = time.time_ns() // 1000000
-                        gesture_time += end - start
-                        gesture_num += 1
 
                         probability = max(res)
                         gesture_idx = (
                             res.index(probability) if probability >= config["gesture_prob_threshold"] else len(gestures) - 1
                         )
-                        text_a = f"{gestures[gesture_idx]} {int(probability * 100)}%"
+                        prev_gestures.append({"gesture": gesture_idx, "time": time.time()})
+                        prev_gestures = update_prev_gestures(prev_gestures)
 
-                        if state["gesture"] == gesture_idx:
-                            # start multi action when user hold one gesture enough time
-                            if (
-                                time.time() - state["start_time"] > multi_action_time_threshold
-                            ):
-                                if state["multi_action_start_time"] == -1:
-                                    state["multi_action_start_time"] = time.time()
-                                if (
-                                    time.time() - state["multi_action_start_time"] > multi_action_cooltime * state["multi_action_cnt"]
-                                ):
-                                    state["multi_action_cnt"] += 1
-                                    state["prev_action"] = utils.perform_action(
-                                        state["prev_action"][0], infinite=True
-                                    )
+                        prob_text = f"{gestures[gesture_idx]} {int(probability * 100)}%"
 
-                            elif time.time() - state["start_time"] > time_threshold:
-                                if gestures[state["prev_gesture"]] == "default":
-                                    state["prev_action"] = utils.perform_action(
-                                        gestures[state["gesture"]]
-                                    )
-                                state["prev_gesture"] = gesture_idx
+                        if recognize_gesture(prev_gestures, multi_action_time_threshold, infinite=True) != -1:
+                            if state["multi_action_start_time"] == -1:
+                                state["multi_action_start_time"] = time.time()
+                            if prev_gestures[-1]["time"] >= state["multi_action_start_time"] + multi_action_cooltime * state["multi_action_cnt"]:
+                                state["prev_action"] = utils.perform_action(state["prev_action"][0], infinite=True)
+                                state["multi_action_cnt"] += 1
                         else:
-                            state = {
-                                "gesture": gesture_idx,
-                                "start_time": time.time(),
-                                "prev_gesture": state["prev_gesture"],
-                                "multi_action_start_time": -1,
-                                "multi_action_cnt": 0,
-                                "prev_action": ["", 0],
-                            }
+                            gesture = recognize_gesture(prev_gestures, time_threshold)
+                            if gesture != -1:
+                                if gestures[state["prev_gesture"]] == "default":
+                                    state["prev_action"] = utils.perform_action(gestures[gesture])
+                                state["prev_gesture"] = gesture
+                                state["multi_action_start_time"] = -1
+                                state["multi_action_cnt"] = 0
+                            else:
+                                state = {
+                                    "prev_gesture": state["prev_gesture"],
+                                    "multi_action_start_time": -1,
+                                    "multi_action_cnt": 0,
+                                    "prev_action": ["", 0],
+                                }
                     else:
                         # stop recognizing
                         recognized_hand = []
-                        text_a = ""
+                        prob_text = ""
                         if (
                             recognizing and time.time() - last_hand_time > stop_recognizing_time_threshold
                         ):
@@ -176,9 +194,7 @@ def run(hand_tracker, model, cv2_util):
                             utils.play_audio_file("Stop")
                             recognizing = False
                             state = {
-                                "gesture": 5,
-                                "start_time": time.time(),
-                                "prev_gesture": 5,
+                                "prev_gesture": len(gestures) - 1,
                                 "multi_action_start_time": -1,
                                 "multi_action_cnt": 0,
                                 "prev_action": ["", 0],
@@ -186,44 +202,37 @@ def run(hand_tracker, model, cv2_util):
                 else:
                     # when not recognizing, get hands with 'default' gesture and measure elapsed time
                     delete_list = []
-                    wake_up_hands = []
-                    for right_hand in right_hands:
-                        lst, _ = utils.normalize_points(right_hand)
-                        res = list(
-                            model.result_with_softmax(
-                                torch.tensor(
-                                    [element for row in lst for element in row],
-                                    dtype=torch.float,
-                                )
-                            )
-                        )
-                        probability = max(res)
-                        gesture_idx = (
-                            res.index(probability) if probability >= config["gesture_prob_threshold"] else len(gestures) - 1
-                        )
-                        if gestures[gesture_idx] == "default":
-                            wake_up_hands.append(right_hand)
-                    checked = [0 for _ in range(len(wake_up_hands))]
-                    for i, [prev_pos, start_time] in enumerate(wake_up_state):
+                    checked = [0 for _ in range(len(right_hands))]
+                    for i, [prev_pos, prev_gestures] in enumerate(wake_up_state):
                         hand_idx, prev_pos = utils.same_hand_tracking(
-                            wake_up_hands, prev_pos, same_hand_threshold
+                            right_hands, prev_pos, same_hand_threshold
                         )
                         if hand_idx == -1:
                             delete_list = [i] + delete_list
-                        elif (
-                            time.time() - start_time > start_recognizing_time_threshold
-                        ):
+                        elif recognize_gesture(prev_gestures, start_recognizing_time_threshold) == 0:
                             # when there are default gestured hand for enough time, start recognizing and track the hand
                             print("start recognizing")
-                            recognized_hand_prev_pos = utils.get_center(
-                                wake_up_hands[hand_idx]
-                            )
+                            recognized_hand_prev_pos = utils.get_center(right_hands[hand_idx])
                             utils.play_audio_file("Start")
                             recognizing = True
                             wake_up_state = []
                             break
                         else:
+                            lst, _ = utils.normalize_points(right_hands[hand_idx])
+                            res = list(
+                                model.result_with_softmax(
+                                    torch.tensor(
+                                        [element for row in lst for element in row],
+                                        dtype=torch.float,
+                                    )
+                                )
+                            )
+                            probability = max(res)
+                            gesture_idx = (
+                                res.index(probability) if probability >= config["gesture_prob_threshold"] else len(gestures) - 1
+                            )
                             checked[hand_idx] = 1
+                            prev_gestures.append({"gesture": gesture_idx, "time": time.time()})
 
                     # wake_up_state refreshing
                     if not recognizing:
@@ -232,14 +241,27 @@ def run(hand_tracker, model, cv2_util):
 
                         for idx, _ in enumerate(checked):
                             if checked[idx] == 0:
+                                lst, _ = utils.normalize_points(right_hands[idx])
+                                res = list(
+                                    model.result_with_softmax(
+                                        torch.tensor(
+                                            [element for row in lst for element in row],
+                                            dtype=torch.float,
+                                        )
+                                    )
+                                )
+                                probability = max(res)
+                                gesture_idx = (
+                                    res.index(probability) if probability >= config["gesture_prob_threshold"] else len(gestures) - 1
+                                )
                                 wake_up_state.append(
-                                    [utils.get_center(wake_up_hands[idx]), time.time()]
+                                    [utils.get_center(right_hands[idx]), [{"gesture": gesture_idx, "time": time.time()}]]
                                 )
             else:
                 # stop recognizing
                 recognized_hands = []
                 recognized_hand = []
-                text_a = ""
+                prob_text = ""
                 if (
                     recognizing and time.time() - last_hand_time > stop_recognizing_time_threshold
                 ):
@@ -247,9 +269,7 @@ def run(hand_tracker, model, cv2_util):
                     utils.play_audio_file("Stop")
                     recognizing = False
                     state = {
-                        "gesture": 5,
-                        "start_time": time.time(),
-                        "prev_gesture": 5,
+                        "prev_gesture": len(gestures) - 1,
                         "multi_action_start_time": -1,
                         "multi_action_cnt": 0,
                         "prev_action": ["", 0],
@@ -265,7 +285,7 @@ def run(hand_tracker, model, cv2_util):
         # Print Current Hand's Gesture
         cv2.putText(
             annotated_frame,
-            text_a,
+            prob_text,
             (annotated_frame.shape[1] // 2 + 230, annotated_frame.shape[0] // 2 - 220),
             cv2.FONT_HERSHEY_SIMPLEX,
             2,
